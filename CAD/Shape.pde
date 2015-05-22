@@ -24,32 +24,8 @@ abstract class Shape {
       x2 = xx2;
       y2 = yy2;
     }
-    
-    void draw(){
-      
-    }
-  }
 
-  class Rectangle extends Shape {
-    float x2, y2;
-
-   Rectangle(float xx1, float yy1, float zz1, 
-    float xx2, float yy2, float zz2, int mod) {
-      super(xx1, yy1, zz1, zz2, mod);
-      x2 = xx2;
-      y2 = yy2;
-    }
-    
-    void draw(){
-      if (mode==TOP){
-        rect(x1+BOUNDARYV1,y1,x2+BOUNDARYV1,y2);
-        line(x1+BOUNDARYV1,ENDY-z1);
-        line();
-      } else if (mode==FRONT){
-        
-      } else if (mode==RIGHT){
-        
-      }
+    void draw() {
     }
   }
 
@@ -59,9 +35,8 @@ abstract class Shape {
       super(xx1, yy1, zz1, zz2, mod);
       r = rr;
     }
-    
-    void draw(){
-      
+
+    void draw() {
     }
   }
 }

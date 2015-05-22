@@ -10,18 +10,9 @@ void setup() {
   size(ENDX,ENDY);
   frame.setTitle("avoCADo");
   
-  cp5 = new ControlP5(this);
-  /*cp5.addTextfield("input")
-     .setPosition(20,100)
-     .setSize(100,20)
-     .setFocus(true)
-     .setColor(color(255,0,0))
-     ;
-  cp5.addBang("clear")
-     .setPosition(240,170)
-     .setSize(80,40)
-     .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
-     ;*/    
+  cp5 = new ControlP5(this);   
+  
+  creations.add(new Rectangle(5,5,5,20,20,20,0));
   
 }
 
@@ -37,7 +28,7 @@ void draw() {
   
   for (int i=0; i<creations.size(); i++){
      stroke(0,255,0);
-     nofill();
+     noFill();
      creations.get(i).draw(); 
   }
 }
