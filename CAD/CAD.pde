@@ -2,16 +2,12 @@ import controlP5.*;
 
 ControlP5 cp5;
 String textValue = "";
-//ArrayList<Shape> creations = new ArrayList<Shape>();
-int BOUNDARYV1, BOUNDARYV2, BOUNDARYH;
+ArrayList<Shape> creations = new ArrayList<Shape>();
+final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
 
 void setup() {
   size(900,600);
   frame.setTitle("avoCADo");
-  
-  BOUNDARYV1 = 100;
-  BOUNDARYV2 = 500;
-  BOUNDARYH  = 300;
   
   cp5 = new ControlP5(this);
   /*cp5.addTextfield("input")
@@ -37,6 +33,10 @@ void draw() {
   line(BOUNDARYV1,BOUNDARYH,900,BOUNDARYH);
   //text(cp5.get(Textfield.class,"input").getText(), 360,130);
   //text(textValue, 360,180);
+  
+  for (int i=0; i<creations.size(); i++){
+     creations.get(i).draw(); 
+  }
 }
 
 public void clear() {
