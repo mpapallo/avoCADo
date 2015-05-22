@@ -10,17 +10,20 @@ class Rectangle extends Shape {
 
   void draw() {
     if (mode==TOP) {
-      rect(x1+BOUNDARYV1, y1, x2+BOUNDARYV1, y2);
+      println(pmouseX+" "+pmouseY);
+      //println(BOUNDARYV1);
+      //println(x1+BOUNDARYV1+" "+y1+" "+(x2+BOUNDARYV1)+" "+y2);
+      rect(x1+BOUNDARYV1, y1, x2-x1, y2-y1);
       line(x1+BOUNDARYV1, ENDY-z1, x2+BOUNDARYV1, ENDY-z1);
       line(y1+BOUNDARYV2, ENDY-z1, y2+BOUNDARYV2, ENDY-z1);
-    } else if (mode==RIGHT) {
-      line(x1+BOUNDARYV1, y1, x2+BOUNDARYV1, y2);
-      line(x1+BOUNDARYV1, ENDY-z1, x2+BOUNDARYV1, ENDY-z1);
-      rect(y1+BOUNDARYV2, ENDY-z1, y2+BOUNDARYV2, ENDY-z1);
     } else if (mode==FRONT) {
       line(x1+BOUNDARYV1, y1, x2+BOUNDARYV1, y2);
-      rect(x1+BOUNDARYV1, ENDY-z1, x2+BOUNDARYV1, ENDY-z1);
-      line(y1+BOUNDARYV2, ENDY-z1, y2+BOUNDARYV2, ENDY-z1);
+      rect(x1+BOUNDARYV1, ENDY-z2, x2-x1, z2-z1);
+      line(y1+BOUNDARYV2, ENDY-z1, y2+BOUNDARYV2, ENDY-z2);
+    } else if (mode==RIGHT) {
+      line(x1+BOUNDARYV1, y1, x2+BOUNDARYV1, y2);
+      line(x1+BOUNDARYV1, ENDY-z1, x2+BOUNDARYV1, ENDY-z2);
+      rect(y1+BOUNDARYV2, ENDY-z2, y2-y1, z2-z1);
     }
   }
 }

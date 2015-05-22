@@ -12,13 +12,16 @@ void setup() {
   
   cp5 = new ControlP5(this);   
   
-  creations.add(new Rectangle(5,5,5,20,20,20,0));
+  //creations.add(new Rectangle(5,5,5,120,250,5,0));
+  //creations.add(new Rectangle(5,5,5,120,5,250,1));
+  creations.add(new Rectangle(5,5,5,5,250,120,2));
   
 }
 
 void draw() {
   background(0);
   fill(200);
+  noStroke();
   rect(0,0,BOUNDARYV1,600);
   stroke(200);
   line(BOUNDARYV2,0,BOUNDARYV2,ENDY);
