@@ -10,7 +10,7 @@ class Rectangle extends Shape {
 
   void draw() {
     if (mode==TOP) {
-      println(pmouseX+" "+pmouseY);
+      //println(pmouseX+" "+pmouseY);
       //println(BOUNDARYV1);
       //println(x1+BOUNDARYV1+" "+y1+" "+(x2+BOUNDARYV1)+" "+y2);
       rect(x1+BOUNDARYV1, y1, x2-x1, y2-y1);
