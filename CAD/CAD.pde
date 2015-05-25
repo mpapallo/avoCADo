@@ -1,6 +1,7 @@
 import controlP5.*;
 
 ControlP5 cp5;
+MultiList menu;
 String textValue = "";
 ArrayList<Shape> creations = new ArrayList<Shape>();
 final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
@@ -22,16 +23,47 @@ void setup() {
 }
 
 void createMenu() {
+   menu = cp5.addMultiList("Menu", 0, 5, BOUNDARYV1, BUTTON_W);
+   MultiListButton b;
+   b = menu.add("Create", 1);
+   b.add("Rectangle", 11);
+   b.add("Line", 12);
+   b.add("Circle", 13);
+   b = menu.add("Delete", 2);
+   b = menu.add("XForm", 3);
+   b = menu.add("Edit", 4);
+  /*
   cp5.addButton("Create")
-      .setValue(0)
+    .setValue(0)
       .setPosition(0, 5)
-      .setSize(BOUNDARYV1, BUTTON_W)
-      ;  
+        .setSize(BOUNDARYV1, BUTTON_W)
+          ;  
   cp5.addButton("Delete")
-      .setValue(1)
+    .setValue(1)
       .setPosition(0, 30)
-      .setSize(BOUNDARYV1, BUTTON_W)
-      ;
+        .setSize(BOUNDARYV1, BUTTON_W)
+          ;
+  cp5.addButton("XForm")
+    .setValue(2)
+      .setPosition(0, 55)
+        .setSize(BOUNDARYV1, BUTTON_W)
+          ;
+  cp5.addButton("Edit")
+    .setValue(3)
+      .setPosition(0, 80)
+        .setSize(BOUNDARYV1, BUTTON_W)
+          ;
+  */
+  cp5.addButton("3D View")
+    .setValue(4)
+      .setPosition(0, 130)
+        .setSize(BOUNDARYV1, BUTTON_W)
+          ;
+  cp5.addButton("Save As")
+    .setValue(5)
+      .setPosition(0, 180)
+        .setSize(BOUNDARYV1, BUTTON_W)
+          ;
 }
 
 void draw() {
@@ -63,12 +95,35 @@ void controlEvent(ControlEvent theEvent) {
       +theEvent.getStringValue()
       );
   }
-  String ControllerName = theEvent.getController().getName();
-  if (ControllerName.equals("Create")){
-     println("the Create button was pressed"); 
+  if (theEvent.isAssignableFrom(Button.class)) {
+    String ControllerName = theEvent.getController().getName();
+    /*
+    if (ControllerName.equals("Create")) {
+      println("the Create button was pressed");
+    } else if (ControllerName.equals("Delete")) {
+      println("the Delete button was pressed");
+    } else if (ControllerName.equals("XForm")) {
+      println("the XForm button was pressed");
+    } else if (ControllerName.equals("Edit")) {
+      println("the Edit button was pressed");
+    }
+    */
+    if (ControllerName.equals("3D View")) {
+      println("the 3D button was pressed");
+    } else if (ControllerName.equals("Save As")) {
+      println("the Save button was pressed");
+    }
   }
-  if (ControllerName.equals("Delete")){
-     println("the Delete button was pressed");
+  if (theEvent.isAssignableFrom(MultiListButton.class)){
+    String ControllerName = theEvent.getController().getName();
+    if (ControllerName.equals("Rectangle")){
+       println("the Rect option was selected");
+    }else if (ControllerName.equals("Line")){
+       println("the Line option was selected");
+    }else if (ControllerName.equals("Circle")){
+       println("the Circle option was selected");
+    }
+    //delete, xform, edit, save, 3d
   }
 }
 
