@@ -7,16 +7,16 @@ ArrayList<Shape> creations = new ArrayList<Shape>();
 final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
 final int ENDX = 900, ENDY = 600;
 final int BUTTON_W = 20;
+boolean SELECT_MODE = false, FIRST_CLICK = true;
 
 void setup() {
   size(ENDX, ENDY);
   frame.setTitle("avoCADo");
 
-  cp5 = new ControlP5(this);   
-
+  cp5 = new ControlP5(this);
   createMenu();
 
-  creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
+  //creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
   //creations.add(new Rectangle(185,15,5,130,15,250,1));
   //creations.add(new Rectangle(5,30,5,5,250,120,2));
   //creations.add(new Circle(100,100,50,44,0));
@@ -55,12 +55,12 @@ void createMenu() {
           ;
   */
   cp5.addButton("3D View")
-    .setValue(4)
+    .setValue(5)
       .setPosition(0, 130)
         .setSize(BOUNDARYV1, BUTTON_W)
           ;
   cp5.addButton("Save As")
-    .setValue(5)
+    .setValue(6)
       .setPosition(0, 180)
         .setSize(BOUNDARYV1, BUTTON_W)
           ;
@@ -84,7 +84,7 @@ void draw() {
   }
 }
 
-public void clear() {
+void clear() {
   cp5.get(Textfield.class, "input").clear();
 }
 
@@ -118,6 +118,8 @@ void controlEvent(ControlEvent theEvent) {
     String ControllerName = theEvent.getController().getName();
     if (ControllerName.equals("Rectangle")){
        println("the Rect option was selected");
+       SELECT_MODE = true;
+       FIRST_CLICK = true;
     }else if (ControllerName.equals("Line")){
        println("the Line option was selected");
     }else if (ControllerName.equals("Circle")){
@@ -127,10 +129,20 @@ void controlEvent(ControlEvent theEvent) {
   }
 }
 
-
-public void input(String theText) {
+void input(String theText) {
   println(theText);
   // automatically receives results from controller input
   //println("a textfield event for controller 'input' : "+theText);
+}
+
+void mouseClicked(){
+   if (SELECT_MODE){
+      if (FIRST_CLICK == false){
+        println("xcor: " + mouseX + ", ycor: " + mouseY);
+        SELECT_MODE = false;
+      }else{
+         FIRST_CLICK = false; 
+      }
+   }
 }
 
