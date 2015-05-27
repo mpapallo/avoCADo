@@ -9,7 +9,7 @@ final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
 final int ENDX = 900, ENDY = 600;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
-boolean CRT_RECT = false, CRT_LINE = false, CRT_CIRCLE = false;
+boolean MOUSE_CLICKED = false;
 int tempX, tempY;
 
 void setup() {
@@ -121,6 +121,10 @@ void controlEvent(ControlEvent theEvent) {
     if (ControllerName.equals("Rectangle")) {
       println("the Rect option was selected");
       text.setText("Create new Rectangle:\n\n" + getPosition());
+      if (MOUSE_CLICKED) {
+        createRect();
+        MOUSE_CLICKED = false;
+      }
     } else if (ControllerName.equals("Line")) {
       println("the Line option was selected");
       text.setText("Create new Line:\n\n" + getPosition());
@@ -128,8 +132,12 @@ void controlEvent(ControlEvent theEvent) {
       println("the Circle option was selected");
       text.setText("Create new Circle:\n\n" + getPosition());
     }
-    //delete, xform, edit, save, 3d
+    //delete, xform, edit
   }
+}
+
+void createRect() {
+  text.setText(text.getText() + "\n\n Now input a width.");
 }
 
 int getMode(int x, int y) {
@@ -165,7 +173,7 @@ void mouseClicked() {
       println("xcor: " + tempX + ", ycor: " + tempY);
       println("mode: " + getMode(tempX, tempY));
       SELECT_MODE = false;
-      text.setText("Success");
+      MOUSE_CLICKED = true;
     } else {
       FIRST_CLICK = false;
     }
