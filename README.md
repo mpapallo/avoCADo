@@ -23,4 +23,4 @@ Memorial Day Weekend:
 - menu buttons started
 
 5/26/15
--messing around with text input
+- messing around with text input
