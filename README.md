@@ -16,9 +16,11 @@ CADKey in Processing
 ###DevLog
 5/22/15
 - background done
+
 Memorial Day Weekend:
 - Shapes abstract class
 - Shape subclasses started
 - menu buttons started
+
 5/26/15
 -messing around with text input
