@@ -1,4 +1,5 @@
 class Line extends Shape {
+  
   float x2, y2, z2;
 
   Line(float xx1, float yy1, float zz1, 

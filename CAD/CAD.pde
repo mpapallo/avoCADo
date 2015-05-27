@@ -2,12 +2,15 @@ import controlP5.*;
 
 ControlP5 cp5;
 MultiList menu;
+Textarea text;
 String textValue = "";
 ArrayList<Shape> creations = new ArrayList<Shape>();
 final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
 final int ENDX = 900, ENDY = 600;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
+boolean CRT_RECT = false, CRT_LINE = false, CRT_CIRCLE = false;
+int tempX, tempY;
 
 void setup() {
   size(ENDX, ENDY);
@@ -51,23 +54,29 @@ void createMenu() {
           .setColorCaptionLabel(0)
             ;
 
-  cp5.addTextarea("notes")
+  text = cp5.addTextarea("notes")
     .setPosition(0, 300)
       .setSize(BOUNDARYV1, 230)
-        .setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-          +" Quisque sed velit nec eros scelerisque adipiscing vitae eu sem."
-          +" Quisque malesuada interdum lectus. Pellentesque pellentesque molestie"
-          +" vestibulum. Maecenas ultricies, neque at porttitor lacinia, tellus enim"
-          +" suscipit tortor, ut dapibus orci lorem non ipsum. Mauris ut velit velit."
-          +" Fusce at purus in augue semper tincidunt imperdiet sit amet eros."
-          +" Vestibulum nunc diam, fringilla vitae tristique ut, viverra ut felis."
-          +" Proin aliquet turpis ornare leo aliquam dapibus. Integer dui nisi, condimentum"
-          +" ut sagittis non, fringilla vestibulum sapien. Sed ullamcorper libero et massa"
-          +" congue in facilisis mauris lobortis. Fusce cursus risus sit amet leo imperdiet"
-          +" lacinia faucibus turpis tempus. Pellentesque pellentesque augue sed purus varius"
-          +" sed volutpat dui rhoncus. Lorem ipsum dolor sit amet, consectetur adipiscing elit")
+        .setText("Look here for instructions")
           .setColor(0)
-            ;
+            .setFont(createFont("arial", 12))
+              ;
+
+  cp5.addTextarea("top")
+    .setPosition(450, 280)
+      .setSize(BOUNDARYV1, BUTTON_W)
+        .setText("TOP VIEW")
+          ;
+  cp5.addTextarea("front")
+    .setPosition(438, 310)
+      .setSize(BOUNDARYV1, BUTTON_W)
+        .setText("FRONT VIEW")
+          ;
+  cp5.addTextarea("side")
+    .setPosition(505, 310)
+      .setSize(BOUNDARYV1, BUTTON_W)
+        .setText("RIGHT VIEW")
+          ;
 }
 
 void draw() {
@@ -111,28 +120,52 @@ void controlEvent(ControlEvent theEvent) {
     String ControllerName = theEvent.getController().getName();
     if (ControllerName.equals("Rectangle")) {
       println("the Rect option was selected");
-      SELECT_MODE = true;
-      FIRST_CLICK = true;
+      text.setText("Create new Rectangle:\n\n" + getPosition());
     } else if (ControllerName.equals("Line")) {
       println("the Line option was selected");
+      text.setText("Create new Line:\n\n" + getPosition());
     } else if (ControllerName.equals("Circle")) {
       println("the Circle option was selected");
+      text.setText("Create new Circle:\n\n" + getPosition());
     }
     //delete, xform, edit, save, 3d
   }
 }
 
+int getMode(int x, int y) {
+  if (x > BOUNDARYV1 && x < BOUNDARYV2) {
+    if (y < BOUNDARYH) {
+      return 0; //top mode
+    } else {
+      return 1; //front mode
+    }
+  } else if (x > BOUNDARYV2 && y > BOUNDARYH) {
+    return 2; //right mode
+  } else {
+    return -1;
+  }
+}
+
+String getPosition() {
+  SELECT_MODE = true;
+  FIRST_CLICK = true;
+  return "Click in either the top, front or right view box to indicate the position of the shape";
+}
+
 void input(String theText) {
   println(theText);
   // automatically receives results from controller input
-  //println("a textfield event for controller 'input' : "+theText);
 }
 
 void mouseClicked() {
   if (SELECT_MODE) {
-    if (FIRST_CLICK == false) {
-      println("xcor: " + mouseX + ", ycor: " + mouseY);
+    if (!FIRST_CLICK) {
+      tempX = mouseX;
+      tempY = mouseY;
+      println("xcor: " + tempX + ", ycor: " + tempY);
+      println("mode: " + getMode(tempX, tempY));
       SELECT_MODE = false;
+      text.setText("Success");
     } else {
       FIRST_CLICK = false;
     }
