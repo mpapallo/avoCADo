@@ -9,8 +9,8 @@ final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
 final int ENDX = 900, ENDY = 600;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
-boolean MOUSE_CLICKED = false;
-int tempX, tempY;
+boolean CRT_RECT = false, CRT_LINE = false, CRT_CIRC = false;
+int temp1 = -1;
 
 void setup() {
   size(ENDX, ENDY);
@@ -119,16 +119,15 @@ void controlEvent(ControlEvent theEvent) {
   if (theEvent.isAssignableFrom(MultiListButton.class)) {
     String ControllerName = theEvent.getController().getName();
     if (ControllerName.equals("Rectangle")) {
+      CRT_RECT = true;
       println("the Rect option was selected");
       text.setText("Create new Rectangle:\n\n" + getPosition());
-      if (MOUSE_CLICKED) {
-        createRect();
-        MOUSE_CLICKED = false;
-      }
     } else if (ControllerName.equals("Line")) {
+      CRT_LINE = true;
       println("the Line option was selected");
       text.setText("Create new Line:\n\n" + getPosition());
     } else if (ControllerName.equals("Circle")) {
+      CRT_CIRC = true;
       println("the Circle option was selected");
       text.setText("Create new Circle:\n\n" + getPosition());
     }
@@ -136,8 +135,20 @@ void controlEvent(ControlEvent theEvent) {
   }
 }
 
-void createRect() {
-  text.setText(text.getText() + "\n\n Now input a width.");
+void createRect(int x1, int y1) {
+  text.setText("Create new Rectangle:\n\nNow input a width.\n\n(If you enter a negative value, we'll take the absolute value.)");
+  while (temp1 == -1) {
+    int width = temp1;
+  }
+  temp1 = -1;
+  text.setText("Create new Rectangle:\n\nNow input a length.");
+  while (temp1 == -1) {
+    int length = temp1;
+  }
+  temp1 = -1;
+  int mode = getMode(x1, y1);
+  //creations.add(new Rect...)
+  CRT_RECT = false;
 }
 
 int getMode(int x, int y) {
@@ -163,17 +174,27 @@ String getPosition() {
 void input(String theText) {
   println(theText);
   // automatically receives results from controller input
+  try {
+    temp1 = abs(Integer.parseInt(theText));
+  }
+  catch(Exception e) {
+    text.setText(text.getText() + "\n\nTry again...");
+  }
+  println(temp1);
 }
 
 void mouseClicked() {
   if (SELECT_MODE) {
     if (!FIRST_CLICK) {
-      tempX = mouseX;
-      tempY = mouseY;
+      int tempX = mouseX;
+      int tempY = mouseY;
       println("xcor: " + tempX + ", ycor: " + tempY);
-      println("mode: " + getMode(tempX, tempY));
+      //println("mode: " + getMode(tempX, tempY));
       SELECT_MODE = false;
-      MOUSE_CLICKED = true;
+      if (CRT_RECT) {
+        //println("call create Rect");
+        createRect(tempX, tempY);
+      }
     } else {
       FIRST_CLICK = false;
     }
