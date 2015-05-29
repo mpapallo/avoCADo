@@ -20,7 +20,7 @@ void setup() {
   cp5 = new ControlP5(this);
   createMenu();
 
-  creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
+  //creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
   //creations.add(new Rectangle(185,15,5,130,15,250,1));
   //creations.add(new Rectangle(5,30,5,5,250,120,2));
   //creations.add(new Circle(100,100,50,44,0));
@@ -97,6 +97,9 @@ void draw() {
   }
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
+  } else {
+    width = -1;
+    length = -1;
   }
 }
 
@@ -146,19 +149,22 @@ void createRect(int x1, int y1) {
       width = temp1;
     }
     if (width != -1) {
+      println(width+"ii");
       temp1 = -1;
       CRT_RECT = 3;
     }
-    //println(temp1);
+    println(width);
   } else if (CRT_RECT == 3) {
     //println(lengt);
     text.setText("Create new Rectangle:\n\nNow input a length.");
     length = temp1;
+    println(width+" "+length);
     //println(lengt);
     if (length != -1) {
       int mode = getMode(x1, y1);
       text.setText("h");
-      creations.add(new Rect());
+      println(width+" "+length);
+      creations.add(new Rectangle(x1, y1, width, length, mode));
       CRT_RECT = 0;
     }
   }

@@ -1,7 +1,8 @@
 class Circle extends Shape {
   
-  float r;
-  Circle(float xx1, float yy1, float zz1, float rr, int mod) {
+  int r;
+  
+  Circle(int xx1, int yy1, int zz1, int rr, int mod) {
     super(xx1, yy1, zz1, mod);
     r = rr;
   }
