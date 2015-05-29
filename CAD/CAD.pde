@@ -3,6 +3,7 @@ import controlP5.*;
 
 ControlP5 cp5;
 MultiList menu;
+MultiListButton del;
 Textarea text;
 String textValue = "";
 ArrayList<Shape> creations = new ArrayList<Shape>();
@@ -34,8 +35,11 @@ void createMenu() {
   b.add("Rectangle", 11);
   b.add("Line", 12);
   b.add("Circle", 13);
-  b = menu.add("Delete", 2);
-  b.add("Clear all", 21);
+  del = menu.add("Delete", 2);
+  del.add("D_Rectangle", 21);
+  del.add("D_Line", 22);
+  del.add("D_Circle", 23);
+  del.add("Clear all", 24);
   b = menu.add("XForm", 3);
   b = menu.add("Edit", 4);
 
