@@ -22,7 +22,8 @@ void setup() {
   //creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
   //creations.add(new Rectangle(185,15,5,130,15,250,1));
   //creations.add(new Rectangle(5,30,5,5,250,120,2));
-  creations.add(new Circle(200,100,50,44,0));
+  //creations.add(new Circle(200,100,50,0));
+
 }
 
 void createMenu() {
@@ -179,7 +180,10 @@ void createCirc(int x1, int y1) {
     temp1 = -1;
     int mode = getMode(x1, y1);
     text.setText("New Circle created");
-    //creations.add(new Circle());
+    creations.add(new Circle(tempX, tempY, radius, mode));
+    radius = -1;
+    tempX = -1;
+    tempY = -1;
     CRT_CIRC = 0;
   }
 }
