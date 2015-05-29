@@ -10,8 +10,7 @@ final int ENDX = 900, ENDY = 600;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
-int temp1 = -1;
-int tempX, tempY, width = -1, length = -1;
+int temp1 = -1, tempX = -1, tempY = -1, width = -1, length = -1, radius = -1;
 
 void setup() {
   size(ENDX, ENDY);
@@ -98,6 +97,9 @@ void draw() {
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
   }
+  if (CRT_CIRC == 2) {
+    createCirc(tempX, tempY);
+  }
 }
 
 void clear() {
@@ -157,10 +159,25 @@ void createRect(int x1, int y1) {
     //println(lengt);
     if (length != -1) {
       int mode = getMode(x1, y1);
-      text.setText("h");
-      creations.add(new Rect());
+      text.setText("New Rectangle created");
+      //creations.add(new Rectangle());
       CRT_RECT = 0;
     }
+  }
+}
+
+void createCirc(int x1, int y1) {
+  text.setText("Create new Circle:\n\nNow input a radius.");
+  if (temp1 == -1) {
+    radius = temp1;
+  } else {
+    radius = temp1;
+    println(radius);
+    temp1 = -1;
+    int mode = getMode(x1, y1);
+    text.setText("New Circle created");
+    //creations.add(new Circle());
+    CRT_CIRC = 0;
   }
 }
 
@@ -185,8 +202,8 @@ String getPosition() {
 }
 
 void input(String theText) {
-  println(theText);
   // automatically receives results from controller input
+  // println(theText);
   try {
     temp1 = abs(Integer.parseInt(theText));
   }
@@ -205,8 +222,9 @@ void mouseClicked() {
       //println("mode: " + getMode(tempX, tempY));
       SELECT_MODE = false;
       if (CRT_RECT == 1) {
-        //println("call create Rect");
         CRT_RECT = 2;
+      } else if (CRT_CIRC == 1) {
+        CRT_CIRC = 2;
       }
     } else {
       FIRST_CLICK = false;
