@@ -97,6 +97,9 @@ void draw() {
   }
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
+  } else {
+    width = -1;
+    length = -1;
   }
   if (CRT_CIRC == 2) {
     createCirc(tempX, tempY);
@@ -152,19 +155,21 @@ void createRect(int x1, int y1) {
       width = temp1;
     }
     if (width != -1) {
+      println(width+"ii");
       temp1 = -1;
       CRT_RECT = 3;
     }
-    //println(temp1);
+    println(width);
   } else if (CRT_RECT == 3) {
     //println(lengt);
     text.setText("Create new Rectangle:\n\nNow input a length.");
     length = temp1;
+    println(width+" "+length);
     //println(lengt);
     if (length != -1) {
       int mode = getMode(x1, y1);
       text.setText("New Rectangle created");
-      //creations.add(new Rectangle());
+      creations.add(new Rectangle(x1, y1, width, length, mode));
       CRT_RECT = 0;
     }
   }
