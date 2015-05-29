@@ -9,8 +9,9 @@ final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
 final int ENDX = 900, ENDY = 600;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
-boolean CRT_RECT = false, CRT_LINE = false, CRT_CIRCLE = false;
-int tempX, tempY;
+int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
+int temp1 = -1;
+int tempX, tempY, width = -1, length = -1;
 
 void setup() {
   size(ENDX, ENDY);
@@ -89,11 +90,13 @@ void draw() {
   line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
   //text(cp5.get(Textfield.class,"input").getText(), 360,130);
   //text(textValue, 360,180);
-
   for (int i=0; i<creations.size (); i++) {
     stroke(0, 255, 0);
     noFill();
     creations.get(i).draw();
+  }
+  if (CRT_RECT == 2 || CRT_RECT == 3) {
+    createRect(tempX, tempY);
   }
 }
 
@@ -119,16 +122,45 @@ void controlEvent(ControlEvent theEvent) {
   if (theEvent.isAssignableFrom(MultiListButton.class)) {
     String ControllerName = theEvent.getController().getName();
     if (ControllerName.equals("Rectangle")) {
+      CRT_RECT = 1;
       println("the Rect option was selected");
       text.setText("Create new Rectangle:\n\n" + getPosition());
     } else if (ControllerName.equals("Line")) {
+      CRT_LINE = 1;
       println("the Line option was selected");
       text.setText("Create new Line:\n\n" + getPosition());
     } else if (ControllerName.equals("Circle")) {
+      CRT_CIRC = 1;
       println("the Circle option was selected");
       text.setText("Create new Circle:\n\n" + getPosition());
     }
-    //delete, xform, edit, save, 3d
+    //delete, xform, edit
+  }
+}
+
+void createRect(int x1, int y1) {
+  if (CRT_RECT == 2) {
+    text.setText("Create new Rectangle:\n\nNow input a width.\n\n(If you enter a negative value, we'll take the absolute value.)");
+    //println(width+" "+temp1);
+    if (width == -1) {
+      width = temp1;
+    }
+    if (width != -1) {
+      temp1 = -1;
+      CRT_RECT = 3;
+    }
+    //println(temp1);
+  } else if (CRT_RECT == 3) {
+    //println(lengt);
+    text.setText("Create new Rectangle:\n\nNow input a length.");
+    length = temp1;
+    //println(lengt);
+    if (length != -1) {
+      int mode = getMode(x1, y1);
+      text.setText("h");
+      creations.add(new Rect());
+      CRT_RECT = 0;
+    }
   }
 }
 
@@ -155,6 +187,13 @@ String getPosition() {
 void input(String theText) {
   println(theText);
   // automatically receives results from controller input
+  try {
+    temp1 = abs(Integer.parseInt(theText));
+  }
+  catch(Exception e) {
+    text.setText(text.getText() + "\n\nTry again...");
+  }
+  println(temp1);
 }
 
 void mouseClicked() {
@@ -163,9 +202,12 @@ void mouseClicked() {
       tempX = mouseX;
       tempY = mouseY;
       println("xcor: " + tempX + ", ycor: " + tempY);
-      println("mode: " + getMode(tempX, tempY));
+      //println("mode: " + getMode(tempX, tempY));
       SELECT_MODE = false;
-      text.setText("Success");
+      if (CRT_RECT == 1) {
+        //println("call create Rect");
+        CRT_RECT = 2;
+      }
     } else {
       FIRST_CLICK = false;
     }
