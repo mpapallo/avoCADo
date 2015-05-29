@@ -24,3 +24,6 @@ Memorial Day Weekend:
 
 5/26/15
 - messing around with text input
+
+5/28/15
+- user can create a circle from top or front view, and a rectangle from top view
