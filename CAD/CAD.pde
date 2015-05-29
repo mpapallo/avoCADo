@@ -10,8 +10,7 @@ final int ENDX = 900, ENDY = 600;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
-int temp1 = -1;
-int tempX, tempY, width = -1, length = -1;
+int temp1 = -1, tempX = -1, tempY = -1, width = -1, length = -1, radius = -1;
 
 void setup() {
   size(ENDX, ENDY);
@@ -20,10 +19,11 @@ void setup() {
   cp5 = new ControlP5(this);
   createMenu();
 
-  creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
+  //creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
   //creations.add(new Rectangle(185,15,5,130,15,250,1));
   //creations.add(new Rectangle(5,30,5,5,250,120,2));
-  //creations.add(new Circle(100,100,50,44,0));
+  //creations.add(new Circle(200,100,50,0));
+
 }
 
 void createMenu() {
@@ -98,6 +98,9 @@ void draw() {
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
   }
+  if (CRT_CIRC == 2) {
+    createCirc(tempX, tempY);
+  }
 }
 
 void clear() {
@@ -124,15 +127,18 @@ void controlEvent(ControlEvent theEvent) {
     if (ControllerName.equals("Rectangle")) {
       CRT_RECT = 1;
       println("the Rect option was selected");
-      text.setText("Create new Rectangle:\n\n" + getPosition());
+      text.setText("Create new Rectangle:\n\nClick in either the top, front or right view box to indicate the position of the shape.");
+      getPosition();
     } else if (ControllerName.equals("Line")) {
       CRT_LINE = 1;
       println("the Line option was selected");
-      text.setText("Create new Line:\n\n" + getPosition());
+      text.setText("Create new Line:\n\nClick in either the top, front or right view box to indicate the position of the shape");
+      getPosition();
     } else if (ControllerName.equals("Circle")) {
       CRT_CIRC = 1;
       println("the Circle option was selected");
-      text.setText("Create new Circle:\n\n" + getPosition());
+      text.setText("Create new Circle:\n\nClick in either the top, front or right view box to indicate the center of the shape");
+      getPosition();
     }
     //delete, xform, edit
   }
@@ -157,10 +163,28 @@ void createRect(int x1, int y1) {
     //println(lengt);
     if (length != -1) {
       int mode = getMode(x1, y1);
-      text.setText("h");
-      creations.add(new Rect());
+      text.setText("New Rectangle created");
+      //creations.add(new Rectangle());
       CRT_RECT = 0;
     }
+  }
+}
+
+void createCirc(int x1, int y1) {
+  text.setText("Create new Circle:\n\nNow input a radius.");
+  if (temp1 == -1) {
+    radius = temp1;
+  } else {
+    radius = temp1;
+    println(radius);
+    temp1 = -1;
+    int mode = getMode(x1, y1);
+    text.setText("New Circle created");
+    creations.add(new Circle(tempX, tempY, radius, mode));
+    radius = -1;
+    tempX = -1;
+    tempY = -1;
+    CRT_CIRC = 0;
   }
 }
 
@@ -178,15 +202,14 @@ int getMode(int x, int y) {
   }
 }
 
-String getPosition() {
+void getPosition() {
   SELECT_MODE = true;
   FIRST_CLICK = true;
-  return "Click in either the top, front or right view box to indicate the position of the shape";
 }
 
 void input(String theText) {
-  println(theText);
   // automatically receives results from controller input
+  // println(theText);
   try {
     temp1 = abs(Integer.parseInt(theText));
   }
@@ -202,11 +225,11 @@ void mouseClicked() {
       tempX = mouseX;
       tempY = mouseY;
       println("xcor: " + tempX + ", ycor: " + tempY);
-      //println("mode: " + getMode(tempX, tempY));
       SELECT_MODE = false;
       if (CRT_RECT == 1) {
-        //println("call create Rect");
         CRT_RECT = 2;
+      } else if (CRT_CIRC == 1) {
+        CRT_CIRC = 2;
       }
     } else {
       FIRST_CLICK = false;
