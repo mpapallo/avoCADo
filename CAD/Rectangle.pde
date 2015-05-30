@@ -26,8 +26,8 @@ class Rectangle extends Shape {
       width = w;
       length = l;
     } else if (mod == RIGHT) {
-      setZ(xx1);
-      setY(yy1);
+      setY(xx1);
+      setZ(yy1);
       setX(100);
       setM(mod);
       width = w;
@@ -41,13 +41,14 @@ class Rectangle extends Shape {
       line(x1, ENDY-z1, x1+width, ENDY-z1);
       line(ENDX-y1, ENDY-z1, ENDX-(y1+length), ENDY-z1);
     } else if (mode==FRONT) {
-      rect(x1, z1, width, length);
       line(x1, BOUNDARYH-y1, x1+width, BOUNDARYH-y1);
+      rect(x1, z1, width, length);
       line(BOUNDARYV2+y1, z1, BOUNDARYV2+y1, z1+length);
     } else if (mode==RIGHT) {
       rect(y1, z1, width, length);
-      line(x1, ENDY-z1, x1+width, ENDY-z1);
-      line(ENDX-(y1), ENDY-z1, ENDX-(y1+length), ENDY-z1);
+      line(BOUNDARYV1+x1, ENDX-(y1+width), BOUNDARYV1+x1, ENDX-y1);
+      //line(BOUNDARYV1+x1, y1, BOUNDARYV1+x1, y1+width);
+      //line(BOUNDARYV1+x1, z1, BOUNDARYV1+x1, z1+length);
     }
   }
 }
