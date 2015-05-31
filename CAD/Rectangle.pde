@@ -41,8 +41,7 @@ class Rectangle extends Shape {
     } else if (mode==RIGHT) {
       rect(y1, z1, width, length);
       line(BOUNDARYV1+x1, ENDX-(y1+width), BOUNDARYV1+x1, ENDX-y1);
-      //line(BOUNDARYV1+x1, y1, BOUNDARYV1+x1, y1+width);
-      //line(BOUNDARYV1+x1, z1, BOUNDARYV1+x1, z1+length);
+      line(BOUNDARYV1+x1, z1+length, BOUNDARYV1+x1, z1);
     }
   }
 }

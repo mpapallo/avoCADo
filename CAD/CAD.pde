@@ -6,8 +6,8 @@ MultiListButton del;
 Textarea text;
 String textValue = "";
 ArrayList<Shape> creations = new ArrayList<Shape>();
-final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
-final int ENDX = 900, ENDY = 600;
+final int BOUNDARYV1 = 100, BOUNDARYV2 = 450, BOUNDARYH = 350;
+final int ENDX = 800, ENDY = 700;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
@@ -54,14 +54,14 @@ void createMenu() {
 
   cp5.addTextfield("input")
     .setValue(7)
-      .setPosition(0, 550)
+      .setPosition(0, 650)
         .setSize(BOUNDARYV1, BUTTON_W)
           .setColorCaptionLabel(0)
             ;
 
   text = cp5.addTextarea("notes")
-    .setPosition(0, 300)
-      .setSize(BOUNDARYV1, 230)
+    .setPosition(0, 350)
+      .setSize(BOUNDARYV1, 280)
         .setText("Look here for instructions")
           .setColor(0)
             .setFont(createFont("arial", 12))
@@ -70,17 +70,17 @@ void createMenu() {
   cp5.addTextarea("top")
     .setPosition(450, 280)
       .setSize(BOUNDARYV1, BUTTON_W)
-        .setText("TOP VIEW")
+        .setText("TOP")
           ;
   cp5.addTextarea("front")
     .setPosition(438, 310)
       .setSize(BOUNDARYV1, BUTTON_W)
-        .setText("FRONT VIEW")
+        .setText("FRONT")
           ;
   cp5.addTextarea("side")
     .setPosition(505, 310)
       .setSize(BOUNDARYV1, BUTTON_W)
-        .setText("RIGHT VIEW")
+        .setText("RIGHT")
           ;
 }
 
@@ -88,7 +88,7 @@ void draw() {
   background(0);
   fill(200);
   noStroke();
-  rect(0, 0, BOUNDARYV1, 600);
+  rect(0, 0, BOUNDARYV1, ENDY);
   stroke(200);
   line(BOUNDARYV2, 0, BOUNDARYV2, ENDY);
   line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
