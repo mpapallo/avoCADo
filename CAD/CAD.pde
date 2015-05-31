@@ -1,6 +1,5 @@
 import controlP5.*;
 
-
 ControlP5 cp5;
 MultiList menu;
 MultiListButton del;
@@ -102,9 +101,6 @@ void draw() {
   }
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
-  } else {
-    width = -1;
-    length = -1;
   }
   if (CRT_CIRC == 2) {
     createCirc(tempX, tempY);
@@ -178,6 +174,8 @@ void createRect(int x1, int y1) {
       int mode = getMode(x1, y1);
       text.setText("New Rectangle created");
       creations.add(new Rectangle(x1, y1, width, length, mode));
+      width = -1;
+      length = -1;
       CRT_RECT = 0;
     }
   }
