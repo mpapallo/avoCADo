@@ -68,17 +68,17 @@ void createMenu() {
               ;
 
   cp5.addTextarea("top")
-    .setPosition(450, 280)
+    .setPosition(412, 330)
       .setSize(BOUNDARYV1, BUTTON_W)
         .setText("TOP")
           ;
   cp5.addTextarea("front")
-    .setPosition(438, 310)
+    .setPosition(412, 360)
       .setSize(BOUNDARYV1, BUTTON_W)
         .setText("FRONT")
           ;
   cp5.addTextarea("side")
-    .setPosition(505, 310)
+    .setPosition(455, 360)
       .setSize(BOUNDARYV1, BUTTON_W)
         .setText("RIGHT")
           ;
