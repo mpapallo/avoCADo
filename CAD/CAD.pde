@@ -24,7 +24,6 @@ void setup() {
   //creations.add(new Rectangle(185,15,5,130,15,250,1));
   //creations.add(new Rectangle(5,30,5,5,250,120,2));
   //creations.add(new Circle(200,100,50,0));
-
 }
 
 void createMenu() {
@@ -102,9 +101,6 @@ void draw() {
   }
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
-  } else {
-    width = -1;
-    length = -1;
   }
   if (CRT_CIRC == 2) {
     createCirc(tempX, tempY);
@@ -148,7 +144,7 @@ void controlEvent(ControlEvent theEvent) {
       text.setText("Create new Circle:\n\nClick in either the top, front or right view box to indicate the center of the shape");
       getPosition();
     } else if (ControllerName.equals("Clear all")) {
-       creations.clear(); 
+      creations.clear();
     }
     //delete, xform, edit
   }
@@ -174,9 +170,12 @@ void createRect(int x1, int y1) {
     //println(width+" "+length);
     //println(lengt);
     if (length != -1) {
+      temp1 = -1;
       int mode = getMode(x1, y1);
       text.setText("New Rectangle created");
       creations.add(new Rectangle(x1, y1, width, length, mode));
+      width = -1;
+      length = -1;
       CRT_RECT = 0;
     }
   }
@@ -224,9 +223,9 @@ void input(String theText) {
   // println(theText);
   try {
     temp1 = abs(Integer.parseInt(theText));
-    if (temp1 == 0){
-     temp1 = -1;
-      text.setText(text.getText() + "\n\nTry again..."); 
+    if (temp1 == 0) {
+      temp1 = -1;
+      text.setText(text.getText() + "\n\nTry again...");
     }
   }
   catch(Exception e) {

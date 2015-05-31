@@ -6,10 +6,10 @@
 CADKey in Processing
 
 ###To Do
-- allow the user to create shape by selecting location and inputting dimensions
-- xform
+- allow the user to create rects and lines
 - delete
-- edit
+- xform
+- (edit?)
 - 3d view
 - save file
 
@@ -25,10 +25,13 @@ CADKey in Processing
 <b>5/26/15</b>
 - messing around with text input
 
-<b>5/26/25</b>
+<b>5/26/15</b>
 - can get input but can't prompt again
 
 <b>5/28/15</b>
 - text input issue fixed, can actually wait for input
 - user can create a circle from top or front view, and a rectangle from top view
 - a merge conflict e<i>merge</i>d after finishing rectangle, but it was <i>rect</i>ified
+
+<b>5/31/15</b>
+- circle views work but boundary issues
