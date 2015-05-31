@@ -14,13 +14,21 @@ CADKey in Processing
 - save file
 
 ###DevLog
-5/22/15
+<b>5/22/15</b>
 - background done
 
-Memorial Day Weekend:
+<b>Memorial Day Weekend:</b>
 - Shapes abstract class
 - Shape subclasses started
 - menu buttons started
 
-5/26/15
+<b>5/26/15</b>
 - messing around with text input
+
+<b>5/26/25</b>
+- can get input but can't prompt again
+
+<b>5/28/15</b>
+- text input issue fixed, can actually wait for input
+- user can create a circle from top or front view, and a rectangle from top view
+- a merge conflict e<i>merge</i>d after finishing rectangle, but it was <i>rect</i>ified

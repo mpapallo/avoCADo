@@ -1,7 +1,9 @@
 import controlP5.*;
 
+
 ControlP5 cp5;
 MultiList menu;
+MultiListButton del;
 Textarea text;
 String textValue = "";
 ArrayList<Shape> creations = new ArrayList<Shape>();
@@ -33,7 +35,11 @@ void createMenu() {
   b.add("Rectangle", 11);
   b.add("Line", 12);
   b.add("Circle", 13);
-  b = menu.add("Delete", 2);
+  del = menu.add("Delete", 2);
+  del.add("D_Rectangle", 21);
+  del.add("D_Line", 22);
+  del.add("D_Circle", 23);
+  del.add("Clear all", 24);
   b = menu.add("XForm", 3);
   b = menu.add("Edit", 4);
 
@@ -97,6 +103,9 @@ void draw() {
   }
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
+  } else {
+    width = -1;
+    length = -1;
   }
   if (CRT_CIRC == 2) {
     createCirc(tempX, tempY);
@@ -139,6 +148,8 @@ void controlEvent(ControlEvent theEvent) {
       println("the Circle option was selected");
       text.setText("Create new Circle:\n\nClick in either the top, front or right view box to indicate the center of the shape");
       getPosition();
+    } else if (ControllerName.equals("Clear all")) {
+       creations.clear(); 
     }
     //delete, xform, edit
   }
@@ -152,19 +163,21 @@ void createRect(int x1, int y1) {
       width = temp1;
     }
     if (width != -1) {
+      //println(width+"ii");
       temp1 = -1;
       CRT_RECT = 3;
     }
-    //println(temp1);
+    //println(width);
   } else if (CRT_RECT == 3) {
     //println(lengt);
     text.setText("Create new Rectangle:\n\nNow input a length.");
     length = temp1;
+    //println(width+" "+length);
     //println(lengt);
     if (length != -1) {
       int mode = getMode(x1, y1);
       text.setText("New Rectangle created");
-      //creations.add(new Rectangle());
+      creations.add(new Rectangle(x1, y1, width, length, mode));
       CRT_RECT = 0;
     }
   }
@@ -176,7 +189,7 @@ void createCirc(int x1, int y1) {
     radius = temp1;
   } else {
     radius = temp1;
-    println(radius);
+    //println(radius);
     temp1 = -1;
     int mode = getMode(x1, y1);
     text.setText("New Circle created");
@@ -212,6 +225,10 @@ void input(String theText) {
   // println(theText);
   try {
     temp1 = abs(Integer.parseInt(theText));
+    if (temp1 == 0){
+     temp1 = -1;
+      text.setText(text.getText() + "\n\nTry again..."); 
+    }
   }
   catch(Exception e) {
     text.setText(text.getText() + "\n\nTry again...");
