@@ -11,25 +11,23 @@ class Rectangle extends Shape {
    }
    */
   Rectangle(int xx1, int yy1, int w, int l, int mod) {
-    if (mod == TOP) {
+    setM(mod);
+    if (mode == TOP) {
       setX(xx1);
       setY(yy1);
       setZ(10);
-      setM(mod);
       width = w;
       length = l;
-    } else if (mod == FRONT) {
+    } else if (mode == FRONT) {
       setX(xx1);
       setZ(yy1);
       setY(10);
-      setM(mod);
       width = w;
       length = l;
-    } else if (mod == RIGHT) {
+    } else if (mode == RIGHT) {
       setZ(xx1);
       setY(yy1);
       setX(10);
-      setM(mod);
       width = w;
       length = l;
     }

@@ -1,13 +1,13 @@
 class Circle extends Shape {
 
-  int r = 0, d = 0;
+  int r, d;
 
   //where (xx1, yy1) is the center of the circle
   //(regardless of actual x, y, z dimensions)
   //and rr is the radius of the circle
   //and mod indicates which view the face of the circle is in
   Circle(int xx1, int yy1, int r, int mod) {
-    mode = mod;
+    setM(mod);
     if (mode == TOP) {
       setX(xx1);
       setY(yy1);
