@@ -11,7 +11,8 @@ Working V1 (June 1st):
 - You can also clear the screen of all shapes.
 
 ###To Do
-- allow the user to create rects and lines
+- allow the user to create lines
+- set boundaries for user selection
 - delete
 - xform
 - (edit?)
@@ -40,3 +41,4 @@ Working V1 (June 1st):
 
 <b>5/31/15</b>
 - circle views work but boundary issues
+- rect views work
