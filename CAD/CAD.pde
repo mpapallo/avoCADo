@@ -11,7 +11,9 @@ final int ENDX = 800, ENDY = 700;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
-int temp1 = -1, tempX = -1, tempY = -1, width = -1, length = -1, radius = -1;
+int temp1 = -1, tempX = -1, tempY = -1;
+int tempX2 = -1, tempY2 = -1;
+int width = -1, length = -1, radius = -1;
 
 void setup() {
   size(ENDX, ENDY);
@@ -102,6 +104,9 @@ void draw() {
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
   }
+  if (CRT_LINE == 2 || CRT_LINE == 3) {
+    createLine(tempX, tempY);
+  }
   if (CRT_CIRC == 2) {
     createCirc(tempX, tempY);
   }
@@ -181,6 +186,21 @@ void createRect(int x1, int y1) {
   }
 }
 
+void createLine(int x1, int y1) {
+  if (CRT_LINE == 2) {
+    tempX2 = x1;
+    tempY2 = y1;
+    text.setText("Create New Line:\n\nNow choose another point within the same view box to form a line.");
+    SELECT_MODE = true;
+    FIRST_CLICK = false;
+  } else if (CRT_LINE == 3) {
+    text.setText("New Line Created");
+    int mode = getMode(x1, y1);
+    creations.add(new Line(tempX2, tempY2, x1, y1, mode));
+    CRT_LINE = 0;
+  }
+}
+
 void createCirc(int x1, int y1) {
   text.setText("Create new Circle:\n\nNow input a radius.");
   if (temp1 == -1) {
@@ -245,6 +265,8 @@ void mouseClicked() {
         CRT_RECT = 2;
       } else if (CRT_CIRC == 1) {
         CRT_CIRC = 2;
+      } else if (CRT_LINE == 1 || CRT_LINE == 2) {
+        CRT_LINE += 1;
       }
     } else {
       FIRST_CLICK = false;
