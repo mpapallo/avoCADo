@@ -87,6 +87,7 @@ void createMenu() {
 }
 
 void draw() {
+  println(CRT_LINE);
   background(0);
   fill(200);
   noStroke();
@@ -257,16 +258,24 @@ void input(String theText) {
 void mouseClicked() {
   if (SELECT_MODE) {
     if (!FIRST_CLICK) {
-      tempX = mouseX;
-      tempY = mouseY;
-      println("xcor: " + tempX + ", ycor: " + tempY);
-      SELECT_MODE = false;
-      if (CRT_RECT == 1) {
-        CRT_RECT = 2;
-      } else if (CRT_CIRC == 1) {
-        CRT_CIRC = 2;
-      } else if (CRT_LINE == 1 || CRT_LINE == 2) {
-        CRT_LINE += 1;
+      if (getMode(mouseX, mouseY) != -1) {
+        tempX = mouseX;
+        tempY = mouseY;
+        println("xcor: " + tempX + ", ycor: " + tempY);
+        SELECT_MODE = false;
+        if (CRT_RECT == 1) {
+          CRT_RECT = 2;
+        } else if (CRT_CIRC == 1) {
+          CRT_CIRC = 2;
+        } else if (CRT_LINE == 1 || CRT_LINE == 2) {
+          if (CRT_LINE == 2 && getMode(tempX, tempY) != getMode(tempX2, tempY2)) {
+            text.setText(text.getText() + "\n\nWrong view...");
+          } else {
+            CRT_LINE++;
+          }
+        }
+      } else {
+        text.setText(text.getText() + "\n\nWrong view...");
       }
     } else {
       FIRST_CLICK = false;
