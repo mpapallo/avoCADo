@@ -5,6 +5,11 @@
 ###Description 
 CADKey in Processing
 
+###How to Use
+Working V1 (June 1st):
+- You can create Rectangles or Circles in any of the 3 views.
+- You can also clear the screen of all shapes.
+
 ###To Do
 - allow the user to create rects and lines
 - delete
