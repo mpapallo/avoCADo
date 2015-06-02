@@ -136,27 +136,22 @@ void controlEvent(ControlEvent theEvent) {
     String ControllerName = theEvent.getController().getName();
     if (ControllerName.equals("Rectangle")) {
       CRT_RECT = 1;
-      CRT_LINE = 0;
-      CRT_CIRC = 0;
       println("the Rect option was selected");
       text.setText("Create new Rectangle:\n\nClick in either the top, front or right view box to indicate the position of the shape.");
       getPosition();
     } else if (ControllerName.equals("Line")) {
-      CRT_RECT = 0;
       CRT_LINE = 1;
-      CRT_CIRC = 0;
       println("the Line option was selected");
       text.setText("Create new Line:\n\nClick in either the top, front or right view box to indicate the position of the shape");
       getPosition();
     } else if (ControllerName.equals("Circle")) {
-      CRT_RECT = 0;
-      CRT_LINE = 0;
       CRT_CIRC = 1;
       println("the Circle option was selected");
       text.setText("Create new Circle:\n\nClick in either the top, front or right view box to indicate the center of the shape");
       getPosition();
     } else if (ControllerName.equals("Clear all")) {
       creations.clear();
+      text.setText("Cleared all.");
     }
     //delete, xform, edit
   }
