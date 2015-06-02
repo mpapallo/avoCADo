@@ -11,17 +11,17 @@ class Circle extends Shape {
     if (mode == TOP) {
       setX(xx1);
       setY(yy1);
-      setZ(yy1);
+      setZ(100);
       setR(r);
       setD(2*r);
     } else if (mode == FRONT) {
       setX(xx1);
-      setY(ENDY-yy1);
+      setY(100);
       setZ(ENDY-yy1);
       setR(r);
       setD(2*r);
     } else {
-      setX(BOUNDARYV1+ENDX-xx1);
+      setX(BOUNDARYV1+100);
       setY(ENDX-xx1);
       setZ(ENDY-yy1);
       setR(r);
