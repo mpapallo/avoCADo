@@ -87,7 +87,7 @@ void createMenu() {
 }
 
 void draw() {
-  println(CRT_LINE);
+  //println(CRT_LINE);
   background(0);
   fill(200);
   noStroke();
@@ -136,15 +136,21 @@ void controlEvent(ControlEvent theEvent) {
     String ControllerName = theEvent.getController().getName();
     if (ControllerName.equals("Rectangle")) {
       CRT_RECT = 1;
+      CRT_LINE = 0;
+      CRT_CIRC = 0;
       println("the Rect option was selected");
       text.setText("Create new Rectangle:\n\nClick in either the top, front or right view box to indicate the position of the shape.");
       getPosition();
     } else if (ControllerName.equals("Line")) {
+      CRT_RECT = 0;
       CRT_LINE = 1;
+      CRT_CIRC = 0;
       println("the Line option was selected");
       text.setText("Create new Line:\n\nClick in either the top, front or right view box to indicate the position of the shape");
       getPosition();
     } else if (ControllerName.equals("Circle")) {
+      CRT_RECT = 0;
+      CRT_LINE = 0;
       CRT_CIRC = 1;
       println("the Circle option was selected");
       text.setText("Create new Circle:\n\nClick in either the top, front or right view box to indicate the center of the shape");
@@ -258,7 +264,7 @@ void input(String theText) {
 void mouseClicked() {
   if (SELECT_MODE) {
     if (!FIRST_CLICK) {
-      if (getMode(mouseX, mouseY) != -1) {
+      if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 2 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 2)) {
         tempX = mouseX;
         tempY = mouseY;
         println("xcor: " + tempX + ", ycor: " + tempY);
@@ -268,11 +274,7 @@ void mouseClicked() {
         } else if (CRT_CIRC == 1) {
           CRT_CIRC = 2;
         } else if (CRT_LINE == 1 || CRT_LINE == 2) {
-          if (CRT_LINE == 2 && getMode(tempX, tempY) != getMode(tempX2, tempY2)) {
-            text.setText(text.getText() + "\n\nWrong view...");
-          } else {
             CRT_LINE++;
-          }
         }
       } else {
         text.setText(text.getText() + "\n\nWrong view...");
