@@ -11,8 +11,6 @@ Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a5
 - You can also clear the screen of all shapes.
 
 ###To Do
-- allow the user to create lines
-- set boundaries for user selection
 - delete
 - xform
 - (edit?)
@@ -42,3 +40,8 @@ Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a5
 <b>5/31/15</b>
 - circle views work but boundary issues
 - rect views work
+- lines work!
+
+<b>6/1/15</b>
+- fixed boundary issues so now the creation of shapes actually works
+
