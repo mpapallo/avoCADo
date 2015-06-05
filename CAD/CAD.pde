@@ -2,7 +2,8 @@ import controlP5.*;
 
 ControlP5 cp5;
 MultiList menu;
-MultiListButton del;
+MultiListButton del, DRect, DCirc, DLine;
+int numRect, numCirc, numLine;
 Textarea text;
 String textValue = "";
 ArrayList<Shape> creations = new ArrayList<Shape>();
@@ -36,9 +37,9 @@ void createMenu() {
   b.add("Line", 12);
   b.add("Circle", 13);
   del = menu.add("Delete", 2);
-  del.add("D_Rectangle", 21);
-  del.add("D_Line", 22);
-  del.add("D_Circle", 23);
+  DRect = del.add("D_Rectangle", 21);
+  DLine = del.add("D_Line", 22);
+  DCirc = del.add("D_Circle", 23);
   del.add("Clear all", 24);
   b = menu.add("XForm", 3);
   b = menu.add("Edit", 4);
@@ -152,8 +153,20 @@ void controlEvent(ControlEvent theEvent) {
     } else if (ControllerName.equals("Clear all")) {
       creations.clear();
       text.setText("Cleared all.");
+    } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")){
+      println("delete a rectangle");
+      //int i = Integer.parseInt(ControllerName.substring(10)); //Rectangle_<index>
+      //creations.remove(i);
+      numRect --;
+    } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")){
+      println("delete a circle");
+      //
+      numCirc --;
+    } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("Line")){
+      println("delete a line");
+      //
+      numLine --; 
     }
-    //delete, xform, edit
   }
 }
 
@@ -183,6 +196,9 @@ void createRect(int x1, int y1) {
       creations.add(new Rectangle(x1, y1, width, length, mode));
       width = -1;
       length = -1;
+      numRect ++;
+      String name = "Rectangle_"+numRect;
+      DRect.add(name, 210 + numRect);
       CRT_RECT = 0;
     }
   }
@@ -199,6 +215,9 @@ void createLine(int x1, int y1) {
     text.setText("New Line Created");
     int mode = getMode(x1, y1);
     creations.add(new Line(tempX2, tempY2, x1, y1, mode));
+    numLine ++;
+    String name = "Line_"+numLine;
+    DLine.add(name, 220+numLine);
     CRT_LINE = 0;
   }
 }
@@ -217,6 +236,9 @@ void createCirc(int x1, int y1) {
     radius = -1;
     tempX = -1;
     tempY = -1;
+    numCirc ++;
+    String name = "Circle_"+numCirc;
+    DCirc.add(name, 230+numCirc);
     CRT_CIRC = 0;
   }
 }
