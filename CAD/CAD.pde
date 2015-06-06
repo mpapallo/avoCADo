@@ -3,10 +3,12 @@ import controlP5.*;
 ControlP5 cp5;
 MultiList menu;
 MultiListButton del, DRect, DCirc, DLine;
-int numRect, numCirc, numLine;
+//int numRect, numCirc, numLine;
 Textarea text;
 String textValue = "";
-ArrayList<Shape> creations = new ArrayList<Shape>();
+ArrayList<Shape> creationsR = new ArrayList<Shape>(), 
+creationsC = new ArrayList<Shape>(), 
+creationsL = new ArrayList<Shape>();
 final int BOUNDARYV1 = 100, BOUNDARYV2 = 450, BOUNDARYH = 350;
 final int ENDX = 800, ENDY = 700;
 final int BUTTON_W = 20;
@@ -98,10 +100,20 @@ void draw() {
   line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
   //text(cp5.get(Textfield.class,"input").getText(), 360,130);
   //text(textValue, 360,180);
-  for (int i=0; i<creations.size (); i++) {
+  for (int i=0; i<creationsR.size (); i++) {
     stroke(0, 255, 0);
     noFill();
-    creations.get(i).draw();
+    creationsR.get(i).draw();
+  }
+  for (int i=0; i<creationsC.size (); i++) {
+    stroke(0, 255, 0);
+    noFill();
+    creationsC.get(i).draw();
+  }
+  for (int i=0; i<creationsL.size (); i++) {
+    stroke(0, 255, 0);
+    noFill();
+    creationsL.get(i).draw();
   }
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
@@ -135,6 +147,7 @@ void controlEvent(ControlEvent theEvent) {
   }
   if (theEvent.isAssignableFrom(MultiListButton.class)) {
     String ControllerName = theEvent.getController().getName();
+    float val = theEvent.getController().getValue();
     if (ControllerName.equals("Rectangle")) {
       CRT_RECT = 1;
       println("the Rect option was selected");
@@ -151,21 +164,30 @@ void controlEvent(ControlEvent theEvent) {
       text.setText("Create new Circle:\n\nClick in either the top, front or right view box to indicate the center of the shape");
       getPosition();
     } else if (ControllerName.equals("Clear all")) {
-      creations.clear();
+      creationsR.clear();
+      creationsC.clear();
+      creationsL.clear();
       text.setText("Cleared all.");
-    } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")){
+    } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")) {
       println("delete a rectangle");
-      //int i = Integer.parseInt(ControllerName.substring(10)); //Rectangle_<index>
-      //creations.remove(i);
-      numRect --;
-    } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")){
+      //println(theEvent.getController().getValue());
+      int i = ((int) val % 210)-1;
+      creationsR.remove(i);
+      text.setText("Rectangle deleted.");
+      //numRect --;
+    } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
       println("delete a circle");
-      //
-      numCirc --;
-    } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("Line")){
+      int i = ((int) val % 230)-1;
+      println(i);
+      creationsC.remove(i);
+      text.setText("Circle deleted.");
+      //numCirc --;
+    } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("Line")) {
       println("delete a line");
-      //
-      numLine --; 
+      int i = ((int) val % 220)-1;
+      creationsL.remove(i);
+      text.setText("Line deleted.");
+      //numLine --;
     }
   }
 }
@@ -193,12 +215,12 @@ void createRect(int x1, int y1) {
       temp1 = -1;
       int mode = getMode(x1, y1);
       text.setText("New Rectangle created");
-      creations.add(new Rectangle(x1, y1, width, length, mode));
+      creationsR.add(new Rectangle(x1, y1, width, length, mode));
       width = -1;
       length = -1;
-      numRect ++;
-      String name = "Rectangle_"+numRect;
-      DRect.add(name, 210 + numRect);
+      //numRect ++;
+      String name = "Rectangle_"+(creationsR.size()-1);
+      DRect.add(name, 210 + creationsR.size());
       CRT_RECT = 0;
     }
   }
@@ -214,10 +236,10 @@ void createLine(int x1, int y1) {
   } else if (CRT_LINE == 3) {
     text.setText("New Line Created");
     int mode = getMode(x1, y1);
-    creations.add(new Line(tempX2, tempY2, x1, y1, mode));
-    numLine ++;
-    String name = "Line_"+numLine;
-    DLine.add(name, 220+numLine);
+    creationsL.add(new Line(tempX2, tempY2, x1, y1, mode));
+    //numLine ++;
+    String name = "Line_"+(creationsL.size()-1);
+    DLine.add(name, 220+creationsL.size());
     CRT_LINE = 0;
   }
 }
@@ -232,13 +254,13 @@ void createCirc(int x1, int y1) {
     temp1 = -1;
     int mode = getMode(x1, y1);
     text.setText("New Circle created");
-    creations.add(new Circle(tempX, tempY, radius, mode));
+    creationsC.add(new Circle(tempX, tempY, radius, mode));
     radius = -1;
     tempX = -1;
     tempY = -1;
-    numCirc ++;
-    String name = "Circle_"+numCirc;
-    DCirc.add(name, 230+numCirc);
+    //numCirc ++;
+    String name = "Circle_"+(creationsC.size()-1);
+    DCirc.add(name, 230+creationsC.size());
     CRT_CIRC = 0;
   }
 }
@@ -291,7 +313,7 @@ void mouseClicked() {
         } else if (CRT_CIRC == 1) {
           CRT_CIRC = 2;
         } else if (CRT_LINE == 1 || CRT_LINE == 2) {
-            CRT_LINE++;
+          CRT_LINE++;
         }
       } else {
         text.setText(text.getText() + "\n\nWrong view...");
