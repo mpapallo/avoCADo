@@ -181,6 +181,7 @@ void controlEvent(ControlEvent theEvent) {
       println(i);
       creationsC.remove(i);
       text.setText("Circle deleted.");
+      theEvent.getController().remove();
       //numCirc --;
     } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("Line")) {
       println("delete a line");
