@@ -45,3 +45,5 @@ Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a5
 <b>6/1/15</b>
 - fixed boundary issues so now the creation of shapes actually works
 
+<b>6/6/15</b>
+- more work on delete
