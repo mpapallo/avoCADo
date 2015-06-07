@@ -27,7 +27,7 @@ void setup() {
 
   cp5 = new ControlP5(this);
   createMenu();
-  
+
   avo = loadImage("avocado.png");
 
   //creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
@@ -68,6 +68,10 @@ void createMenu() {
         .setSize(BOUNDARYV1, BUTTON_W)
           .setVisible(false)
             ;
+  cp5.addButton("             New Part")
+    .setPosition(350, 350)
+      .setSize(100, 25)
+        ;
 
   cp5.addTextfield("input")
     .setValue(7)
@@ -98,7 +102,7 @@ void createMenu() {
         .setText("FRONT")
           .setVisible(false)
             ;
-  cp5.addTextarea("side")
+  cp5.addTextarea("right")
     .setPosition(455, 360)
       .setSize(BOUNDARYV1, BUTTON_W)
         .setText("RIGHT")
@@ -111,7 +115,9 @@ void draw() {
     background(0);
     image(avo, 500, 240, 100, 70);
     textSize(65);
-    text("avoCADo",200,300);
+    text("avoCADo", 200, 300);
+    //textSize(15);
+    //text("by CADtherine and MiCADla",300,350);
   } else {
     show();
     background(0);
@@ -152,16 +158,16 @@ void draw() {
 
 
 void show() {
-  cp5.controller("Create").setVisible(true);
-  cp5.controller("Delete").setVisible(true);
-  cp5.controller("Edit").setVisible(true);
-  cp5.controller("XForm").setVisible(true);
-  cp5.controller("Save as").setVisible(true);
-  cp5.controller("input").setVisible(true);
-  cp5.controller("notes").setVisible(true);
-  cp5.controller("top").setVisible(true);
-  cp5.controller("front").setVisible(true);
-  cp5.controller("right").setVisible(true);
+  cp5.getController("Create").setVisible(true);
+  cp5.getController("Delete").setVisible(true);
+  cp5.getController("Edit").setVisible(true);
+  cp5.getController("XForm").setVisible(true);
+  cp5.getController("Save As").setVisible(true);
+  cp5.getController("input").setVisible(true);
+  cp5.getGroup("notes").setVisible(true);
+  cp5.getGroup("top").setVisible(true);
+  cp5.getGroup("front").setVisible(true);
+  cp5.getGroup("right").setVisible(true);
 }
 
 void controlEvent(ControlEvent theEvent) {
@@ -177,6 +183,9 @@ void controlEvent(ControlEvent theEvent) {
       println("the 3D button was pressed");
     } else if (ControllerName.equals("Save As")) {
       println("the Save button was pressed");
+    } else if (ControllerName.equals("             New Part")) {
+      MENU_SCREEN = false;
+      cp5.remove("             New Part");
     }
   }
   if (theEvent.isAssignableFrom(MultiListButton.class)) {
