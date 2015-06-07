@@ -152,17 +152,29 @@ void draw() {
     line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
     //draw all the shapes
     for (int i=0; i<creationsR.size (); i++) {
-      stroke(0, 255, 0);
+      if (cp5.controller("Rectangle_"+i).isActive()){//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+        stroke(255);
+      } else{
+        stroke(0, 255, 0);
+      }
       noFill();
       creationsR.get(i).draw();
     }
     for (int i=0; i<creationsC.size (); i++) {
-      stroke(0, 255, 0);
+      if (cp5.controller("Circle_"+i).isActive()){//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+        stroke(255);
+      } else{
+        stroke(0, 255, 0);
+      }
       noFill();
       creationsC.get(i).draw();
     }
     for (int i=0; i<creationsL.size (); i++) {
-      stroke(0, 255, 0);
+      if (cp5.controller("Line_"+i).isActive()){//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+        stroke(255);
+      } else{
+        stroke(0, 255, 0);
+      }
       noFill();
       creationsL.get(i).draw();
     }
@@ -190,6 +202,7 @@ void show() {
   cp5.getController("Edit").setVisible(true);
   cp5.getController("XForm").setVisible(true);
   cp5.getController("Save As").setVisible(true);
+  cp5.getController("3D View").setVisible(true);
   cp5.getController("input").setVisible(true);
   cp5.getGroup("notes").setVisible(true);
   cp5.getGroup("top").setVisible(true);
