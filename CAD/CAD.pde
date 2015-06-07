@@ -3,11 +3,12 @@ import controlP5.*;
 PImage avo;
 ControlP5 cp5;
 MultiList menu;
+ListBox open;
 MultiListButton del, DRect, DCirc, DLine, XRect;
 //int numRect, numCirc, numLine;
 Textarea text;
 String textValue = "";
-String fileName = "NewPart";
+String fileName = "";
 ArrayList<Rectangle> creationsR = new ArrayList<Rectangle>(); 
 ArrayList<Circle> creationsC = new ArrayList<Circle>();
 ArrayList<Line> creationsL = new ArrayList<Line>();
@@ -52,8 +53,17 @@ void createMenu() {
   b.add("Delta", 31).add("X_Rectangle", 311);
   b.setVisible(false);
   b = menu.add("Edit", 4);
-  b.setVisible(false); 
+  b.setVisible(false);
 
+  open = cp5.addListBox("\n            Open Part", 500, 375, 100, 25)
+    .setBarHeight(25)
+      .setOpen(false)
+        ;
+
+  String[] files = loadStrings("config.txt");  
+  for (int i=0; i<files.length; i++) {
+    ListBoxItem lbi = open.addItem(files[i], i);
+  }
 
   cp5.addButton("3D View")
     .setValue(5)
@@ -70,7 +80,7 @@ void createMenu() {
               .setBroadcast(true);
   ;
   cp5.addButton("             New Part")
-    .setPosition(350, 350)
+    .setPosition(200, 350)
       .setSize(100, 25)
         ;
 
@@ -215,6 +225,7 @@ void show() {
   cp5.getGroup("top").setVisible(true);
   cp5.getGroup("front").setVisible(true);
   cp5.getGroup("right").setVisible(true);
+  open.remove();
 }
 
 void controlEvent(ControlEvent theEvent) {
@@ -223,6 +234,9 @@ void controlEvent(ControlEvent theEvent) {
       +theEvent.getName()+"': "
       +theEvent.getStringValue()
       );
+  }
+  if (theEvent.isAssignableFrom(ListBoxItem.class)) {
+   println("k"); 
   }
   if (theEvent.isAssignableFrom(Button.class)) {
     String ControllerName = theEvent.getController().getName();
@@ -289,8 +303,8 @@ void controlEvent(ControlEvent theEvent) {
 void saveAs() {
   if (CRT_FILE == 1) {
     text.setText("Save File:\nEnter a file name");
-    if (fileName != "") {
-      println("o");
+    if (!fileName.equals("")) {
+      println(fileName+"l");
       CRT_FILE = 2;
     }
   } else if (CRT_FILE == 2) {
@@ -429,8 +443,8 @@ void input(String theText) {
   // println(theText);
   if (CRT_FILE == 1) {
     fileName = theText;
-    if (fileName == ""){
-       fileName = "NewPart"; 
+    if (fileName.equals("") || fileName.equals("config") || fileName.indexOf(".txt") != -1) {
+      fileName = "NewPart";
     }
     println(fileName);
   } else {
