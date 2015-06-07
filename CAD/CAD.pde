@@ -1,5 +1,6 @@
 import controlP5.*;
 
+PImage avo;
 ControlP5 cp5;
 MultiList menu;
 MultiListButton del, DRect, DCirc, DLine;
@@ -26,6 +27,8 @@ void setup() {
 
   cp5 = new ControlP5(this);
   createMenu();
+  
+  avo = loadImage("avocado.png");
 
   //creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
   //creations.add(new Rectangle(185,15,5,130,15,250,1));
@@ -35,6 +38,7 @@ void setup() {
 
 void createMenu() {
   menu = cp5.addMultiList("Menu", 0, 5, BOUNDARYV1, BUTTON_W);
+  menu.setVisible(false);
   MultiListButton b;
   b = menu.add("Create", 1);
   b.add("Rectangle", 11);
@@ -105,6 +109,9 @@ void createMenu() {
 void draw() {
   if (MENU_SCREEN) {
     background(0);
+    image(avo, 500, 240, 100, 70);
+    textSize(65);
+    text("avoCADo",200,300);
   } else {
     show();
     background(0);
@@ -150,6 +157,11 @@ void show() {
   cp5.controller("Edit").setVisible(true);
   cp5.controller("XForm").setVisible(true);
   cp5.controller("Save as").setVisible(true);
+  cp5.controller("input").setVisible(true);
+  cp5.controller("notes").setVisible(true);
+  cp5.controller("top").setVisible(true);
+  cp5.controller("front").setVisible(true);
+  cp5.controller("right").setVisible(true);
 }
 
 void controlEvent(ControlEvent theEvent) {
