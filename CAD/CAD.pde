@@ -2,16 +2,19 @@ import controlP5.*;
 
 ControlP5 cp5;
 MultiList menu;
-MultiListButton del;
+MultiListButton del, DRect, DCirc, DLine;
+int numRect, numCirc, numLine;
 Textarea text;
 String textValue = "";
 ArrayList<Shape> creations = new ArrayList<Shape>();
-final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
-final int ENDX = 900, ENDY = 600;
+final int BOUNDARYV1 = 100, BOUNDARYV2 = 450, BOUNDARYH = 350;
+final int ENDX = 800, ENDY = 700;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
-int temp1 = -1, tempX = -1, tempY = -1, width = -1, length = -1, radius = -1;
+int temp1 = -1, tempX = -1, tempY = -1;
+int tempX2 = -1, tempY2 = -1;
+int width = -1, length = -1, radius = -1;
 
 void setup() {
   size(ENDX, ENDY);
@@ -34,9 +37,9 @@ void createMenu() {
   b.add("Line", 12);
   b.add("Circle", 13);
   del = menu.add("Delete", 2);
-  del.add("D_Rectangle", 21);
-  del.add("D_Line", 22);
-  del.add("D_Circle", 23);
+  DRect = del.add("D_Rectangle", 21);
+  DLine = del.add("D_Line", 22);
+  DCirc = del.add("D_Circle", 23);
   del.add("Clear all", 24);
   b = menu.add("XForm", 3);
   b = menu.add("Edit", 4);
@@ -54,41 +57,42 @@ void createMenu() {
 
   cp5.addTextfield("input")
     .setValue(7)
-      .setPosition(0, 550)
+      .setPosition(0, 650)
         .setSize(BOUNDARYV1, BUTTON_W)
           .setColorCaptionLabel(0)
             ;
 
   text = cp5.addTextarea("notes")
-    .setPosition(0, 300)
-      .setSize(BOUNDARYV1, 230)
+    .setPosition(0, 350)
+      .setSize(BOUNDARYV1, 280)
         .setText("Look here for instructions")
           .setColor(0)
             .setFont(createFont("arial", 12))
               ;
 
   cp5.addTextarea("top")
-    .setPosition(450, 280)
+    .setPosition(412, 330)
       .setSize(BOUNDARYV1, BUTTON_W)
-        .setText("TOP VIEW")
+        .setText("TOP")
           ;
   cp5.addTextarea("front")
-    .setPosition(438, 310)
+    .setPosition(412, 360)
       .setSize(BOUNDARYV1, BUTTON_W)
-        .setText("FRONT VIEW")
+        .setText("FRONT")
           ;
   cp5.addTextarea("side")
-    .setPosition(505, 310)
+    .setPosition(455, 360)
       .setSize(BOUNDARYV1, BUTTON_W)
-        .setText("RIGHT VIEW")
+        .setText("RIGHT")
           ;
 }
 
 void draw() {
+  //println(CRT_LINE);
   background(0);
   fill(200);
   noStroke();
-  rect(0, 0, BOUNDARYV1, 600);
+  rect(0, 0, BOUNDARYV1, ENDY);
   stroke(200);
   line(BOUNDARYV2, 0, BOUNDARYV2, ENDY);
   line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
@@ -101,6 +105,9 @@ void draw() {
   }
   if (CRT_RECT == 2 || CRT_RECT == 3) {
     createRect(tempX, tempY);
+  }
+  if (CRT_LINE == 2 || CRT_LINE == 3) {
+    createLine(tempX, tempY);
   }
   if (CRT_CIRC == 2) {
     createCirc(tempX, tempY);
@@ -145,8 +152,21 @@ void controlEvent(ControlEvent theEvent) {
       getPosition();
     } else if (ControllerName.equals("Clear all")) {
       creations.clear();
+      text.setText("Cleared all.");
+    } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")){
+      println("delete a rectangle");
+      //int i = Integer.parseInt(ControllerName.substring(10)); //Rectangle_<index>
+      //creations.remove(i);
+      numRect --;
+    } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")){
+      println("delete a circle");
+      //
+      numCirc --;
+    } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("Line")){
+      println("delete a line");
+      //
+      numLine --; 
     }
-    //delete, xform, edit
   }
 }
 
@@ -176,8 +196,29 @@ void createRect(int x1, int y1) {
       creations.add(new Rectangle(x1, y1, width, length, mode));
       width = -1;
       length = -1;
+      numRect ++;
+      String name = "Rectangle_"+numRect;
+      DRect.add(name, 210 + numRect);
       CRT_RECT = 0;
     }
+  }
+}
+
+void createLine(int x1, int y1) {
+  if (CRT_LINE == 2) {
+    tempX2 = x1;
+    tempY2 = y1;
+    text.setText("Create New Line:\n\nNow choose another point within the same view box to form a line.");
+    SELECT_MODE = true;
+    FIRST_CLICK = false;
+  } else if (CRT_LINE == 3) {
+    text.setText("New Line Created");
+    int mode = getMode(x1, y1);
+    creations.add(new Line(tempX2, tempY2, x1, y1, mode));
+    numLine ++;
+    String name = "Line_"+numLine;
+    DLine.add(name, 220+numLine);
+    CRT_LINE = 0;
   }
 }
 
@@ -195,6 +236,9 @@ void createCirc(int x1, int y1) {
     radius = -1;
     tempX = -1;
     tempY = -1;
+    numCirc ++;
+    String name = "Circle_"+numCirc;
+    DCirc.add(name, 230+numCirc);
     CRT_CIRC = 0;
   }
 }
@@ -237,14 +281,20 @@ void input(String theText) {
 void mouseClicked() {
   if (SELECT_MODE) {
     if (!FIRST_CLICK) {
-      tempX = mouseX;
-      tempY = mouseY;
-      println("xcor: " + tempX + ", ycor: " + tempY);
-      SELECT_MODE = false;
-      if (CRT_RECT == 1) {
-        CRT_RECT = 2;
-      } else if (CRT_CIRC == 1) {
-        CRT_CIRC = 2;
+      if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 2 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 2)) {
+        tempX = mouseX;
+        tempY = mouseY;
+        println("xcor: " + tempX + ", ycor: " + tempY);
+        SELECT_MODE = false;
+        if (CRT_RECT == 1) {
+          CRT_RECT = 2;
+        } else if (CRT_CIRC == 1) {
+          CRT_CIRC = 2;
+        } else if (CRT_LINE == 1 || CRT_LINE == 2) {
+            CRT_LINE++;
+        }
+      } else {
+        text.setText(text.getText() + "\n\nWrong view...");
       }
     } else {
       FIRST_CLICK = false;

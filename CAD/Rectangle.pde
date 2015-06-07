@@ -12,44 +12,37 @@ class Rectangle extends Shape {
    */
   Rectangle(int xx1, int yy1, int w, int l, int mod) {
     setM(mod);
+    width = w;
+    length = l;
     if (mode == TOP) {
       setX(xx1);
       setY(yy1);
-      setZ(10);
-      width = w;
-      length = l;
+      setZ(100);
     } else if (mode == FRONT) {
       setX(xx1);
       setZ(yy1);
-      setY(10);
-      width = w;
-      length = l;
-    } else if (mode == RIGHT) {
-      setZ(xx1);
-      setY(yy1);
-      setX(10);
-      width = w;
-      length = l;
+      setY(100);
+    } else if (mod == RIGHT) {
+      setY(xx1);
+      setZ(yy1);
+      setX(100);
     }
   }
 
   void draw() {
     if (mode==TOP) {
-      //println(BOUNDARYV1);
-      //println(x1+BOUNDARYV1+" "+y1+" "+(x2+BOUNDARYV1)+" "+y2);
-      //println(x1+" "+y1+" "+z1+" "+width+" "+length);
       rect(x1, y1, width, length);
       line(x1, ENDY-z1, x1+width, ENDY-z1);
-      line(ENDX-(y1), ENDY-z1, ENDX-(y1+length), ENDY-z1);
-    } /*else if (mode==FRONT) {
-      line(x1, y1, x2, y2);
-      rect(x1, z2, x2-x1, z2-z1);
-      line(y1, z1, y2, ENDY-z2);
+      line(ENDX-y1, ENDY-z1, ENDX-(y1+length), ENDY-z1);
+    } else if (mode==FRONT) {
+      line(x1, BOUNDARYH-y1, x1+width, BOUNDARYH-y1);
+      rect(x1, z1, width, length);
+      line(BOUNDARYV2+y1, z1, BOUNDARYV2+y1, z1+length);
     } else if (mode==RIGHT) {
-      line(x1, y1, x2, y2);
-      line(x1, z1, x2, z2);
-      rect(y1, z2, y2-y1, z2);
-    }*/
+      rect(y1, z1, width, length);
+      line(BOUNDARYV1+x1, ENDX-(y1+width), BOUNDARYV1+x1, ENDX-y1);
+      line(BOUNDARYV1+x1, z1+length, BOUNDARYV1+x1, z1);
+    }
   }
 }
 

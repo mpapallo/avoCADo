@@ -5,8 +5,12 @@
 ###Description 
 CADKey in Processing
 
+###How to Use
+Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a53991a2e1114316673a7f7077
+- You can create Rectangles or Circles in any of the 3 views; creating lines vaguely works.
+- You can also clear the screen of all shapes.
+
 ###To Do
-- allow the user to create rects and lines
 - delete
 - xform
 - (edit?)
@@ -35,3 +39,9 @@ CADKey in Processing
 
 <b>5/31/15</b>
 - circle views work but boundary issues
+- rect views work
+- lines work!
+
+<b>6/1/15</b>
+- fixed boundary issues so now the creation of shapes actually works
+
