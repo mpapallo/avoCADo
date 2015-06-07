@@ -20,12 +20,12 @@ int temp1 = -1, tempX = -1, tempY = -1;
 int tempX2 = -1, tempY2 = -1;
 int width = -1, length = -1, radius = -1;
 
-
 void setup() {
   size(ENDX, ENDY);
   frame.setTitle("avoCADo");
 
   cp5 = new ControlP5(this);
+  cp5.setColorBackground(0);
   createMenu();
 
   avo = loadImage("avocado.png");
@@ -60,8 +60,8 @@ void createMenu() {
     .setValue(5)
       .setPosition(0, 130)
         .setSize(BOUNDARYV1, BUTTON_W)
-          .setVisible(false)
-            ;
+            .setVisible(false)
+              ;
   cp5.addButton("Save As")
     .setValue(6)
       .setPosition(0, 180)
@@ -78,8 +78,9 @@ void createMenu() {
       .setPosition(0, 650)
         .setSize(BOUNDARYV1, BUTTON_W)
           .setColorCaptionLabel(0)
-            .setVisible(false)
-              ;
+            .setBroadcast(false)
+              .setVisible(false)
+                ;
 
   text = cp5.addTextarea("notes")
     .setPosition(0, 350)
@@ -143,6 +144,11 @@ void draw() {
       stroke(0, 255, 0);
       noFill();
       creationsL.get(i).draw();
+    }
+    if (CRT_RECT == 2 || CRT_RECT == 3 || CRT_CIRC == 2) {
+      cp5.getController("input").setBroadcast(true);
+    } else {
+      cp5.getController("input").setBroadcast(false);
     }
     if (CRT_RECT == 2 || CRT_RECT == 3) {
       createRect(tempX, tempY);
