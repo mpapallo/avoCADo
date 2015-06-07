@@ -34,6 +34,18 @@ class Line extends Shape {
       x1 = BOUNDARYV1+100;
     }
   }
+  
+  int getX2() {
+    return x2;
+  }
+
+  int getY2() {
+    return y2;
+  }
+
+  int getZ2() {
+    return z2;
+  }
 
   void draw() {
     if (mode == TOP) {

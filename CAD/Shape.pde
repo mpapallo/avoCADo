@@ -27,6 +27,10 @@ abstract class Shape {
     return z1;
   }
 
+  int getM() {
+    return mode;
+  }
+
   void setX(int x) {
     x1=x;
   }

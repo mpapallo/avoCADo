@@ -28,6 +28,14 @@ class Circle extends Shape {
       setD(2*r);
     }
   }
+  
+  int getR() {
+    return r;
+  }
+
+  int getD() {
+    return d;
+  }
 
   void draw() {
     if (mode == TOP) {

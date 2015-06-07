@@ -3,20 +3,21 @@ import controlP5.*;
 PImage avo;
 ControlP5 cp5;
 MultiList menu;
-MultiListButton del, DRect, DCirc, DLine;
+MultiListButton del, DRect, DCirc, DLine, XRect;
 //int numRect, numCirc, numLine;
 Textarea text;
 String textValue = "";
-ArrayList<Shape> creationsR = new ArrayList<Shape>(), 
-creationsC = new ArrayList<Shape>(), 
-creationsL = new ArrayList<Shape>();
+String fileName = "NewPart";
+ArrayList<Rectangle> creationsR = new ArrayList<Rectangle>(); 
+ArrayList<Circle> creationsC = new ArrayList<Circle>();
+ArrayList<Line> creationsL = new ArrayList<Line>();
 final int BOUNDARYV1 = 100, BOUNDARYV2 = 450, BOUNDARYH = 350;
 final int ENDX = 800, ENDY = 700;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
 boolean MENU_SCREEN = true;
 boolean setup = true;
-int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
+int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0;
 int temp1 = -1, tempX = -1, tempY = -1;
 int tempX2 = -1, tempY2 = -1;
 int width = -1, length = -1, radius = -1;
@@ -48,6 +49,7 @@ void createMenu() {
   updateDMenu();
   del.setVisible(false);
   b = menu.add("XForm", 3);
+  b.add("Delta", 31).add("X_Rectangle", 311);
   b.setVisible(false);
   b = menu.add("Edit", 4);
   b.setVisible(false); 
@@ -152,34 +154,34 @@ void draw() {
     line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
     //draw all the shapes
     for (int i=0; i<creationsR.size (); i++) {
-      if (cp5.controller("Rectangle_"+i).isActive()){//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+      if (cp5.controller("Rectangle_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
         stroke(255);
-      } else{
+      } else {
         stroke(0, 255, 0);
       }
       noFill();
       creationsR.get(i).draw();
     }
     for (int i=0; i<creationsC.size (); i++) {
-      if (cp5.controller("Circle_"+i).isActive()){//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+      if (cp5.controller("Circle_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
         stroke(255);
-      } else{
+      } else {
         stroke(0, 255, 0);
       }
       noFill();
       creationsC.get(i).draw();
     }
     for (int i=0; i<creationsL.size (); i++) {
-      if (cp5.controller("Line_"+i).isActive()){//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+      if (cp5.controller("Line_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
         stroke(255);
-      } else{
+      } else {
         stroke(0, 255, 0);
       }
       noFill();
       creationsL.get(i).draw();
     }
     //check the mode
-    if (CRT_RECT == 2 || CRT_RECT == 3 || CRT_CIRC == 2) {
+    if (CRT_RECT == 2 || CRT_RECT == 3 || CRT_CIRC == 2 || CRT_FILE == 1) {
       cp5.getController("input").setBroadcast(true);
     } else {
       cp5.getController("input").setBroadcast(false);
@@ -192,6 +194,9 @@ void draw() {
     }
     if (CRT_CIRC == 2) {
       createCirc(tempX, tempY);
+    }
+    if (CRT_FILE == 1 || CRT_FILE == 2) {
+      saveAs();
     }
   }
 }
@@ -223,6 +228,7 @@ void controlEvent(ControlEvent theEvent) {
       println("the 3D button was pressed");
     } else if (ControllerName.equals("Save As")) {
       println("the Save button was pressed");
+      CRT_FILE = 1;
     } else if (ControllerName.equals("             New Part")) {
       MENU_SCREEN = false;
       cp5.remove("             New Part");
@@ -275,6 +281,50 @@ void controlEvent(ControlEvent theEvent) {
       //theEvent.getController().remove();
       updateDMenu();
     }
+  }
+}
+
+void saveAs() {
+  if (CRT_FILE == 1) {
+    text.setText("Save File:\nEnter a file name");
+    if (fileName != "NewPart") {
+      println("o");
+      CRT_FILE = 2;
+    }
+  } else if (CRT_FILE == 2) {
+    int size = creationsR.size() + creationsC.size() + creationsL.size();
+    String[] data = new String[size];
+    for (int i=0; i<creationsR.size (); i++) {
+      String[] datz = new String[6];
+      datz[0] = creationsR.get(i).getX() + "";
+      datz[1] = creationsR.get(i).getY() + "";
+      datz[2] = creationsR.get(i).getW() + "";
+      datz[3] = creationsR.get(i).getL() + "";
+      datz[4] = creationsR.get(i).getM() + "";
+      datz[5] = "0";
+      data[i] = join(datz,",");
+    }
+    for (int i=0; i<creationsL.size (); i++) {
+      String[] datz = new String[6];
+      datz[0] = creationsL.get(i).getX() + "";
+      datz[1] = creationsL.get(i).getY() + "";
+      datz[2] = creationsL.get(i).getX2() + "";
+      datz[3] = creationsL.get(i).getY2() + "";
+      datz[4] = creationsL.get(i).getM() + "";
+      datz[5] = "1";
+      data[i+creationsR.size()-1] = join(datz,",");
+    }
+    for (int i=0; i<creationsC.size (); i++) {
+      String[] datz = new String[5];
+      datz[0] = creationsC.get(i).getX() + "";
+      datz[1] = creationsC.get(i).getY() + "";
+      datz[2] = creationsC.get(i).getR() + "";
+      datz[3] = creationsC.get(i).getM() + "";
+      datz[4] = "2";
+      data[i+creationsR.size()+creationsL.size()-2] = join(datz,",");
+    }
+    saveStrings(fileName+".txt", data);
+    text.setText(fileName+" created.");
   }
 }
 
@@ -373,17 +423,23 @@ void getPosition() {
 void input(String theText) {
   // automatically receives results from controller input
   // println(theText);
-  try {
-    temp1 = abs(Integer.parseInt(theText));
-    if (temp1 == 0) {
-      temp1 = -1;
+  if (CRT_FILE == 1) {
+    fileName = theText;
+    println("hii");
+    println(fileName);
+  } else {
+    try {
+      temp1 = abs(Integer.parseInt(theText));
+      if (temp1 == 0) {
+        temp1 = -1;
+        text.setText(text.getText() + "\n\nTry again...");
+      }
+    }
+    catch(Exception e) {
       text.setText(text.getText() + "\n\nTry again...");
     }
+    println(temp1);
   }
-  catch(Exception e) {
-    text.setText(text.getText() + "\n\nTry again...");
-  }
-  println(temp1);
 }
 
 void mouseClicked() {

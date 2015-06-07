@@ -29,6 +29,14 @@ class Rectangle extends Shape {
     }
   }
 
+  int getW() {
+    return width;
+  }
+  
+  int getL() {
+    return length; 
+  }
+
   void draw() {
     if (mode==TOP) {
       rect(x1, y1, width, length);
