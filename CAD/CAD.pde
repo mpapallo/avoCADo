@@ -15,10 +15,12 @@ final int ENDX = 800, ENDY = 700;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
 boolean MENU_SCREEN = true;
+boolean setup = true;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
 int temp1 = -1, tempX = -1, tempY = -1;
 int tempX2 = -1, tempY2 = -1;
 int width = -1, length = -1, radius = -1;
+int numRemovals = 0;
 
 void setup() {
   size(ENDX, ENDY);
@@ -30,10 +32,7 @@ void setup() {
 
   avo = loadImage("avocado.png");
 
-  //creations.add(new Rectangle(5, 5, 75, 120, 250, 75, 0));
-  //creations.add(new Rectangle(185,15,5,130,15,250,1));
-  //creations.add(new Rectangle(5,30,5,5,250,120,2));
-  //creations.add(new Circle(200,100,50,0));
+  setup = false;
 }
 
 void createMenu() {
@@ -46,22 +45,21 @@ void createMenu() {
   b.add("Circle", 13);
   b.setVisible(false);
   del = menu.add("Delete", 2);
-  DRect = del.add("D_Rectangle", 21);
-  DLine = del.add("D_Line", 22);
-  DCirc = del.add("D_Circle", 23);
-  del.add("Clear all", 24);
+  del.add("Clear all", 20);
+  updateDMenu();
   del.setVisible(false);
   b = menu.add("XForm", 3);
   b.setVisible(false);
   b = menu.add("Edit", 4);
-  b.setVisible(false);
+  b.setVisible(false); 
+
 
   cp5.addButton("3D View")
     .setValue(5)
       .setPosition(0, 130)
         .setSize(BOUNDARYV1, BUTTON_W)
-            .setVisible(false)
-              ;
+          .setVisible(false)
+            ;
   cp5.addButton("Save As")
     .setValue(6)
       .setPosition(0, 180)
@@ -111,8 +109,32 @@ void createMenu() {
             ;
 }
 
+void updateDMenu() {
+  if (!setup) {
+    DRect.remove();
+    DLine.remove();
+    DCirc.remove();
+  }
+  DRect = del.add("D_Rectangle", 21);
+  DRect.setPosition(BOUNDARYV1, 5 + 2*BUTTON_W);
+  for (int i=0; i<creationsR.size (); i++) {
+    DRect.add("Rectangle_"+i, 210+i);
+  }
+  DLine = del.add("D_Line", 22);
+  DLine.setPosition(BOUNDARYV1, 5 + 3*BUTTON_W);
+  for (int i=0; i<creationsL.size (); i++) {
+    DLine.add("Line_"+i, 220+i);
+  }
+  DCirc = del.add("D_Circle", 23);
+  DCirc.setPosition(BOUNDARYV1, 5 + 4*BUTTON_W);
+  for (int i=0; i<creationsC.size (); i++) {
+    DCirc.add("Circle_"+i, 230+i);
+  }
+}
+
 void draw() {
   if (MENU_SCREEN) {
+    //title screen
     background(0);
     image(avo, 500, 240, 100, 70);
     textSize(65);
@@ -120,6 +142,7 @@ void draw() {
     //textSize(15);
     //text("by CADtherine and MiCADla",300,350);
   } else {
+    //background stuff
     show();
     background(0);
     fill(200);
@@ -128,8 +151,7 @@ void draw() {
     stroke(200);
     line(BOUNDARYV2, 0, BOUNDARYV2, ENDY);
     line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
-    //text(cp5.get(Textfield.class,"input").getText(), 360,130);
-    //text(textValue, 360,180);
+    //draw all the shapes
     for (int i=0; i<creationsR.size (); i++) {
       stroke(0, 255, 0);
       noFill();
@@ -145,6 +167,7 @@ void draw() {
       noFill();
       creationsL.get(i).draw();
     }
+    //check the mode
     if (CRT_RECT == 2 || CRT_RECT == 3 || CRT_CIRC == 2) {
       cp5.getController("input").setBroadcast(true);
     } else {
@@ -161,7 +184,6 @@ void draw() {
     }
   }
 }
-
 
 void show() {
   cp5.getController("Create").setVisible(true);
@@ -220,24 +242,32 @@ void controlEvent(ControlEvent theEvent) {
     } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")) {
       println("delete a rectangle");
       //println(theEvent.getController().getValue());
-      int i = ((int) val % 210)-1;
+      int i = ((int) val % 210);
       creationsR.remove(i);
       text.setText("Rectangle deleted.");
+      //theEvent.getController().remove();
+      updateDMenu();
       //numRect --;
+      numRemovals --;
     } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
       println("delete a circle");
-      int i = ((int) val % 230)-1;
+      int i = ((int) val % 230);
       println(i);
       creationsC.remove(i);
       text.setText("Circle deleted.");
-      theEvent.getController().remove();
+      //theEvent.getController().remove();
+      updateDMenu();
       //numCirc --;
+      numRemovals --;
     } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("Line")) {
       println("delete a line");
-      int i = ((int) val % 220)-1;
+      int i = ((int) val % 220);
       creationsL.remove(i);
       text.setText("Line deleted.");
+      //theEvent.getController().remove();
+      updateDMenu();
       //numLine --;
+      numRemovals --;
     }
   }
 }
@@ -270,7 +300,7 @@ void createRect(int x1, int y1) {
       length = -1;
       //numRect ++;
       String name = "Rectangle_"+(creationsR.size()-1);
-      DRect.add(name, 210 + creationsR.size());
+      DRect.add(name, 210 + creationsR.size()-1);
       CRT_RECT = 0;
     }
   }
@@ -289,7 +319,7 @@ void createLine(int x1, int y1) {
     creationsL.add(new Line(tempX2, tempY2, x1, y1, mode));
     //numLine ++;
     String name = "Line_"+(creationsL.size()-1);
-    DLine.add(name, 220+creationsL.size());
+    DLine.add(name, 220+creationsL.size()-1);
     CRT_LINE = 0;
   }
 }
@@ -310,7 +340,7 @@ void createCirc(int x1, int y1) {
     tempY = -1;
     //numCirc ++;
     String name = "Circle_"+(creationsC.size()-1);
-    DCirc.add(name, 230+creationsC.size());
+    DCirc.add(name, 230+creationsC.size()-1);
     CRT_CIRC = 0;
   }
 }
