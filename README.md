@@ -11,10 +11,9 @@ Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a5
 - You can also clear the screen of all shapes.
 
 ###To Do
-- delete
 - xform
 - (edit?)
-- 3d view
+- (3d view?)
 - save file
 
 ###DevLog
