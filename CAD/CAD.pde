@@ -62,11 +62,13 @@ void createMenu() {
           .setVisible(false)
             ;
   cp5.addButton("Save As")
-    .setValue(6)
-      .setPosition(0, 180)
-        .setSize(BOUNDARYV1, BUTTON_W)
-          .setVisible(false)
-            ;
+    .setBroadcast(false)
+      .setValue(6)
+        .setPosition(0, 180)
+          .setSize(BOUNDARYV1, BUTTON_W)
+            .setVisible(false)
+              .setBroadcast(true);
+  ;
   cp5.addButton("             New Part")
     .setPosition(350, 350)
       .setSize(100, 25)
@@ -287,7 +289,7 @@ void controlEvent(ControlEvent theEvent) {
 void saveAs() {
   if (CRT_FILE == 1) {
     text.setText("Save File:\nEnter a file name");
-    if (fileName != "NewPart") {
+    if (fileName != "") {
       println("o");
       CRT_FILE = 2;
     }
@@ -302,7 +304,7 @@ void saveAs() {
       datz[3] = creationsR.get(i).getL() + "";
       datz[4] = creationsR.get(i).getM() + "";
       datz[5] = "0";
-      data[i] = join(datz,",");
+      data[i] = join(datz, ",");
     }
     for (int i=0; i<creationsL.size (); i++) {
       String[] datz = new String[6];
@@ -312,7 +314,7 @@ void saveAs() {
       datz[3] = creationsL.get(i).getY2() + "";
       datz[4] = creationsL.get(i).getM() + "";
       datz[5] = "1";
-      data[i+creationsR.size()-1] = join(datz,",");
+      data[i+creationsR.size()] = join(datz, ",");
     }
     for (int i=0; i<creationsC.size (); i++) {
       String[] datz = new String[5];
@@ -321,10 +323,12 @@ void saveAs() {
       datz[2] = creationsC.get(i).getR() + "";
       datz[3] = creationsC.get(i).getM() + "";
       datz[4] = "2";
-      data[i+creationsR.size()+creationsL.size()-2] = join(datz,",");
+      data[i+creationsR.size()+creationsL.size()] = join(datz, ",");
     }
     saveStrings(fileName+".txt", data);
     text.setText(fileName+" created.");
+    CRT_FILE = 0;
+    fileName = "";
   }
 }
 
@@ -425,7 +429,9 @@ void input(String theText) {
   // println(theText);
   if (CRT_FILE == 1) {
     fileName = theText;
-    println("hii");
+    if (fileName == ""){
+       fileName = "NewPart"; 
+    }
     println(fileName);
   } else {
     try {
