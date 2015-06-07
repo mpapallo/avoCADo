@@ -13,10 +13,12 @@ final int BOUNDARYV1 = 100, BOUNDARYV2 = 450, BOUNDARYH = 350;
 final int ENDX = 800, ENDY = 700;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
+boolean MENU_SCREEN = true;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
 int temp1 = -1, tempX = -1, tempY = -1;
 int tempX2 = -1, tempY2 = -1;
 int width = -1, length = -1, radius = -1;
+
 
 void setup() {
   size(ENDX, ENDY);
@@ -38,31 +40,38 @@ void createMenu() {
   b.add("Rectangle", 11);
   b.add("Line", 12);
   b.add("Circle", 13);
+  b.setVisible(false);
   del = menu.add("Delete", 2);
   DRect = del.add("D_Rectangle", 21);
   DLine = del.add("D_Line", 22);
   DCirc = del.add("D_Circle", 23);
   del.add("Clear all", 24);
+  del.setVisible(false);
   b = menu.add("XForm", 3);
+  b.setVisible(false);
   b = menu.add("Edit", 4);
+  b.setVisible(false);
 
   cp5.addButton("3D View")
     .setValue(5)
       .setPosition(0, 130)
         .setSize(BOUNDARYV1, BUTTON_W)
-          ;
+          .setVisible(false)
+            ;
   cp5.addButton("Save As")
     .setValue(6)
       .setPosition(0, 180)
         .setSize(BOUNDARYV1, BUTTON_W)
-          ;
+          .setVisible(false)
+            ;
 
   cp5.addTextfield("input")
     .setValue(7)
       .setPosition(0, 650)
         .setSize(BOUNDARYV1, BUTTON_W)
           .setColorCaptionLabel(0)
-            ;
+            .setVisible(false)
+              ;
 
   text = cp5.addTextarea("notes")
     .setPosition(0, 350)
@@ -70,64 +79,77 @@ void createMenu() {
         .setText("Look here for instructions")
           .setColor(0)
             .setFont(createFont("arial", 12))
-              ;
+              .setVisible(false)
+                ;
 
   cp5.addTextarea("top")
     .setPosition(412, 330)
       .setSize(BOUNDARYV1, BUTTON_W)
         .setText("TOP")
-          ;
+          .setVisible(false)
+            ;
   cp5.addTextarea("front")
     .setPosition(412, 360)
       .setSize(BOUNDARYV1, BUTTON_W)
         .setText("FRONT")
-          ;
+          .setVisible(false)
+            ;
   cp5.addTextarea("side")
     .setPosition(455, 360)
       .setSize(BOUNDARYV1, BUTTON_W)
         .setText("RIGHT")
-          ;
+          .setVisible(false)
+            ;
 }
 
 void draw() {
-  //println(CRT_LINE);
-  background(0);
-  fill(200);
-  noStroke();
-  rect(0, 0, BOUNDARYV1, ENDY);
-  stroke(200);
-  line(BOUNDARYV2, 0, BOUNDARYV2, ENDY);
-  line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
-  //text(cp5.get(Textfield.class,"input").getText(), 360,130);
-  //text(textValue, 360,180);
-  for (int i=0; i<creationsR.size (); i++) {
-    stroke(0, 255, 0);
-    noFill();
-    creationsR.get(i).draw();
-  }
-  for (int i=0; i<creationsC.size (); i++) {
-    stroke(0, 255, 0);
-    noFill();
-    creationsC.get(i).draw();
-  }
-  for (int i=0; i<creationsL.size (); i++) {
-    stroke(0, 255, 0);
-    noFill();
-    creationsL.get(i).draw();
-  }
-  if (CRT_RECT == 2 || CRT_RECT == 3) {
-    createRect(tempX, tempY);
-  }
-  if (CRT_LINE == 2 || CRT_LINE == 3) {
-    createLine(tempX, tempY);
-  }
-  if (CRT_CIRC == 2) {
-    createCirc(tempX, tempY);
+  if (MENU_SCREEN) {
+    background(0);
+  } else {
+    show();
+    background(0);
+    fill(200);
+    noStroke();
+    rect(0, 0, BOUNDARYV1, ENDY);
+    stroke(200);
+    line(BOUNDARYV2, 0, BOUNDARYV2, ENDY);
+    line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
+    //text(cp5.get(Textfield.class,"input").getText(), 360,130);
+    //text(textValue, 360,180);
+    for (int i=0; i<creationsR.size (); i++) {
+      stroke(0, 255, 0);
+      noFill();
+      creationsR.get(i).draw();
+    }
+    for (int i=0; i<creationsC.size (); i++) {
+      stroke(0, 255, 0);
+      noFill();
+      creationsC.get(i).draw();
+    }
+    for (int i=0; i<creationsL.size (); i++) {
+      stroke(0, 255, 0);
+      noFill();
+      creationsL.get(i).draw();
+    }
+    if (CRT_RECT == 2 || CRT_RECT == 3) {
+      createRect(tempX, tempY);
+    }
+    if (CRT_LINE == 2 || CRT_LINE == 3) {
+      createLine(tempX, tempY);
+    }
+    if (CRT_CIRC == 2) {
+      createCirc(tempX, tempY);
+    }
   }
 }
 
-void clear() {
-  cp5.get(Textfield.class, "input").clear();
+
+void show() {
+  cp5.controller("Create").setVisible(true);
+  cp5.controller("Delete").setVisible(true);
+  cp5.controller("Edit").setVisible(true);
+  cp5.controller("XForm").setVisible(true);
+  cp5.controller("Save as").setVisible(true);
 }
 
 void controlEvent(ControlEvent theEvent) {
