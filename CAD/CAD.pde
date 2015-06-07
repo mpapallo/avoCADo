@@ -20,7 +20,6 @@ int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
 int temp1 = -1, tempX = -1, tempY = -1;
 int tempX2 = -1, tempY2 = -1;
 int width = -1, length = -1, radius = -1;
-int numRemovals = 0;
 
 void setup() {
   size(ENDX, ENDY);
@@ -247,8 +246,6 @@ void controlEvent(ControlEvent theEvent) {
       text.setText("Rectangle deleted.");
       //theEvent.getController().remove();
       updateDMenu();
-      //numRect --;
-      numRemovals --;
     } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
       println("delete a circle");
       int i = ((int) val % 230);
@@ -257,17 +254,13 @@ void controlEvent(ControlEvent theEvent) {
       text.setText("Circle deleted.");
       //theEvent.getController().remove();
       updateDMenu();
-      //numCirc --;
-      numRemovals --;
-    } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("Line")) {
+    } else if (ControllerName.length() > 4 && ControllerName.substring(0, 4).equals("Line")) {
       println("delete a line");
       int i = ((int) val % 220);
       creationsL.remove(i);
       text.setText("Line deleted.");
       //theEvent.getController().remove();
       updateDMenu();
-      //numLine --;
-      numRemovals --;
     }
   }
 }
