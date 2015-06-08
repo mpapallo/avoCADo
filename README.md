@@ -14,7 +14,7 @@ Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a5
 - xform
 - (edit?)
 - (3d view?)
-- save file
+- bug fixes
 
 ###DevLog
 <b>5/22/15</b>
@@ -44,8 +44,12 @@ Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a5
 <b>6/1/15</b>
 - fixed boundary issues so now the creation of shapes actually works
 
-<b>6/6/15</b>
-- more work on delete
+<b>6/5/15</b>
+- started delete/planned
+
+<b>6/6/15
+- created title screen
 
 <b>6/7/15</b>
 - you can now delete any shape you create c:
+- save file/open file
