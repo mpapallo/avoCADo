@@ -2,7 +2,6 @@
 ##### by CADtherine and MiCADla
 ##### Team aCADemic dishonesty
 
-<br>
 ###Description 
 CADKey in Processing
 
@@ -55,7 +54,7 @@ Working V2 (June 8th):
 <b>6/5/15</b>
 - started delete/planned
 
-<b>6/6/15
+<b>6/6/15</b>
 - created title screen
 
 <b>6/7/15</b>
