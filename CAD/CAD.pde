@@ -22,6 +22,7 @@ int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0;
 int temp1 = -1, tempX = -1, tempY = -1;
 int tempX2 = -1, tempY2 = -1;
 int width = -1, length = -1, radius = -1;
+String[] files;
 
 void setup() {
   size(ENDX, ENDY);
@@ -30,6 +31,7 @@ void setup() {
   cp5 = new ControlP5(this);
   cp5.setColorBackground(0);
   createMenu();
+  //output = createWriter("config.txt");
 
   avo = loadImage("avocado.png");
 
@@ -55,14 +57,14 @@ void createMenu() {
   b = menu.add("Edit", 4);
   b.setVisible(false);
 
-  open = cp5.addListBox("\n            Open Part", 500, 375, 100, 25)
+  open = cp5.addListBox("\n            Open Part", 500, 375, 100, 200)
     .setBarHeight(25)
       .setOpen(false)
         ;
 
-  String[] files = loadStrings("config.txt");  
+  files = loadStrings("config.txt");  
   for (int i=0; i<files.length; i++) {
-    ListBoxItem lbi = open.addItem(files[i], i);
+    ListBoxItem lbi = open.addItem("File_"+files[i], i);
   }
 
   cp5.addButton("3D View")
@@ -229,14 +231,12 @@ void show() {
 }
 
 void controlEvent(ControlEvent theEvent) {
+  if (theEvent.isAssignableFro
   if (theEvent.isAssignableFrom(Textfield.class)) {
     println("controlEvent: accessing a string from controller '"
       +theEvent.getName()+"': "
       +theEvent.getStringValue()
       );
-  }
-  if (theEvent.isAssignableFrom(ListBoxItem.class)) {
-   println("k"); 
   }
   if (theEvent.isAssignableFrom(Button.class)) {
     String ControllerName = theEvent.getController().getName();
@@ -341,6 +341,13 @@ void saveAs() {
     }
     saveStrings(fileName+".txt", data);
     text.setText(fileName+" created.");
+    String[] names = loadStrings("config.txt");
+    String[] name = new String[names.length+1];
+    for (int i=0; i<names.length; i++){
+       name[i] = names[i]; 
+    }
+    name[names.length] = fileName;
+    saveStrings("config.txt", name);
     CRT_FILE = 0;
     fileName = "";
   }
