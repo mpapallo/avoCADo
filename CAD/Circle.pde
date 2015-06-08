@@ -20,7 +20,7 @@ class Circle extends Shape {
       setZ(ENDY-yy1);
       setR(r);
       setD(2*r);
-    } else {
+    } else if (mode == RIGHT){
       setX(BOUNDARYV1+100);
       setY(ENDX-xx1);
       setZ(ENDY-yy1);

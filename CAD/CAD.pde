@@ -64,7 +64,7 @@ void createMenu() {
 
   files = loadStrings("config.txt");  
   for (int i=0; i<files.length; i++) {
-    ListBoxItem lbi = open.addItem("File_"+files[i], i);
+    ListBoxItem lbi = open.addItem(files[i], i);
   }
 
   cp5.addButton("3D View")
@@ -122,6 +122,9 @@ void createMenu() {
         .setText("RIGHT")
           .setVisible(false)
             ;
+
+  //creationsR.add(new Rectangle(100, 565, 66, 77, 2));
+  //updateDMenu();
 }
 
 void updateDMenu() {
@@ -227,12 +230,28 @@ void show() {
   cp5.getGroup("top").setVisible(true);
   cp5.getGroup("front").setVisible(true);
   cp5.getGroup("right").setVisible(true);
+  cp5.remove("             New Part");
   open.remove();
 }
 
 void controlEvent(ControlEvent theEvent) {
-  if (theEvent.isAssignableFro
-  if (theEvent.isAssignableFrom(Textfield.class)) {
+  if (theEvent.isAssignableFrom(ListBox.class)) {
+    int ind = (int)theEvent.getValue();
+    String feil = files[ind];
+    String[] data = loadStrings(feil+".txt");
+    for (int i=0; i<data.length; i++) {
+      int[] nums = int(split(data[i], ','));
+      if (nums[nums.length-1] == 0) {
+        creationsR.add(new Rectangle(nums[0], nums[1], nums[2], nums[3], nums[4]));
+      } else if (nums[nums.length-1] == 1) {
+        creationsL.add(new Line(nums[0], nums[1], nums[2], nums[3], nums[4]));
+      } else if (nums[nums.length-1] == 2) {
+        creationsC.add(new Circle(nums[0], nums[1], nums[2], nums[3]));
+      }
+    }
+    updateDMenu();
+    MENU_SCREEN = false;
+  } else if (theEvent.isAssignableFrom(Textfield.class)) {
     println("controlEvent: accessing a string from controller '"
       +theEvent.getName()+"': "
       +theEvent.getStringValue()
@@ -247,7 +266,6 @@ void controlEvent(ControlEvent theEvent) {
       CRT_FILE = 1;
     } else if (ControllerName.equals("             New Part")) {
       MENU_SCREEN = false;
-      cp5.remove("             New Part");
     }
   }
   if (theEvent.isAssignableFrom(MultiListButton.class)) {
@@ -312,8 +330,16 @@ void saveAs() {
     String[] data = new String[size];
     for (int i=0; i<creationsR.size (); i++) {
       String[] datz = new String[6];
-      datz[0] = creationsR.get(i).getX() + "";
-      datz[1] = creationsR.get(i).getY() + "";
+      if (creationsR.get(i).getM()==0) {
+        datz[0] = creationsR.get(i).getX() + "";
+        datz[1] = creationsR.get(i).getY() + "";
+      } else if (creationsR.get(i).getM()==1) {
+        datz[0] = creationsR.get(i).getX() + "";
+        datz[1] = creationsR.get(i).getZ() + "";
+      } else if (creationsR.get(i).getM()==2) {
+        datz[0] = creationsR.get(i).getY() + "";
+        datz[1] = creationsR.get(i).getZ() + "";
+      }
       datz[2] = creationsR.get(i).getW() + "";
       datz[3] = creationsR.get(i).getL() + "";
       datz[4] = creationsR.get(i).getM() + "";
@@ -322,18 +348,38 @@ void saveAs() {
     }
     for (int i=0; i<creationsL.size (); i++) {
       String[] datz = new String[6];
-      datz[0] = creationsL.get(i).getX() + "";
-      datz[1] = creationsL.get(i).getY() + "";
-      datz[2] = creationsL.get(i).getX2() + "";
-      datz[3] = creationsL.get(i).getY2() + "";
+      if (creationsL.get(i).getM()==0) {
+        datz[0] = creationsL.get(i).getX() + "";
+        datz[1] = creationsL.get(i).getY() + "";
+        datz[2] = creationsL.get(i).getX2() + "";
+        datz[3] = creationsL.get(i).getY2() + "";
+      } else if (creationsL.get(i).getM()==1) {
+        datz[0] = creationsL.get(i).getX() + "";
+        datz[1] = ENDY-creationsL.get(i).getZ() + "";
+        datz[2] = creationsL.get(i).getX2() + "";
+        datz[3] = ENDY-creationsL.get(i).getZ2() + "";
+      } else if (creationsL.get(i).getM()==2) {
+        datz[0] = ENDX-creationsL.get(i).getY() + "";
+        datz[1] = ENDY-creationsL.get(i).getZ() + "";
+        datz[2] = ENDX-creationsL.get(i).getY2() + "";
+        datz[3] = ENDY-creationsL.get(i).getZ2() + "";
+      }
       datz[4] = creationsL.get(i).getM() + "";
       datz[5] = "1";
       data[i+creationsR.size()] = join(datz, ",");
     }
     for (int i=0; i<creationsC.size (); i++) {
       String[] datz = new String[5];
-      datz[0] = creationsC.get(i).getX() + "";
-      datz[1] = creationsC.get(i).getY() + "";
+      if (creationsC.get(i).getM()==0) {
+        datz[0] = creationsC.get(i).getX() + "";
+        datz[1] = creationsC.get(i).getY() + "";
+      } else if (creationsC.get(i).getM()==1) {
+        datz[0] = creationsC.get(i).getX() + "";
+        datz[1] = ENDY-creationsC.get(i).getZ() + "";
+      } else if (creationsC.get(i).getM()==2) {
+        datz[0] = ENDX-creationsC.get(i).getY() + "";
+        datz[1] = ENDY-creationsC.get(i).getZ() + "";
+      }
       datz[2] = creationsC.get(i).getR() + "";
       datz[3] = creationsC.get(i).getM() + "";
       datz[4] = "2";
@@ -343,8 +389,8 @@ void saveAs() {
     text.setText(fileName+" created.");
     String[] names = loadStrings("config.txt");
     String[] name = new String[names.length+1];
-    for (int i=0; i<names.length; i++){
-       name[i] = names[i]; 
+    for (int i=0; i<names.length; i++) {
+      name[i] = names[i];
     }
     name[names.length] = fileName;
     saveStrings("config.txt", name);
