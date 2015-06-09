@@ -29,7 +29,7 @@ void setup() {
   frame.setTitle("avoCADo");
 
   cp5 = new ControlP5(this);
-  cp5.setColorBackground(0);
+  cp5.setColorBackground(color(100));
   createMenu();
   //output = createWriter("config.txt");
 
@@ -40,6 +40,7 @@ void setup() {
 
 void createMenu() {
   menu = cp5.addMultiList("Menu", 0, 5, BOUNDARYV1, BUTTON_W);
+  //menu.setColorBackground(200);
   menu.setVisible(false);
   MultiListButton b;
   b = menu.add("Create", 1);
