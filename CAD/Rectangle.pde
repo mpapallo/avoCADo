@@ -1,15 +1,7 @@
 class Rectangle extends Shape {
 
   int width, length;
-  /*
-  Rectangle(int xx1, int yy1, int zz1, 
-   int xx2, int yy2, int zz2, int mod) {
-   super(xx1, yy1, zz1, mod);
-   x2 = xx2;
-   y2 = yy2;
-   z2 = zz2;
-   }
-   */
+
   Rectangle(int xx1, int yy1, int w, int l, int mod) {
     setM(mod);
     width = w;

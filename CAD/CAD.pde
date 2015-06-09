@@ -29,7 +29,8 @@ void setup() {
   frame.setTitle("avoCADo");
 
   cp5 = new ControlP5(this);
-  cp5.setColorBackground(color(100));
+  cp5.setColorBackground(color(150));
+  cp5.setColorCaptionLabel(0);
   createMenu();
   //output = createWriter("config.txt");
 
@@ -40,7 +41,6 @@ void setup() {
 
 void createMenu() {
   menu = cp5.addMultiList("Menu", 0, 5, BOUNDARYV1, BUTTON_W);
-  //menu.setColorBackground(200);
   menu.setVisible(false);
   MultiListButton b;
   b = menu.add("Create", 1);
@@ -158,8 +158,8 @@ void draw() {
     image(avo, 500, 240, 100, 70);
     textSize(65);
     text("avoCADo", 200, 300);
-    //textSize(15);
-    //text("by CADtherine and MiCADla",300,350);
+    textSize(15);
+    text("by CADtherine and MiCADla", 300, 330);
   } else {
     //background stuff
     show();
