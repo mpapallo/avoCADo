@@ -1,7 +1,7 @@
 # avoCADo
 ##### by CADtherine and MiCADla
+##### Team aCADemic dishonesty
 
-<br>
 ###Description 
 CADKey in Processing
 
@@ -10,12 +10,19 @@ Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a5
 - You can create Rectangles or Circles in any of the 3 views; creating lines vaguely works.
 - You can also clear the screen of all shapes.
 
+Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1
+- You can create lines.
+- You can no longer create stuff in weird places.
+- You can delete individual shapes.
+- You can save a file and then open it later.
+- You can cry because you're not sleeping tonight.
+- See V1.
+
 ###To Do
-- delete
 - xform
 - (edit?)
-- 3d view
-- save file
+- (3d view?)
+- bug fixes
 
 ###DevLog
 <b>5/22/15</b>
@@ -45,5 +52,12 @@ Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a5
 <b>6/1/15</b>
 - fixed boundary issues so now the creation of shapes actually works
 
+<b>6/5/15</b>
+- started delete/planned
+
 <b>6/6/15</b>
-- more work on delete
+- created title screen
+
+<b>6/7/15</b>
+- you can now delete any shape you create c:
+- save file/open file

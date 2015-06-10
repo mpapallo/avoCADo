@@ -3,31 +3,36 @@ import controlP5.*;
 PImage avo;
 ControlP5 cp5;
 MultiList menu;
-MultiListButton del, DRect, DCirc, DLine;
+ListBox open;
+MultiListButton del, DRect, DCirc, DLine, XRect;
 //int numRect, numCirc, numLine;
 Textarea text;
 String textValue = "";
-ArrayList<Shape> creationsR = new ArrayList<Shape>(), 
-creationsC = new ArrayList<Shape>(), 
-creationsL = new ArrayList<Shape>();
+String fileName = "";
+ArrayList<Rectangle> creationsR = new ArrayList<Rectangle>(); 
+ArrayList<Circle> creationsC = new ArrayList<Circle>();
+ArrayList<Line> creationsL = new ArrayList<Line>();
 final int BOUNDARYV1 = 100, BOUNDARYV2 = 450, BOUNDARYH = 350;
 final int ENDX = 800, ENDY = 700;
 final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
 boolean MENU_SCREEN = true;
 boolean setup = true;
-int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0;
+int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0;
 int temp1 = -1, tempX = -1, tempY = -1;
 int tempX2 = -1, tempY2 = -1;
 int width = -1, length = -1, radius = -1;
+String[] files;
 
 void setup() {
   size(ENDX, ENDY);
   frame.setTitle("avoCADo");
 
   cp5 = new ControlP5(this);
-  cp5.setColorBackground(0);
+  cp5.setColorBackground(color(150));
+  cp5.setColorCaptionLabel(0);
   createMenu();
+  //output = createWriter("config.txt");
 
   avo = loadImage("avocado.png");
 
@@ -48,10 +53,20 @@ void createMenu() {
   updateDMenu();
   del.setVisible(false);
   b = menu.add("XForm", 3);
+  b.add("Delta", 31).add("X_Rectangle", 311);
   b.setVisible(false);
   b = menu.add("Edit", 4);
-  b.setVisible(false); 
+  b.setVisible(false);
 
+  open = cp5.addListBox("\n            Open Part", 500, 375, 100, 200)
+    .setBarHeight(25)
+      .setOpen(false)
+        ;
+
+  files = loadStrings("config.txt");  
+  for (int i=0; i<files.length; i++) {
+    ListBoxItem lbi = open.addItem(files[i], i);
+  }
 
   cp5.addButton("3D View")
     .setValue(5)
@@ -60,13 +75,15 @@ void createMenu() {
           .setVisible(false)
             ;
   cp5.addButton("Save As")
-    .setValue(6)
-      .setPosition(0, 180)
-        .setSize(BOUNDARYV1, BUTTON_W)
-          .setVisible(false)
-            ;
+    .setBroadcast(false)
+      .setValue(6)
+        .setPosition(0, 180)
+          .setSize(BOUNDARYV1, BUTTON_W)
+            .setVisible(false)
+              .setBroadcast(true);
+  ;
   cp5.addButton("             New Part")
-    .setPosition(350, 350)
+    .setPosition(200, 350)
       .setSize(100, 25)
         ;
 
@@ -106,6 +123,9 @@ void createMenu() {
         .setText("RIGHT")
           .setVisible(false)
             ;
+
+  //creationsR.add(new Rectangle(100, 565, 66, 77, 2));
+  //updateDMenu();
 }
 
 void updateDMenu() {
@@ -138,8 +158,8 @@ void draw() {
     image(avo, 500, 240, 100, 70);
     textSize(65);
     text("avoCADo", 200, 300);
-    //textSize(15);
-    //text("by CADtherine and MiCADla",300,350);
+    textSize(15);
+    text("by CADtherine and MiCADla", 300, 330);
   } else {
     //background stuff
     show();
@@ -152,22 +172,34 @@ void draw() {
     line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
     //draw all the shapes
     for (int i=0; i<creationsR.size (); i++) {
-      stroke(0, 255, 0);
+      if (cp5.controller("Rectangle_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+        stroke(255);
+      } else {
+        stroke(0, 255, 0);
+      }
       noFill();
       creationsR.get(i).draw();
     }
     for (int i=0; i<creationsC.size (); i++) {
-      stroke(0, 255, 0);
+      if (cp5.controller("Circle_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+        stroke(255);
+      } else {
+        stroke(0, 255, 0);
+      }
       noFill();
       creationsC.get(i).draw();
     }
     for (int i=0; i<creationsL.size (); i++) {
-      stroke(0, 255, 0);
+      if (cp5.controller("Line_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+        stroke(255);
+      } else {
+        stroke(0, 255, 0);
+      }
       noFill();
       creationsL.get(i).draw();
     }
     //check the mode
-    if (CRT_RECT == 2 || CRT_RECT == 3 || CRT_CIRC == 2) {
+    if (CRT_RECT == 2 || CRT_RECT == 3 || CRT_CIRC == 2 || CRT_FILE == 1) {
       cp5.getController("input").setBroadcast(true);
     } else {
       cp5.getController("input").setBroadcast(false);
@@ -181,6 +213,9 @@ void draw() {
     if (CRT_CIRC == 2) {
       createCirc(tempX, tempY);
     }
+    if (CRT_FILE == 1 || CRT_FILE == 2) {
+      saveAs();
+    }
   }
 }
 
@@ -190,15 +225,34 @@ void show() {
   cp5.getController("Edit").setVisible(true);
   cp5.getController("XForm").setVisible(true);
   cp5.getController("Save As").setVisible(true);
+  cp5.getController("3D View").setVisible(true);
   cp5.getController("input").setVisible(true);
   cp5.getGroup("notes").setVisible(true);
   cp5.getGroup("top").setVisible(true);
   cp5.getGroup("front").setVisible(true);
   cp5.getGroup("right").setVisible(true);
+  cp5.remove("             New Part");
+  open.remove();
 }
 
 void controlEvent(ControlEvent theEvent) {
-  if (theEvent.isAssignableFrom(Textfield.class)) {
+  if (theEvent.isAssignableFrom(ListBox.class)) {
+    int ind = (int)theEvent.getValue();
+    String feil = files[ind];
+    String[] data = loadStrings(feil+".txt");
+    for (int i=0; i<data.length; i++) {
+      int[] nums = int(split(data[i], ','));
+      if (nums[nums.length-1] == 0) {
+        creationsR.add(new Rectangle(nums[0], nums[1], nums[2], nums[3], nums[4]));
+      } else if (nums[nums.length-1] == 1) {
+        creationsL.add(new Line(nums[0], nums[1], nums[2], nums[3], nums[4]));
+      } else if (nums[nums.length-1] == 2) {
+        creationsC.add(new Circle(nums[0], nums[1], nums[2], nums[3]));
+      }
+    }
+    updateDMenu();
+    MENU_SCREEN = false;
+  } else if (theEvent.isAssignableFrom(Textfield.class)) {
     println("controlEvent: accessing a string from controller '"
       +theEvent.getName()+"': "
       +theEvent.getStringValue()
@@ -210,9 +264,9 @@ void controlEvent(ControlEvent theEvent) {
       println("the 3D button was pressed");
     } else if (ControllerName.equals("Save As")) {
       println("the Save button was pressed");
+      CRT_FILE = 1;
     } else if (ControllerName.equals("             New Part")) {
       MENU_SCREEN = false;
-      cp5.remove("             New Part");
     }
   }
   if (theEvent.isAssignableFrom(MultiListButton.class)) {
@@ -262,6 +316,87 @@ void controlEvent(ControlEvent theEvent) {
       //theEvent.getController().remove();
       updateDMenu();
     }
+  }
+}
+
+void saveAs() {
+  if (CRT_FILE == 1) {
+    text.setText("Save File:\nEnter a file name");
+    if (!fileName.equals("")) {
+      println(fileName+"l");
+      CRT_FILE = 2;
+    }
+  } else if (CRT_FILE == 2) {
+    int size = creationsR.size() + creationsC.size() + creationsL.size();
+    String[] data = new String[size];
+    for (int i=0; i<creationsR.size (); i++) {
+      String[] datz = new String[6];
+      if (creationsR.get(i).getM()==0) {
+        datz[0] = creationsR.get(i).getX() + "";
+        datz[1] = creationsR.get(i).getY() + "";
+      } else if (creationsR.get(i).getM()==1) {
+        datz[0] = creationsR.get(i).getX() + "";
+        datz[1] = creationsR.get(i).getZ() + "";
+      } else if (creationsR.get(i).getM()==2) {
+        datz[0] = creationsR.get(i).getY() + "";
+        datz[1] = creationsR.get(i).getZ() + "";
+      }
+      datz[2] = creationsR.get(i).getW() + "";
+      datz[3] = creationsR.get(i).getL() + "";
+      datz[4] = creationsR.get(i).getM() + "";
+      datz[5] = "0";
+      data[i] = join(datz, ",");
+    }
+    for (int i=0; i<creationsL.size (); i++) {
+      String[] datz = new String[6];
+      if (creationsL.get(i).getM()==0) {
+        datz[0] = creationsL.get(i).getX() + "";
+        datz[1] = creationsL.get(i).getY() + "";
+        datz[2] = creationsL.get(i).getX2() + "";
+        datz[3] = creationsL.get(i).getY2() + "";
+      } else if (creationsL.get(i).getM()==1) {
+        datz[0] = creationsL.get(i).getX() + "";
+        datz[1] = ENDY-creationsL.get(i).getZ() + "";
+        datz[2] = creationsL.get(i).getX2() + "";
+        datz[3] = ENDY-creationsL.get(i).getZ2() + "";
+      } else if (creationsL.get(i).getM()==2) {
+        datz[0] = ENDX-creationsL.get(i).getY() + "";
+        datz[1] = ENDY-creationsL.get(i).getZ() + "";
+        datz[2] = ENDX-creationsL.get(i).getY2() + "";
+        datz[3] = ENDY-creationsL.get(i).getZ2() + "";
+      }
+      datz[4] = creationsL.get(i).getM() + "";
+      datz[5] = "1";
+      data[i+creationsR.size()] = join(datz, ",");
+    }
+    for (int i=0; i<creationsC.size (); i++) {
+      String[] datz = new String[5];
+      if (creationsC.get(i).getM()==0) {
+        datz[0] = creationsC.get(i).getX() + "";
+        datz[1] = creationsC.get(i).getY() + "";
+      } else if (creationsC.get(i).getM()==1) {
+        datz[0] = creationsC.get(i).getX() + "";
+        datz[1] = ENDY-creationsC.get(i).getZ() + "";
+      } else if (creationsC.get(i).getM()==2) {
+        datz[0] = ENDX-creationsC.get(i).getY() + "";
+        datz[1] = ENDY-creationsC.get(i).getZ() + "";
+      }
+      datz[2] = creationsC.get(i).getR() + "";
+      datz[3] = creationsC.get(i).getM() + "";
+      datz[4] = "2";
+      data[i+creationsR.size()+creationsL.size()] = join(datz, ",");
+    }
+    saveStrings(fileName+".txt", data);
+    text.setText(fileName+" created.");
+    String[] names = loadStrings("config.txt");
+    String[] name = new String[names.length+1];
+    for (int i=0; i<names.length; i++) {
+      name[i] = names[i];
+    }
+    name[names.length] = fileName;
+    saveStrings("config.txt", name);
+    CRT_FILE = 0;
+    fileName = "";
   }
 }
 
@@ -360,17 +495,25 @@ void getPosition() {
 void input(String theText) {
   // automatically receives results from controller input
   // println(theText);
-  try {
-    temp1 = abs(Integer.parseInt(theText));
-    if (temp1 == 0) {
-      temp1 = -1;
+  if (CRT_FILE == 1) {
+    fileName = theText;
+    if (fileName.equals("") || fileName.equals("config") || fileName.indexOf(".txt") != -1) {
+      fileName = "NewPart";
+    }
+    println(fileName);
+  } else {
+    try {
+      temp1 = abs(Integer.parseInt(theText));
+      if (temp1 == 0) {
+        temp1 = -1;
+        text.setText(text.getText() + "\n\nTry again...");
+      }
+    }
+    catch(Exception e) {
       text.setText(text.getText() + "\n\nTry again...");
     }
+    println(temp1);
   }
-  catch(Exception e) {
-    text.setText(text.getText() + "\n\nTry again...");
-  }
-  println(temp1);
 }
 
 void mouseClicked() {
