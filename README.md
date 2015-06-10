@@ -61,3 +61,6 @@ Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1
 <b>6/7/15</b>
 - you can now delete any shape you create c:
 - save file/open file
+
+<b>6/9/15</b>
+- starting xform: you can move rects and circles
