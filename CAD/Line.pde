@@ -36,6 +36,18 @@ class Line extends Shape {
   int getZ2() {
     return z2;
   }
+  
+  void setX2(int x) {
+    x2=x;
+  }
+
+  void setY2(int y) {
+    y2=y;
+  }
+
+  void setZ2(int z) {
+    z2=z;
+  }
 
   void draw() {
     if (mode == TOP) {

@@ -164,12 +164,12 @@ void updateMMenu() {
     MRect.add("MRectangle_"+i, 310+i);
   }
   MLine = move.add("M_Line", 32);
-  MRect.setPosition(BOUNDARYV1*2, 5 + 3*BUTTON_W);
+  MLine.setPosition(BOUNDARYV1*2, 5 + 3*BUTTON_W);
   for (int i=0; i<creationsL.size (); i++) {
     MLine.add("MLine_"+i, 320+i);
   }
   MCirc = move.add("M_Circle", 33);
-  MRect.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
+  MCirc.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
   for (int i=0; i<creationsC.size (); i++) {
     MCirc.add("MCircle_"+i, 330+i);
   }
@@ -555,18 +555,26 @@ void moveShape() {
     int i = temp2;
     if (tempM == 0) {
       Rectangle r = creationsR.get(i);
-      creationsR.get(i).setX(r.getX() + tempX);
-      creationsR.get(i).setY(r.getY() - tempY);
-      creationsR.get(i).setZ(r.getZ() - tempZ);
+      r.setX(r.getX() + tempX);
+      r.setY(r.getY() - tempY);
+      r.setZ(r.getZ() + tempZ);
+      text.setText("Rectangle was moved");
     } else if (tempM == 1) {
       Circle c = creationsC.get(i);
-      creationsC.get(i).setX(c.getX() + tempX);
-      creationsC.get(i).setY(c.getY() - tempY);
-      creationsC.get(i).setZ(c.getZ() - tempZ);
+      c.setX(c.getX() + tempX);
+      c.setY(c.getY() - tempY);
+      c.setZ(c.getZ() + tempZ);
+      text.setText("Circle was moved");
     } else {
       Line l = creationsL.get(i);
+      l.setX(l.getX() + tempX);
+      l.setY(l.getY() - tempY);
+      l.setZ(l.getZ() + tempZ);
+      l.setX2(l.getX2() + tempX);
+      l.setY2(l.getY2() - tempY);
+      l.setZ2(l.getZ2() + tempZ);
+      text.setText("Line was moved");
     }
-    text.setText("Rectangle was moved");
     MV_SHAPE = 0;
     tempM = -1;
     temp1 = -1;
