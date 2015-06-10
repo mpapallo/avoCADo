@@ -4,8 +4,7 @@ PImage avo;
 ControlP5 cp5;
 MultiList menu;
 ListBox open;
-MultiListButton del, DRect, DCirc, DLine, XRect;
-//int numRect, numCirc, numLine;
+MultiListButton del, DRect, DCirc, DLine, xform, move, MRect, MLine, MCirc;
 Textarea text;
 String textValue = "";
 String fileName = "";
@@ -18,9 +17,10 @@ final int BUTTON_W = 20;
 boolean SELECT_MODE = false, FIRST_CLICK = true;
 boolean MENU_SCREEN = true;
 boolean setup = true;
-int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0;
-int temp1 = -1, tempX = -1, tempY = -1;
-int tempX2 = -1, tempY2 = -1;
+boolean gotIt = false;
+int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0, MV_SHAPE = 0;
+int temp1 = -1, temp2 = -1, tempX = -1, tempY = -1, tempZ = -1;
+int tempX2 = -1, tempY2 = -1, tempM = -1;
 int width = -1, length = -1, radius = -1;
 String[] files;
 
@@ -52,9 +52,10 @@ void createMenu() {
   del.add("Clear all", 20);
   updateDMenu();
   del.setVisible(false);
-  b = menu.add("XForm", 3);
-  b.add("Delta", 31).add("X_Rectangle", 311);
-  b.setVisible(false);
+  xform = menu.add("XForm", 3);
+  move = xform.add("Move", 30);
+  updateMMenu();
+  xform.setVisible(false);
   b = menu.add("Edit", 4);
   b.setVisible(false);
 
@@ -151,6 +152,29 @@ void updateDMenu() {
   }
 }
 
+void updateMMenu() {
+  if (!setup) {
+    MRect.remove();
+    MLine.remove();
+    MCirc.remove();
+  } 
+  MRect = move.add("M_Rectangle", 31);
+  MRect.setPosition(BOUNDARYV1*2, 5 + 2*BUTTON_W);
+  for (int i=0; i<creationsR.size (); i++) {
+    MRect.add("MRectangle_"+i, 310+i);
+  }
+  MLine = move.add("M_Line", 32);
+  MRect.setPosition(BOUNDARYV1*2, 5 + 3*BUTTON_W);
+  for (int i=0; i<creationsL.size (); i++) {
+    MLine.add("MLine_"+i, 320+i);
+  }
+  MCirc = move.add("M_Circle", 33);
+  MRect.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
+  for (int i=0; i<creationsC.size (); i++) {
+    MCirc.add("MCircle_"+i, 330+i);
+  }
+}
+
 void draw() {
   if (MENU_SCREEN) {
     //title screen
@@ -170,9 +194,10 @@ void draw() {
     stroke(200);
     line(BOUNDARYV2, 0, BOUNDARYV2, ENDY);
     line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
+
     //draw all the shapes
     for (int i=0; i<creationsR.size (); i++) {
-      if (cp5.controller("Rectangle_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+      if (cp5.controller("Rectangle_"+i).isActive() || cp5.controller("MRectangle_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
         stroke(255);
       } else {
         stroke(0, 255, 0);
@@ -181,7 +206,7 @@ void draw() {
       creationsR.get(i).draw();
     }
     for (int i=0; i<creationsC.size (); i++) {
-      if (cp5.controller("Circle_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+      if (cp5.controller("Circle_"+i).isActive() || cp5.controller("MCircle_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
         stroke(255);
       } else {
         stroke(0, 255, 0);
@@ -190,7 +215,7 @@ void draw() {
       creationsC.get(i).draw();
     }
     for (int i=0; i<creationsL.size (); i++) {
-      if (cp5.controller("Line_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
+      if (cp5.controller("Line_"+i).isActive() || cp5.getController("MLine_"+i).isActive()) {//.controller("D_Rectangle").controller("Rectangle"+i).isActive()){
         stroke(255);
       } else {
         stroke(0, 255, 0);
@@ -199,7 +224,7 @@ void draw() {
       creationsL.get(i).draw();
     }
     //check the mode
-    if (CRT_RECT == 2 || CRT_RECT == 3 || CRT_CIRC == 2 || CRT_FILE == 1) {
+    if (CRT_RECT == 2 || CRT_RECT == 3 || CRT_CIRC == 2 || CRT_FILE == 1 || (MV_SHAPE > 0 && MV_SHAPE < 5)) {
       cp5.getController("input").setBroadcast(true);
     } else {
       cp5.getController("input").setBroadcast(false);
@@ -215,6 +240,9 @@ void draw() {
     }
     if (CRT_FILE == 1 || CRT_FILE == 2) {
       saveAs();
+    }
+    if (MV_SHAPE > 0 && MV_SHAPE < 5) {
+      moveShape();
     }
   }
 }
@@ -251,6 +279,7 @@ void controlEvent(ControlEvent theEvent) {
       }
     }
     updateDMenu();
+    updateMMenu();
     MENU_SCREEN = false;
   } else if (theEvent.isAssignableFrom(Textfield.class)) {
     println("controlEvent: accessing a string from controller '"
@@ -300,6 +329,7 @@ void controlEvent(ControlEvent theEvent) {
       text.setText("Rectangle deleted.");
       //theEvent.getController().remove();
       updateDMenu();
+      updateMMenu();
     } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
       println("delete a circle");
       int i = ((int) val % 230);
@@ -308,6 +338,7 @@ void controlEvent(ControlEvent theEvent) {
       text.setText("Circle deleted.");
       //theEvent.getController().remove();
       updateDMenu();
+      updateMMenu();
     } else if (ControllerName.length() > 4 && ControllerName.substring(0, 4).equals("Line")) {
       println("delete a line");
       int i = ((int) val % 220);
@@ -315,6 +346,25 @@ void controlEvent(ControlEvent theEvent) {
       text.setText("Line deleted.");
       //theEvent.getController().remove();
       updateDMenu();
+      updateMMenu();
+    } else if (ControllerName.length() > 10 && ControllerName.substring(0, 10).equals("MRectangle")) {
+      println("move a rect");
+      temp2 = ((int) val % 310);
+      tempM = 0;
+      MV_SHAPE = 1;
+      //MV_RECT = 1;
+    } else if (ControllerName.length() > 7 && ControllerName.substring(0, 7).equals("MCircle")) {
+      println("move a circle");
+      temp2 = ((int) val % 330);
+      tempM = 1;
+      MV_SHAPE = 1;
+      //MV_CIRC = 1;
+    } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("MLine")) {
+      println("move a line");
+      temp2 = ((int) val % 320);
+      tempM = 2;
+      MV_SHAPE = 1;
+      //MV_LINE =  1;
     }
   }
 }
@@ -430,6 +480,8 @@ void createRect(int x1, int y1) {
       String name = "Rectangle_"+(creationsR.size()-1);
       DRect.add(name, 210 + creationsR.size()-1);
       CRT_RECT = 0;
+      updateDMenu();
+      updateMMenu();
     }
   }
 }
@@ -449,6 +501,8 @@ void createLine(int x1, int y1) {
     String name = "Line_"+(creationsL.size()-1);
     DLine.add(name, 220+creationsL.size()-1);
     CRT_LINE = 0;
+    updateDMenu();
+    updateMMenu();
   }
 }
 
@@ -470,7 +524,61 @@ void createCirc(int x1, int y1) {
     String name = "Circle_"+(creationsC.size()-1);
     DCirc.add(name, 230+creationsC.size()-1);
     CRT_CIRC = 0;
+    updateDMenu();
+    updateMMenu();
   }
+}
+
+void moveShape() {
+  if (MV_SHAPE == 1) {
+    text.setText("Move a Shape:\n\nInput the change in x (+ or -)");
+    if (gotIt) {
+      tempX = temp1;
+      MV_SHAPE ++;
+      gotIt = false;
+    }
+  } else if (MV_SHAPE == 2) {
+    text.setText("Move a Shape:\n\nInput the change in y (+ or -)");
+    if (gotIt) {
+      tempY = temp1;
+      MV_SHAPE ++;
+      gotIt = false;
+    }
+  } else if (MV_SHAPE == 3) {
+    text.setText("Move a Shape:\n\nInput the change in z (+ or -)");
+    if (gotIt) {
+      tempZ = temp1;
+      MV_SHAPE ++;
+      gotIt = false;
+    }
+  } else if (MV_SHAPE == 4) {
+    int i = temp2;
+    if (tempM == 0) {
+      Rectangle r = creationsR.get(i);
+      creationsR.get(i).setX(r.getX() + tempX);
+      creationsR.get(i).setY(r.getY() - tempY);
+      creationsR.get(i).setZ(r.getZ() - tempZ);
+    } else if (tempM == 1) {
+      Circle c = creationsC.get(i);
+      creationsC.get(i).setX(c.getX() + tempX);
+      creationsC.get(i).setY(c.getY() - tempY);
+      creationsC.get(i).setZ(c.getZ() - tempZ);
+    } else {
+      Line l = creationsL.get(i);
+    }
+    text.setText("Rectangle was moved");
+    MV_SHAPE = 0;
+    tempM = -1;
+    temp1 = -1;
+    temp2 = -1;
+    tempX = -1;
+    tempY = -1;
+    tempZ = -1;
+  }
+}
+void moveCirc() {
+}
+void moveLine() {
 }
 
 int getMode(int x, int y) {
@@ -502,17 +610,27 @@ void input(String theText) {
     }
     println(fileName);
   } else {
-    try {
-      temp1 = abs(Integer.parseInt(theText));
-      if (temp1 == 0) {
-        temp1 = -1;
+    if (MV_SHAPE > 0 && MV_SHAPE < 5) {
+      try {
+        temp1 = Integer.parseInt(theText);
+        gotIt = true;
+      }
+      catch(Exception e) {
+        text.setText(text.getText() +  "\n\nTry again...");
+      }
+    } else {
+      try {
+        temp1 = abs(Integer.parseInt(theText));
+        if (temp1 == 0) {
+          temp1 = -1;
+          text.setText(text.getText() + "\n\nTry again...");
+        }
+      }
+      catch(Exception e) {
         text.setText(text.getText() + "\n\nTry again...");
       }
+      println(temp1);
     }
-    catch(Exception e) {
-      text.setText(text.getText() + "\n\nTry again...");
-    }
-    println(temp1);
   }
 }
 
