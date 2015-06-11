@@ -255,7 +255,9 @@ void draw() {
     // draw all the shapes
     // (highlight if user is hovering over its menu item)
     for (int i=0; i<creationsR.size (); i++) {
-      if (cp5.controller("Rectangle_"+i).isActive() || cp5.controller("MRectangle_"+i).isActive()) {
+      if (cp5.controller("Rectangle_"+i).isActive() || 
+        cp5.controller("MRectangle_"+i).isActive() ||
+        cp5.controller("CRectangle_"+i).isActive() ) {
         stroke(255);
       } else {
         stroke(0, 255, 0);
@@ -264,7 +266,9 @@ void draw() {
       creationsR.get(i).draw();
     }
     for (int i=0; i<creationsC.size (); i++) {
-      if (cp5.controller("Circle_"+i).isActive() || cp5.controller("MCircle_"+i).isActive()) {
+      if (cp5.controller("Circle_"+i).isActive() ||
+        cp5.controller("MCircle_"+i).isActive() ||
+        cp5.controller("CCircle_"+i).isActive() ) {
         stroke(255);
       } else {
         stroke(0, 255, 0);
@@ -273,11 +277,13 @@ void draw() {
       creationsC.get(i).draw();
     }
     for (int i=0; i<creationsL.size (); i++) {
-      if (cp5.controller("Line_"+i).isActive() || cp5.getController("MLine_"+i).isActive()) {
+      //if (cp5.controller("Line_"+i).isActive() || 
+        //cp5.getController("MLine_"+i).isActive() ||
+        //cp5.getController("CLine_"+i).isActive()) {
         stroke(255);
-      } else {
+      //} else {
         stroke(0, 255, 0);
-      }
+      //}
       noFill();
       creationsL.get(i).draw();
     }
@@ -288,23 +294,18 @@ void draw() {
       cp5.getController("input").setBroadcast(true);
     } else {
       cp5.getController("input").setBroadcast(false);
-    }
+    } 
     if (CRT_RECT == 2 || CRT_RECT == 3) {
       createRect(tempX, tempY);
-    }
-    if (CRT_LINE == 2 || CRT_LINE == 3) {
+    } else if (CRT_LINE == 2 || CRT_LINE == 3) {
       createLine(tempX, tempY);
-    }
-    if (CRT_CIRC == 2) {
+    } else if (CRT_CIRC == 2) {
       createCirc(tempX, tempY);
-    }
-    if (CRT_FILE == 1 || CRT_FILE == 2) {
+    } else if (CRT_FILE == 1 || CRT_FILE == 2) {
       saveAs();
-    }
-    if (MV_SHAPE > 0 && MV_SHAPE < 5) {
+    } else if (MV_SHAPE > 0 && MV_SHAPE < 5) {
       moveShape();
-    }
-    if (CP_SHAPE == 1) {
+    } else if (CP_SHAPE == 1) {
       copyShape();
     }
   }
@@ -351,6 +352,7 @@ void controlEvent(ControlEvent theEvent) {
     }
     updateDMenu();
     updateMMenu();
+    updateCMenu();
     MENU_SCREEN = false;
   }
   // TEXT FIELD
@@ -580,6 +582,7 @@ void createRect(int x1, int y1) {
       CRT_RECT = 0;
       updateDMenu();
       updateMMenu();
+      updateCMenu();
     }
   }
 }
@@ -601,6 +604,7 @@ void createLine(int x1, int y1) {
     CRT_LINE = 0;
     updateDMenu();
     updateMMenu();
+    updateCMenu();
   }
 }
 
@@ -624,6 +628,7 @@ void createCirc(int x1, int y1) {
     CRT_CIRC = 0;
     updateDMenu();
     updateMMenu();
+    updateCMenu();
   }
 }
 
@@ -661,8 +666,10 @@ void moveShape() {
       text.setText("Move a Shape:\n\nInput the change in x (+ or -)");
     }
     if (gotIt) {
+      println("l");
       tempX = temp1;
       MV_SHAPE ++;
+      println(MV_SHAPE);
       gotIt = false;
     }
   } else if (MV_SHAPE == 2) {
@@ -770,7 +777,6 @@ void copyShape() {
       creationsL.add(line);
     }
     MV_SHAPE = 1;
-    moveShape();
   }
 }
 
