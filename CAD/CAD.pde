@@ -74,8 +74,8 @@ void createMenu() {
   del.setVisible(false);
   // XForm
   xform = menu.add("XForm", 3);
-  move = xform.add("Move", 30);
-  copy = xform.add("Copy", 40);
+  move = xform.add("Move", 31);
+  copy = xform.add("Copy", 32);
   updateMMenu();
   updateCMenu();
   xform.setVisible(false);
@@ -185,20 +185,20 @@ void updateMMenu() {
     MCirc.remove();
   }
   // add creations to the menu
-  MRect = move.add("M_Rectangle", 31);
+  MRect = move.add("M_Rectangle", 311);
   MRect.setPosition(BOUNDARYV1*2, 5 + 2*BUTTON_W);
   for (int i=0; i<creationsR.size (); i++) {
-    MRect.add("MRectangle_"+i, 310+i);
+    MRect.add("MRectangle_"+i, 3110+i);
   }
-  MLine = move.add("M_Line", 32);
+  MLine = move.add("M_Line", 312);
   MLine.setPosition(BOUNDARYV1*2, 5 + 3*BUTTON_W);
   for (int i=0; i<creationsL.size (); i++) {
-    MLine.add("MLine_"+i, 320+i);
+    MLine.add("MLine_"+i, 3120+i);
   }
-  MCirc = move.add("M_Circle", 33);
+  MCirc = move.add("M_Circle", 313);
   MCirc.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
   for (int i=0; i<creationsC.size (); i++) {
-    MCirc.add("MCircle_"+i, 330+i);
+    MCirc.add("MCircle_"+i, 3130+i);
   }
 }
 
@@ -209,20 +209,20 @@ void updateCMenu() {
     CCirc.remove();
   }
   // add creations to the menu
-  CRect = copy.add("C_Rectangle", 41);
+  CRect = copy.add("C_Rectangle", 321);
   CRect.setPosition(BOUNDARYV1*2, 5 + 2*BUTTON_W);
   for (int i=0; i<creationsR.size (); i++) {
-    CRect.add("CRectangle_"+i, 410+i);
+    CRect.add("CRectangle_"+i, 3210+i);
   }
-  CLine = move.add("C_Line", 42);
+  CLine = copy.add("C_Line", 322);
   CLine.setPosition(BOUNDARYV1*2, 5 + 3*BUTTON_W);
   for (int i=0; i<creationsL.size (); i++) {
-    CLine.add("CLine_"+i, 420+i);
+    CLine.add("CLine_"+i, 3220+i);
   }
-  CCirc = move.add("C_Circle", 43);
+  CCirc = copy.add("C_Circle", 323);
   CCirc.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
   for (int i=0; i<creationsC.size (); i++) {
-    CCirc.add("CCircle_"+i, 430+i);
+    CCirc.add("CCircle_"+i, 3230+i);
   }
 }
 
@@ -277,13 +277,13 @@ void draw() {
       creationsC.get(i).draw();
     }
     for (int i=0; i<creationsL.size (); i++) {
-      //if (cp5.controller("Line_"+i).isActive() || 
-        //cp5.getController("MLine_"+i).isActive() ||
-        //cp5.getController("CLine_"+i).isActive()) {
+      if (cp5.controller("Line_"+i).isActive() || 
+        cp5.getController("MLine_"+i).isActive() ||
+        cp5.getController("CLine_"+i).isActive()) {
         stroke(255);
-      //} else {
+      } else {
         stroke(0, 255, 0);
-      //}
+      }
       noFill();
       creationsL.get(i).draw();
     }
@@ -431,32 +431,32 @@ void controlEvent(ControlEvent theEvent) {
       updateCMenu();
     } else if (ControllerName.length() > 10 && ControllerName.substring(0, 10).equals("MRectangle")) {
       println("move a rect");
-      temp2 = ((int) val % 310);
+      temp2 = ((int) val % 3110);
       tempM = 0;
       MV_SHAPE = 1;
     } else if (ControllerName.length() > 7 && ControllerName.substring(0, 7).equals("MCircle")) {
       println("move a circle");
-      temp2 = ((int) val % 330);
+      temp2 = ((int) val % 3120);
       tempM = 1;
       MV_SHAPE = 1;
     } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("MLine")) {
       println("move a line");
-      temp2 = ((int) val % 320);
+      temp2 = ((int) val % 3120);
       tempM = 2;
       MV_SHAPE = 1;
     } else if (ControllerName.length() > 10 && ControllerName.substring(0, 10).equals("CRectangle")) {
       println("copy a rect");
-      temp2 = ((int) val % 410);
+      temp2 = ((int) val % 3210);
       tempM = 0;
       CP_SHAPE = 1;
     } else if (ControllerName.length() > 7 && ControllerName.substring(0, 7).equals("CCircle")) {
       println("copy a circle");
-      temp2 = ((int) val % 430);
+      temp2 = ((int) val % 3220);
       tempM = 1;
       CP_SHAPE = 1;
     } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("CLine")) {
       println("copy a line");
-      temp2 = ((int) val % 420);
+      temp2 = ((int) val % 3230);
       tempM = 2;
       CP_SHAPE = 1;
     }
