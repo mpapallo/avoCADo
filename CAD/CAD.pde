@@ -33,7 +33,8 @@ int width = -1, length = -1, radius = -1;
 
 //
 PImage avo;
-String fileName = "";
+String fileName = "NewPart";
+String feilNom = "";
 String[] files;
 
 /////////////////////////
@@ -501,8 +502,9 @@ void controlEvent(ControlEvent theEvent) {
 void saveAs() {
   if (CRT_FILE == 1) {
     text.setText("Save File:\nEnter a file name");
-    if (!fileName.equals("")) {
-      println(fileName+"l");
+    if (!feilNom.equals("")) {
+      println(feilNom+"l");
+      fileName = feilNom;
       CRT_FILE = 2;
     }
   } else if (CRT_FILE == 2) {
@@ -571,7 +573,6 @@ void sauve() {
     data[i+creationsR.size()+creationsL.size()] = join(datz, ",");
   }
   saveStrings(fileName+".txt", data);
-  text.setText(fileName+" created.");
   String[] names = loadStrings("config.txt");
   String[] name = new String[names.length+1];
   boolean contains = false;
@@ -584,9 +585,12 @@ void sauve() {
   if (!contains) {
     name[names.length] = fileName;
     saveStrings("config.txt", name);
+    text.setText(fileName+" created.");
+  } else {
+    text.setText(fileName+" overwritten.");
   }
   CRT_FILE = 0;
-  fileName = "";
+  feilNom = "";
 }
 
 /////////////////////////
@@ -833,9 +837,10 @@ void input(String theText) {
 
     // println(theText);
   if (CRT_FILE == 1) {
-    fileName = theText;
-    if (fileName.equals("") || fileName.equals("config") || fileName.indexOf(".txt") != -1) {
-      fileName = "NewPart";
+    feilNom = theText;
+    if (feilNom.equals("") || feilNom.equals("config") ||
+      feilNom.indexOf(".") != -1 || feilNom.indexOf("/") != -1) {
+      feilNom = "NewPart";
     }
     println(fileName);
   } else {
