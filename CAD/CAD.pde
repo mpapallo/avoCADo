@@ -254,6 +254,7 @@ void draw() {
   } else {
     // background stuff
     show();
+    frame.setTitle("avoCADo <"+fileName+">");
     background(0);
     fill(200);
     noStroke();
@@ -376,6 +377,7 @@ void controlEvent(ControlEvent theEvent) {
         creationsC.add(new Circle(nums[0], nums[1], nums[2], nums[3]));
       }
     }
+    fileName = feil;
     updateDMenu();
     updateMMenu();
     updateCMenu();
@@ -504,83 +506,87 @@ void saveAs() {
       CRT_FILE = 2;
     }
   } else if (CRT_FILE == 2) {
-    int size = creationsR.size() + creationsC.size() + creationsL.size();
-    String[] data = new String[size];
-    for (int i=0; i<creationsR.size (); i++) {
-      String[] datz = new String[6];
-      if (creationsR.get(i).getM()==0) {
-        datz[0] = creationsR.get(i).getX() + "";
-        datz[1] = creationsR.get(i).getY() + "";
-      } else if (creationsR.get(i).getM()==1) {
-        datz[0] = creationsR.get(i).getX() + "";
-        datz[1] = creationsR.get(i).getZ() + "";
-      } else if (creationsR.get(i).getM()==2) {
-        datz[0] = creationsR.get(i).getY() + "";
-        datz[1] = creationsR.get(i).getZ() + "";
-      }
-      datz[2] = creationsR.get(i).getW() + "";
-      datz[3] = creationsR.get(i).getL() + "";
-      datz[4] = creationsR.get(i).getM() + "";
-      datz[5] = "0";
-      data[i] = join(datz, ",");
-    }
-    for (int i=0; i<creationsL.size (); i++) {
-      String[] datz = new String[6];
-      if (creationsL.get(i).getM()==0) {
-        datz[0] = creationsL.get(i).getX() + "";
-        datz[1] = creationsL.get(i).getY() + "";
-        datz[2] = creationsL.get(i).getX2() + "";
-        datz[3] = creationsL.get(i).getY2() + "";
-      } else if (creationsL.get(i).getM()==1) {
-        datz[0] = creationsL.get(i).getX() + "";
-        datz[1] = ENDY-creationsL.get(i).getZ() + "";
-        datz[2] = creationsL.get(i).getX2() + "";
-        datz[3] = ENDY-creationsL.get(i).getZ2() + "";
-      } else if (creationsL.get(i).getM()==2) {
-        datz[0] = ENDX-creationsL.get(i).getY() + "";
-        datz[1] = ENDY-creationsL.get(i).getZ() + "";
-        datz[2] = ENDX-creationsL.get(i).getY2() + "";
-        datz[3] = ENDY-creationsL.get(i).getZ2() + "";
-      }
-      datz[4] = creationsL.get(i).getM() + "";
-      datz[5] = "1";
-      data[i+creationsR.size()] = join(datz, ",");
-    }
-    for (int i=0; i<creationsC.size (); i++) {
-      String[] datz = new String[5];
-      if (creationsC.get(i).getM()==0) {
-        datz[0] = creationsC.get(i).getX() + "";
-        datz[1] = creationsC.get(i).getY() + "";
-      } else if (creationsC.get(i).getM()==1) {
-        datz[0] = creationsC.get(i).getX() + "";
-        datz[1] = ENDY-creationsC.get(i).getZ() + "";
-      } else if (creationsC.get(i).getM()==2) {
-        datz[0] = ENDX-creationsC.get(i).getY() + "";
-        datz[1] = ENDY-creationsC.get(i).getZ() + "";
-      }
-      datz[2] = creationsC.get(i).getR() + "";
-      datz[3] = creationsC.get(i).getM() + "";
-      datz[4] = "2";
-      data[i+creationsR.size()+creationsL.size()] = join(datz, ",");
-    }
-    saveStrings(fileName+".txt", data);
-    text.setText(fileName+" created.");
-    String[] names = loadStrings("config.txt");
-    String[] name = new String[names.length+1];
-    boolean contains = false;
-    for (int i=0; i<names.length; i++) {
-      name[i] = names[i];
-      if (names[i].equals(fileName)) {
-        contains = true;
-      }
-    }
-    if (!contains) {
-      name[names.length] = fileName;
-      saveStrings("config.txt", name);
-    }
-    CRT_FILE = 0;
-    fileName = "";
+    sauve();
   }
+}
+
+void sauve() {
+  int size = creationsR.size() + creationsC.size() + creationsL.size();
+  String[] data = new String[size];
+  for (int i=0; i<creationsR.size (); i++) {
+    String[] datz = new String[6];
+    if (creationsR.get(i).getM()==0) {
+      datz[0] = creationsR.get(i).getX() + "";
+      datz[1] = creationsR.get(i).getY() + "";
+    } else if (creationsR.get(i).getM()==1) {
+      datz[0] = creationsR.get(i).getX() + "";
+      datz[1] = creationsR.get(i).getZ() + "";
+    } else if (creationsR.get(i).getM()==2) {
+      datz[0] = creationsR.get(i).getY() + "";
+      datz[1] = creationsR.get(i).getZ() + "";
+    }
+    datz[2] = creationsR.get(i).getW() + "";
+    datz[3] = creationsR.get(i).getL() + "";
+    datz[4] = creationsR.get(i).getM() + "";
+    datz[5] = "0";
+    data[i] = join(datz, ",");
+  }
+  for (int i=0; i<creationsL.size (); i++) {
+    String[] datz = new String[6];
+    if (creationsL.get(i).getM()==0) {
+      datz[0] = creationsL.get(i).getX() + "";
+      datz[1] = creationsL.get(i).getY() + "";
+      datz[2] = creationsL.get(i).getX2() + "";
+      datz[3] = creationsL.get(i).getY2() + "";
+    } else if (creationsL.get(i).getM()==1) {
+      datz[0] = creationsL.get(i).getX() + "";
+      datz[1] = ENDY-creationsL.get(i).getZ() + "";
+      datz[2] = creationsL.get(i).getX2() + "";
+      datz[3] = ENDY-creationsL.get(i).getZ2() + "";
+    } else if (creationsL.get(i).getM()==2) {
+      datz[0] = ENDX-creationsL.get(i).getY() + "";
+      datz[1] = ENDY-creationsL.get(i).getZ() + "";
+      datz[2] = ENDX-creationsL.get(i).getY2() + "";
+      datz[3] = ENDY-creationsL.get(i).getZ2() + "";
+    }
+    datz[4] = creationsL.get(i).getM() + "";
+    datz[5] = "1";
+    data[i+creationsR.size()] = join(datz, ",");
+  }
+  for (int i=0; i<creationsC.size (); i++) {
+    String[] datz = new String[5];
+    if (creationsC.get(i).getM()==0) {
+      datz[0] = creationsC.get(i).getX() + "";
+      datz[1] = creationsC.get(i).getY() + "";
+    } else if (creationsC.get(i).getM()==1) {
+      datz[0] = creationsC.get(i).getX() + "";
+      datz[1] = ENDY-creationsC.get(i).getZ() + "";
+    } else if (creationsC.get(i).getM()==2) {
+      datz[0] = ENDX-creationsC.get(i).getY() + "";
+      datz[1] = ENDY-creationsC.get(i).getZ() + "";
+    }
+    datz[2] = creationsC.get(i).getR() + "";
+    datz[3] = creationsC.get(i).getM() + "";
+    datz[4] = "2";
+    data[i+creationsR.size()+creationsL.size()] = join(datz, ",");
+  }
+  saveStrings(fileName+".txt", data);
+  text.setText(fileName+" created.");
+  String[] names = loadStrings("config.txt");
+  String[] name = new String[names.length+1];
+  boolean contains = false;
+  for (int i=0; i<names.length; i++) {
+    name[i] = names[i];
+    if (names[i].equals(fileName)) {
+      contains = true;
+    }
+  }
+  if (!contains) {
+    name[names.length] = fileName;
+    saveStrings("config.txt", name);
+  }
+  CRT_FILE = 0;
+  fileName = "";
 }
 
 /////////////////////////
