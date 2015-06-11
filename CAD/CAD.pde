@@ -739,25 +739,27 @@ void copyShape() {
     int i = temp2;
     if (tempM == 0) {
       Rectangle r = creationsR.get(i);
-      Rectangle rect = creationsR.add(new Rectangle());
+      Rectangle rect = new Rectangle();
       rect.setX(r.getX());
       rect.setY(r.getY());
       rect.setZ(r.getZ());
       rect.setW(r.getW());
       rect.setL(r.getL());
       rect.setM(r.getM());
+      creationsR.add(rect);
     } else if (tempM == 1) {
       Circle c = creationsC.get(i);
-      Circle circ = creationsC.add(new Circle());
+      Circle circ = new Circle();
       circ.setX(c.getX());
       circ.setY(c.getY());
       circ.setZ(c.getZ());
       circ.setR(c.getR());
       circ.setD(c.getD());
       circ.setM(c.getM());
+      creationsC.add(circ);
     } else {
       Line l = creationsL.get(i);
-      Line line = creationsL.add(new Line());
+      Line line = new Line();
       line.setX(l.getX());
       line.setY(l.getY());
       line.setZ(l.getZ());
@@ -765,6 +767,7 @@ void copyShape() {
       line.setY2(l.getY2());
       line.setZ2(l.getZ2());
       line.setM(l.getM());
+      creationsL.add(line);
     }
     MV_SHAPE = 1;
     moveShape();

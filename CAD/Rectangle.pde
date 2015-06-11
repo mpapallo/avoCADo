@@ -37,6 +37,14 @@ class Rectangle extends Shape {
   int getL() {
     return length;
   }
+  
+  void setW(int x) {
+    width=x;
+  }
+
+  void setL(int y) {
+    length=y;
+  }
 
   void draw() {
     if (mode==TOP) {
