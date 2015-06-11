@@ -316,13 +316,13 @@ void draw() {
     }
 
     // check the mode
-    if (CRT_RECT == 2 || CRT_RECT == 3 || CRT_CIRC == 2 || CRT_FILE == 1 || 
-      (MV_SHAPE > 0 && MV_SHAPE < 5)) {
+    if (CRT_RECT > 0 || CRT_CIRC == 2 || CRT_FILE == 1 || MV_SHAPE > 0) {
       cp5.getController("input").setBroadcast(true);
     } else {
       cp5.getController("input").setBroadcast(false);
     } 
-    if (CRT_RECT == 2 || CRT_RECT == 3) {
+
+    if (CRT_RECT == 3 || CRT_RECT == 4) {
       createRect(tempX, tempY);
     } else if (CRT_LINE == 2 || CRT_LINE == 3) {
       createLine(tempX, tempY);
@@ -367,30 +367,31 @@ void controlEvent(ControlEvent theEvent) {
   // LIST BOX
   if (theEvent.isAssignableFrom(ListBox.class)) {
     try {
-    int ind = (int)theEvent.getValue();
-    String feil = files[ind];
-    String[] data = loadStrings(feil+".txt");
-    // load creations data from file
-    for (int i=0; i<data.length; i++) {
-      int[] nums = int(split(data[i], ','));
-      if (nums[nums.length-1] == 0) {
-        creationsR.add(new Rectangle(nums[0], nums[1], nums[2], nums[3], nums[4]));
-      } else if (nums[nums.length-1] == 1) {
-        creationsL.add(new Line(nums[0], nums[1], nums[2], nums[3], nums[4]));
-      } else if (nums[nums.length-1] == 2) {
-        creationsC.add(new Circle(nums[0], nums[1], nums[2], nums[3]));
+      int ind = (int)theEvent.getValue();
+      String feil = files[ind];
+      String[] data = loadStrings(feil+".txt");
+      // load creations data from file
+      for (int i=0; i<data.length; i++) {
+        int[] nums = int(split(data[i], ','));
+        if (nums[nums.length-1] == 0) {
+          creationsR.add(new Rectangle(nums[0], nums[1], nums[2], nums[3], nums[4]));
+        } else if (nums[nums.length-1] == 1) {
+          creationsL.add(new Line(nums[0], nums[1], nums[2], nums[3], nums[4]));
+        } else if (nums[nums.length-1] == 2) {
+          creationsC.add(new Circle(nums[0], nums[1], nums[2], nums[3]));
+        }
       }
-    }
-    fileName = feil;
-    updateDMenu();
-    updateMMenu();
-    updateCMenu();
-    } catch (Exception e){
-       fileName = "NewPart";
-       creationsR.clear();
-       creationsC.clear();
-       creationsL.clear();
-       text.setText(text.getText()+"\n Could not load file. Does it exist?"); 
+      fileName = feil;
+      updateDMenu();
+      updateMMenu();
+      updateCMenu();
+    } 
+    catch (Exception e) {
+      fileName = "NewPart";
+      creationsR.clear();
+      creationsC.clear();
+      creationsL.clear();
+      text.setText(text.getText()+"\n Could not load file. Does it exist?");
     }
     MENU_SCREEN = false;
   }
@@ -425,8 +426,8 @@ void controlEvent(ControlEvent theEvent) {
     if (ControllerName.equals("Rectangle")) {
       CRT_RECT = 1;
       println("the Rect option was selected");
-      text.setText("Create new Rectangle:\n\nClick in either the top, front or right view box to indicate the position of the shape.");
-      getPosition();
+      text.setText("Create new Rectangle:\n\nEnter 0 for End Entity, 1 for cursor selection");
+  
     } else if (ControllerName.equals("Line")) {
       CRT_LINE = 1;
       println("the Line option was selected");
@@ -605,7 +606,7 @@ void sauve() {
         text.setText(fileName+" overwritten.");
       }
     } else {
-      text.setText(fileName+" saved."); 
+      text.setText(fileName+" saved.");
     }
     CRT_FILE = 0;
     feilNom = "";
@@ -618,18 +619,28 @@ void sauve() {
 //*********************//
 /////////////////////////
 
+void selection(int mode){
+   if (mode == 0){
+      text.setText("Create new Rectangle:\n\nInput a shape in the form <Shape><Index> (see delete menu for reference)");
+   } else{
+      text.setText("Create new Rectangle:\n\nClick in either the top, front or right view box to indicate the position of the shape.");
+      getPosition();
+   }
+   temp1 = -1;
+}
+
 void createRect(int x1, int y1) {
 
-  if (CRT_RECT == 2) {
+  if (CRT_RECT == 3) {
     text.setText("Create new Rectangle:\n\nNow input a width.\n\n(If you enter a negative value, we'll take the absolute value.)");
     if (width == -1) {
       width = temp1;
     }
     if (width != -1) {
       temp1 = -1;
-      CRT_RECT = 3;
+      CRT_RECT = 4;
     }
-  } else if (CRT_RECT == 3) {
+  } else if (CRT_RECT == 4) {
     text.setText("Create new Rectangle:\n\nNow input a length.");
     length = temp1;
     if (length != -1) {
@@ -863,7 +874,7 @@ void input(String theText) {
     }
     println(fileName);
   } else {
-    if (MV_SHAPE > 0 && MV_SHAPE < 5) {
+    if (MV_SHAPE > 0) {
       try {
         temp1 = Integer.parseInt(theText);
         gotIt = true;
@@ -871,7 +882,7 @@ void input(String theText) {
       catch(Exception e) {
         text.setText(text.getText() +  "\n\nTry again...");
       }
-    } else {
+    } else if (CRT_RECT > 1 || CRT_LINE > 0 || CRT_CIRC > 0) {
       try {
         temp1 = abs(Integer.parseInt(theText));
         if (temp1 == 0) {
@@ -883,6 +894,17 @@ void input(String theText) {
         text.setText(text.getText() + "\n\nTry again...");
       }
       println(temp1);
+    } else if (CRT_RECT == 1) {
+      temp1 = Integer.parseInt(theText);
+      println(temp1);
+      if (temp1 != 0 && temp1 != 1) {
+        temp1 = -1;
+        text.setText(text.getText() + "\n\nTry again...");
+      } else {
+        println("next step");
+         CRT_RECT = 2;
+         selection(temp1);
+      }
     }
   }
 }
@@ -895,8 +917,8 @@ void mouseClicked() {
         tempY = mouseY;
         println("xcor: " + tempX + ", ycor: " + tempY);
         SELECT_MODE = false;
-        if (CRT_RECT == 1) {
-          CRT_RECT = 2;
+        if (CRT_RECT == 2) {
+          CRT_RECT = 3;
         } else if (CRT_CIRC == 1) {
           CRT_CIRC = 2;
         } else if (CRT_LINE == 1 || CRT_LINE == 2) {
