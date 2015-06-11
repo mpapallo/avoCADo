@@ -2,6 +2,16 @@ class Line extends Shape {
 
   int x2, y2, z2;
 
+  Line() {
+    setX(0);
+    setY(0);
+    setZ(0);
+    setX2(0);
+    setY2(0);
+    setZ2(0);
+    setM(-1);
+  }
+
   Line(int xx1, int yy1, int xx2, int yy2, int mod) {
     setM(mod);
     if (mode == TOP) {
@@ -24,7 +34,7 @@ class Line extends Shape {
       x1 = BOUNDARYV1+100;
     }
   }
-  
+
   int getX2() {
     return x2;
   }
@@ -36,7 +46,7 @@ class Line extends Shape {
   int getZ2() {
     return z2;
   }
-  
+
   void setX2(int x) {
     x2=x;
   }
@@ -53,7 +63,7 @@ class Line extends Shape {
     if (mode == TOP) {
       line(x1, y1, x2, y2);
       line(x1, ENDY-z1, x2, ENDY-z1);
-      line(ENDX-y1, ENDY-z1, ENDX-y2, ENDY-z1);      
+      line(ENDX-y1, ENDY-z1, ENDX-y2, ENDY-z1);
     } else if (mode == FRONT) {
       line(x1, y1, x2, y1);
       line(x1, ENDY-z1, x2, ENDY-z2);
