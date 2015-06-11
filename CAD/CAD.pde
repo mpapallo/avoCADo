@@ -105,11 +105,21 @@ void createMenu() {
   cp5.addButton("Save As")
     .setBroadcast(false)
       .setValue(6)
-        .setPosition(0, 180)
+        .setPosition(0, 190)
           .setSize(BOUNDARYV1, BUTTON_W)
             .setVisible(false)
               .setBroadcast(true)
                 ;
+
+  cp5.addButton("Save")
+    .setBroadcast(false)
+      .setValue(7)
+        .setPosition(0, 211)
+          .setSize(BOUNDARYV1, BUTTON_W)
+            .setVisible(false)
+              .setBroadcast(true)
+                ;
+
   // New
   cp5.addButton("             New Part")
     .setPosition(200, 400)
@@ -332,6 +342,7 @@ void show() {
   cp5.getController("Edit").setVisible(true);
   cp5.getController("XForm").setVisible(true);
   cp5.getController("Save As").setVisible(true);
+  cp5.getController("Save").setVisible(true);
   cp5.getController("3D View").setVisible(true);
   cp5.getController("input").setVisible(true);
   cp5.getGroup("notes").setVisible(true);
@@ -556,11 +567,17 @@ void saveAs() {
     text.setText(fileName+" created.");
     String[] names = loadStrings("config.txt");
     String[] name = new String[names.length+1];
+    boolean contains = false;
     for (int i=0; i<names.length; i++) {
       name[i] = names[i];
+      if (names[i].equals(fileName)) {
+        contains = true;
+      }
     }
-    name[names.length] = fileName;
-    saveStrings("config.txt", name);
+    if (!contains) {
+      name[names.length] = fileName;
+      saveStrings("config.txt", name);
+    }
     CRT_FILE = 0;
     fileName = "";
   }
