@@ -64,3 +64,7 @@ Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1
 
 <b>6/9/15</b>
 - starting xform: you can move rects and circles
+
+<b>6/10/15</b>
+- fixed some bugs in move
+- after applying <i>copy</i>-ous amounts of effort, did copy
