@@ -210,17 +210,17 @@ void updateCMenu() {
   }
   // add creations to the menu
   CRect = copy.add("C_Rectangle", 321);
-  CRect.setPosition(BOUNDARYV1*2, 5 + 2*BUTTON_W);
+  CRect.setPosition(BOUNDARYV1*2, 5 + 3*BUTTON_W);
   for (int i=0; i<creationsR.size (); i++) {
     CRect.add("CRectangle_"+i, 3210+i);
   }
   CLine = copy.add("C_Line", 322);
-  CLine.setPosition(BOUNDARYV1*2, 5 + 3*BUTTON_W);
+  CLine.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
   for (int i=0; i<creationsL.size (); i++) {
     CLine.add("CLine_"+i, 3220+i);
   }
   CCirc = copy.add("C_Circle", 323);
-  CCirc.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
+  CCirc.setPosition(BOUNDARYV1*2, 5 + 5*BUTTON_W);
   for (int i=0; i<creationsC.size (); i++) {
     CCirc.add("CCircle_"+i, 3230+i);
   }
@@ -255,33 +255,48 @@ void draw() {
     // draw all the shapes
     // (highlight if user is hovering over its menu item)
     for (int i=0; i<creationsR.size (); i++) {
-      if (cp5.controller("Rectangle_"+i).isActive() || 
-        cp5.controller("MRectangle_"+i).isActive() ||
-        cp5.controller("CRectangle_"+i).isActive() ) {
-        stroke(255);
-      } else {
+      try {
+        if (cp5.controller("Rectangle_"+i).isActive() || 
+          cp5.controller("MRectangle_"+i).isActive() ||
+          cp5.controller("CRectangle_"+i).isActive() ) {
+          stroke(255);
+        } else {
+          stroke(0, 255, 0);
+        }
+      } 
+      catch (NullPointerException e) {
         stroke(0, 255, 0);
       }
       noFill();
       creationsR.get(i).draw();
     }
     for (int i=0; i<creationsC.size (); i++) {
-      if (cp5.controller("Circle_"+i).isActive() ||
-        cp5.controller("MCircle_"+i).isActive() ||
-        cp5.controller("CCircle_"+i).isActive() ) {
-        stroke(255);
-      } else {
+      try {
+        if (cp5.controller("Circle_"+i).isActive() ||
+          cp5.controller("MCircle_"+i).isActive() ||
+          cp5.controller("CCircle_"+i).isActive() ) {
+          stroke(255);
+        } else {
+          stroke(0, 255, 0);
+        }
+      } 
+      catch (NullPointerException e) {
         stroke(0, 255, 0);
-      }
+      } 
       noFill();
       creationsC.get(i).draw();
     }
     for (int i=0; i<creationsL.size (); i++) {
-      if (cp5.controller("Line_"+i).isActive() || 
-        cp5.getController("MLine_"+i).isActive() ||
-        cp5.getController("CLine_"+i).isActive()) {
-        stroke(255);
-      } else {
+      try {
+        if (cp5.controller("Line_"+i).isActive() || 
+          cp5.getController("MLine_"+i).isActive() ||
+          cp5.getController("CLine_"+i).isActive()) {
+          stroke(255);
+        } else {
+          stroke(0, 255, 0);
+        }
+      } 
+      catch (NullPointerException e) {
         stroke(0, 255, 0);
       }
       noFill();
@@ -436,7 +451,7 @@ void controlEvent(ControlEvent theEvent) {
       MV_SHAPE = 1;
     } else if (ControllerName.length() > 7 && ControllerName.substring(0, 7).equals("MCircle")) {
       println("move a circle");
-      temp2 = ((int) val % 3120);
+      temp2 = ((int) val % 3130);
       tempM = 1;
       MV_SHAPE = 1;
     } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("MLine")) {
@@ -451,12 +466,13 @@ void controlEvent(ControlEvent theEvent) {
       CP_SHAPE = 1;
     } else if (ControllerName.length() > 7 && ControllerName.substring(0, 7).equals("CCircle")) {
       println("copy a circle");
-      temp2 = ((int) val % 3220);
+      temp2 = ((int) val % 3230);
       tempM = 1;
       CP_SHAPE = 1;
     } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("CLine")) {
       println("copy a line");
-      temp2 = ((int) val % 3230);
+      println(val);
+      temp2 = ((int) val % 3220);
       tempM = 2;
       CP_SHAPE = 1;
     }
@@ -738,6 +754,9 @@ void moveShape() {
     tempX = -1;
     tempY = -1;
     tempZ = -1;
+    updateDMenu();
+    updateMMenu();
+    updateCMenu();
   }
 }
 
