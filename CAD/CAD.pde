@@ -366,6 +366,7 @@ void show() {
 void controlEvent(ControlEvent theEvent) {
   // LIST BOX
   if (theEvent.isAssignableFrom(ListBox.class)) {
+    try {
     int ind = (int)theEvent.getValue();
     String feil = files[ind];
     String[] data = loadStrings(feil+".txt");
@@ -384,6 +385,13 @@ void controlEvent(ControlEvent theEvent) {
     updateDMenu();
     updateMMenu();
     updateCMenu();
+    } catch (Exception e){
+       fileName = "NewPart";
+       creationsR.clear();
+       creationsC.clear();
+       creationsL.clear();
+       text.setText(text.getText()+"\n Could not load file. Does it exist?"); 
+    }
     MENU_SCREEN = false;
   }
   // TEXT FIELD
