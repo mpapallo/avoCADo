@@ -82,8 +82,8 @@ void createMenu() {
   updateCMenu();
   xform.setVisible(false);
   // Edit
-  b = menu.add("Edit", 4);
-  b.setVisible(false);
+  //b = menu.add("Edit", 4);
+  //b.setVisible(false);
 
   // Display Files
   open = cp5.addListBox("\n            Open Part", 500, 425, 100, 200)
@@ -344,7 +344,7 @@ void draw() {
 void show() {
   cp5.getController("Create").setVisible(true);
   cp5.getController("Delete").setVisible(true);
-  cp5.getController("Edit").setVisible(true);
+  //cp5.getController("Edit").setVisible(true);
   cp5.getController("XForm").setVisible(true);
   cp5.getController("Save As").setVisible(true);
   cp5.getController("Save").setVisible(true);
@@ -417,6 +417,20 @@ void controlEvent(ControlEvent theEvent) {
       CRT_FILE = 3;
     } else if (ControllerName.equals("             New Part")) {
       MENU_SCREEN = false;
+    } else if (ControllerName.equals("Abort")) {
+      CRT_RECT = 0;
+      CRT_LINE = 0;
+      CRT_CIRC = 0;
+      boolean SELECT_MODE = false;
+      boolean MENU_SCREEN = true;
+      boolean setup = true;
+      boolean END_ENT = false;
+      boolean gotIt = false;
+      CRT_FILE = 0;
+      MV_SHAPE = 0;
+      CP_SHAPE = 0;
+      text.setText("Nevermind");
+      cp5.getController("Abort").remove();
     }
   }
   // MULTI LIST BUTTON
@@ -429,6 +443,10 @@ void controlEvent(ControlEvent theEvent) {
       tempM = 0;
       println("the Rect option was selected");
       text.setText("Create new Rectangle:\n\nEnter 0 for End Entity, 1 for cursor selection");
+      cp5.addButton("Abort", 4)
+        .setPosition(0, 5 + 4*BUTTON_W)
+          .setSize(BOUNDARYV1, BUTTON_W)
+            ;
     } else if (ControllerName.equals("Line")) {
       CRT_LINE = 1;
       tempM = 1;
@@ -436,6 +454,10 @@ void controlEvent(ControlEvent theEvent) {
       text.setText("Create new Line:\n\nEnter 0 for End Entity, 1 for cursor selection");
       //text.setText("Create new Line:\n\nClick in either the top, front or right view box to indicate the position of the shape");
       //SELECT_MODE = true;
+      cp5.addButton("Abort", 4)
+        .setPosition(0, 5 + 4*BUTTON_W)
+          .setSize(BOUNDARYV1, BUTTON_W)
+            ;
     } else if (ControllerName.equals("Circle")) {
       CRT_CIRC = 1;
       tempM = 2;
@@ -443,6 +465,10 @@ void controlEvent(ControlEvent theEvent) {
       text.setText("Create new Circle:\n\nEnter 0 for End Entity, 1 for cursor selection");
       //text.setText("Create new Circle:\n\nClick in either the top, front or right view box to indicate the center of the shape");
       //SELECT_MODE = true;
+      cp5.addButton("Abort", 4)
+        .setPosition(0, 5 + 4*BUTTON_W)
+          .setSize(BOUNDARYV1, BUTTON_W)
+            ;
     } else if (ControllerName.equals("Clear all")) {
       creationsR.clear();
       creationsC.clear();
@@ -692,6 +718,7 @@ void createRect(int x1, int y1) {
       String name = "Rectangle_"+(creationsR.size()-1);
       //DRect.add(name, 210 + creationsR.size()-1);
       CRT_RECT = 0;
+      cp5.getController("Abort").remove();
       updateDMenu();
       updateMMenu();
       updateCMenu();
@@ -713,6 +740,7 @@ void createLine(int x1, int y1) {
     String name = "Line_"+(creationsL.size()-1);
     //DLine.add(name, 220+creationsL.size()-1);
     CRT_LINE = 0;
+    cp5.getController("Abort").remove();
     updateDMenu();
     updateMMenu();
     updateCMenu();
@@ -737,6 +765,7 @@ void createCirc(int x1, int y1) {
     String name = "Circle_"+(creationsC.size()-1);
     //DCirc.add(name, 230+creationsC.size()-1);
     CRT_CIRC = 0;
+    cp5.getController("Abort").remove();
     updateDMenu();
     updateMMenu();
     updateCMenu();

@@ -5,8 +5,7 @@ abstract class Shape {
   final int TOP = 0, FRONT = 1, RIGHT = 2;
   final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
 
-  Shape() {
-  }
+  Shape() {}
 
   Shape(int xx1, int yy1, int zz1, int mod) {
     x1 = xx1;
