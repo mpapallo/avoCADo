@@ -427,7 +427,6 @@ void controlEvent(ControlEvent theEvent) {
       CRT_RECT = 1;
       println("the Rect option was selected");
       text.setText("Create new Rectangle:\n\nEnter 0 for End Entity, 1 for cursor selection");
-  
     } else if (ControllerName.equals("Line")) {
       CRT_LINE = 1;
       println("the Line option was selected");
@@ -619,14 +618,26 @@ void sauve() {
 //*********************//
 /////////////////////////
 
-void selection(int mode){
+void selection(int mode) {
+  temp1 = -1;
+  if (mode == 0) {
+    text.setText("Create new Rectangle:\n\nInput the name of the shape you wish to select, in the form <Shape><Index> (see delete menu for reference)");
+  } else {
+    text.setText("Create new Rectangle:\n\nClick in either the top, front or right view box to indicate the position of the shape.");
+    getPosition();
+  }
+}
+
+void endEnt(int mode, int i){
+  //each of these has to set tempX and tempY
    if (mode == 0){
-      text.setText("Create new Rectangle:\n\nInput a shape in the form <Shape><Index> (see delete menu for reference)");
-   } else{
-      text.setText("Create new Rectangle:\n\nClick in either the top, front or right view box to indicate the position of the shape.");
-      getPosition();
+      //rectangle i
+   } else if (mode == 1){
+      //line i 
+   } else if (mode == 2){
+      //circle i 
    }
-   temp1 = -1;
+   //CRT_RECT = 3;
 }
 
 void createRect(int x1, int y1) {
@@ -726,7 +737,7 @@ void getPosition() {
 
 /////////////////////////
 //*********************//
-//        MOVE         //////////////////////////////////////////////////////////////////////////////////////////////////
+//     MOVE/COPY       //////////////////////////////////////////////////////////////////////////////////////////////////
 //*********************//
 /////////////////////////
 
@@ -880,56 +891,97 @@ void input(String theText) {
         gotIt = true;
       }
       catch(Exception e) {
-        text.setText(text.getText() +  "\n\nTry again...");
+        tryAgain();
       }
-    } else if (CRT_RECT > 1 || CRT_LINE > 0 || CRT_CIRC > 0) {
+    } else if (CRT_RECT > 2 || CRT_LINE > 0 || CRT_CIRC > 0) {
       try {
         temp1 = abs(Integer.parseInt(theText));
         if (temp1 == 0) {
-          temp1 = -1;
-          text.setText(text.getText() + "\n\nTry again...");
+          tryAgain();
         }
       }
       catch(Exception e) {
-        text.setText(text.getText() + "\n\nTry again...");
+        tryAgain();
       }
       println(temp1);
     } else if (CRT_RECT == 1) {
       temp1 = Integer.parseInt(theText);
       println(temp1);
       if (temp1 != 0 && temp1 != 1) {
-        temp1 = -1;
-        text.setText(text.getText() + "\n\nTry again...");
+        tryAgain();
       } else {
         println("next step");
-         CRT_RECT = 2;
-         selection(temp1);
+        CRT_RECT = 2;
+        selection(temp1);
+      }
+    } else if (CRT_RECT == 2) {
+      int i;
+      if (theText.length() > 9 && theText.substring(0, 9).equals("Rectangle")) {
+        try {
+          i = Integer.parseInt(theText.substring(9));
+          if (i >= creationsR.size()) {
+            tryAgain();
+          } else {
+            endEnt(0, i);
+          }
+        } 
+        catch(Exception e) {
+          tryAgain();
+        }
+      } else if (theText.length() > 4 && theText.substring(0, 4).equals("Line")) {
+        try {
+          int i = Integer.parseInt(theText.substring(4));
+          if (i >= creationsL.size()) {
+            tryAgain();
+          } else {
+            endEnt(1, i);
+          }
+        } 
+        catch(Exception e) {
+          tryAgain();
+        }
+      } else if (theText.length() > 6 && theText.substring(0, 6).equals("Circle")) {
+        try {
+          int i = Integer.parseInt(theText.substring(6));
+          if (i >= creationsC.size()) {
+            tryAgain();
+          } else {
+            endEnt(2, i);
+          }
+        } 
+        catch(Exception e) {
+          tryAgain();
+        }
       }
     }
   }
-}
 
-void mouseClicked() {
-  if (SELECT_MODE) {
-    if (!FIRST_CLICK) {
-      if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 2 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 2)) {
-        tempX = mouseX;
-        tempY = mouseY;
-        println("xcor: " + tempX + ", ycor: " + tempY);
-        SELECT_MODE = false;
-        if (CRT_RECT == 2) {
-          CRT_RECT = 3;
-        } else if (CRT_CIRC == 1) {
-          CRT_CIRC = 2;
-        } else if (CRT_LINE == 1 || CRT_LINE == 2) {
-          CRT_LINE++;
+  void tryAgain() {
+    temp1 = -1;
+    text.setText(text.getText() + "\n\nTry again...");
+  }
+
+  void mouseClicked() {
+    if (SELECT_MODE) {
+      if (!FIRST_CLICK) {
+        if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 2 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 2)) {
+          tempX = mouseX;
+          tempY = mouseY;
+          println("xcor: " + tempX + ", ycor: " + tempY);
+          SELECT_MODE = false;
+          if (CRT_RECT == 2) {
+            CRT_RECT = 3;
+          } else if (CRT_CIRC == 1) {
+            CRT_CIRC = 2;
+          } else if (CRT_LINE == 1 || CRT_LINE == 2) {
+            CRT_LINE++;
+          }
+        } else {
+          text.setText(text.getText() + "\n\nWrong view...");
         }
       } else {
-        text.setText(text.getText() + "\n\nWrong view...");
+        FIRST_CLICK = false;
       }
-    } else {
-      FIRST_CLICK = false;
     }
   }
-}
 
