@@ -628,16 +628,17 @@ void selection(int mode) {
   }
 }
 
-void endEnt(int mode, int i){
+void endEnt(int mode, int i) {
+  println("mode " + mode + " index " + i);
   //each of these has to set tempX and tempY
-   if (mode == 0){
-      //rectangle i
-   } else if (mode == 1){
-      //line i 
-   } else if (mode == 2){
-      //circle i 
-   }
-   //CRT_RECT = 3;
+  if (mode == 0) {
+    //rectangle i
+  } else if (mode == 1) {
+    //line i
+  } else if (mode == 2) {
+    //circle i
+  }
+  //CRT_RECT = 3;
 }
 
 void createRect(int x1, int y1) {
@@ -905,20 +906,26 @@ void input(String theText) {
       }
       println(temp1);
     } else if (CRT_RECT == 1) {
-      temp1 = Integer.parseInt(theText);
-      println(temp1);
-      if (temp1 != 0 && temp1 != 1) {
+      try {
+        temp1 = Integer.parseInt(theText);
+        println(temp1);
+        if (temp1 != 0 && temp1 != 1) {
+          tryAgain();
+        } else {
+          println("next step");
+          CRT_RECT = 2;
+          selection(temp1);
+        }
+      }
+      catch(Exception e) {
         tryAgain();
-      } else {
-        println("next step");
-        CRT_RECT = 2;
-        selection(temp1);
       }
     } else if (CRT_RECT == 2) {
       int i;
       if (theText.length() > 9 && theText.substring(0, 9).equals("Rectangle")) {
         try {
           i = Integer.parseInt(theText.substring(9));
+          println("rect " + i);
           if (i >= creationsR.size()) {
             tryAgain();
           } else {
@@ -930,7 +937,8 @@ void input(String theText) {
         }
       } else if (theText.length() > 4 && theText.substring(0, 4).equals("Line")) {
         try {
-          int i = Integer.parseInt(theText.substring(4));
+          i = Integer.parseInt(theText.substring(4));
+          println("line " + i);
           if (i >= creationsL.size()) {
             tryAgain();
           } else {
@@ -942,7 +950,8 @@ void input(String theText) {
         }
       } else if (theText.length() > 6 && theText.substring(0, 6).equals("Circle")) {
         try {
-          int i = Integer.parseInt(theText.substring(6));
+          i = Integer.parseInt(theText.substring(6));
+          println("circ " + i);
           if (i >= creationsC.size()) {
             tryAgain();
           } else {
@@ -952,36 +961,39 @@ void input(String theText) {
         catch(Exception e) {
           tryAgain();
         }
+      } else {
+        tryAgain();
       }
     }
   }
+}
 
-  void tryAgain() {
-    temp1 = -1;
-    text.setText(text.getText() + "\n\nTry again...");
-  }
+void tryAgain() {
+  temp1 = -1;
+  text.setText(text.getText() + "\n\nTry again...");
+}
 
-  void mouseClicked() {
-    if (SELECT_MODE) {
-      if (!FIRST_CLICK) {
-        if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 2 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 2)) {
-          tempX = mouseX;
-          tempY = mouseY;
-          println("xcor: " + tempX + ", ycor: " + tempY);
-          SELECT_MODE = false;
-          if (CRT_RECT == 2) {
-            CRT_RECT = 3;
-          } else if (CRT_CIRC == 1) {
-            CRT_CIRC = 2;
-          } else if (CRT_LINE == 1 || CRT_LINE == 2) {
-            CRT_LINE++;
-          }
-        } else {
-          text.setText(text.getText() + "\n\nWrong view...");
+void mouseClicked() {
+  if (SELECT_MODE) {
+    if (!FIRST_CLICK) {
+      if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 2 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 2)) {
+        tempX = mouseX;
+        tempY = mouseY;
+        println("xcor: " + tempX + ", ycor: " + tempY);
+        SELECT_MODE = false;
+        if (CRT_RECT == 2) {
+          CRT_RECT = 3;
+        } else if (CRT_CIRC == 1) {
+          CRT_CIRC = 2;
+        } else if (CRT_LINE == 1 || CRT_LINE == 2) {
+          CRT_LINE++;
         }
       } else {
-        FIRST_CLICK = false;
+        text.setText(text.getText() + "\n\nWrong view...");
       }
+    } else {
+      FIRST_CLICK = false;
     }
   }
+}
 
