@@ -2,6 +2,15 @@ class Rectangle extends Shape {
 
   int width, length;
 
+  Rectangle() {
+    setX(0);
+    setY(0);
+    setZ(0);
+    setW(0);
+    setL(0);
+    setM(-1);
+  }
+
   Rectangle(int xx1, int yy1, int w, int l, int mod) {
     setM(mod);
     width = w;
@@ -24,9 +33,17 @@ class Rectangle extends Shape {
   int getW() {
     return width;
   }
-  
+
   int getL() {
-    return length; 
+    return length;
+  }
+  
+  void setW(int x) {
+    width=x;
+  }
+
+  void setL(int y) {
+    length=y;
   }
 
   void draw() {
