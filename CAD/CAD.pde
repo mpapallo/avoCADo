@@ -11,7 +11,7 @@ ListBox open;
 MultiList menu;
 MultiListButton del, DRect, DCirc, DLine, 
 xform, move, MRect, MLine, MCirc, 
-copy, CRect, CLine, CCirc;
+copy, CRect, CLine, CCirc, Rect, Line, Circ;
 Textarea text;
 
 //shape storage
@@ -81,6 +81,16 @@ void createMenu() {
   updateMMenu();
   updateCMenu();
   xform.setVisible(false);
+  Rect = menu.add("Rectangles", 4);
+  Rect.setPosition(0, 226);
+  Rect.setVisible(false);
+  Line = menu.add("Lines", 5);
+  Line.setPosition(0, 247);
+  Line.setVisible(false);
+  Circ = menu.add("Circles", 6);
+  Circ.setPosition(0, 268);
+  Circ.setVisible(false);
+  
   // Edit
   //b = menu.add("Edit", 4);
   //b.setVisible(false);
@@ -99,7 +109,7 @@ void createMenu() {
   // 3D
   cp5.addButton("3D View")
     .setValue(5)
-      .setPosition(0, 130)
+      .setPosition(0, 125)
         .setSize(BOUNDARYV1, BUTTON_W)
           .setVisible(false)
             ;
@@ -107,7 +117,7 @@ void createMenu() {
   cp5.addButton("Save As")
     .setBroadcast(false)
       .setValue(6)
-        .setPosition(0, 190)
+        .setPosition(0, 165)
           .setSize(BOUNDARYV1, BUTTON_W)
             .setVisible(false)
               .setBroadcast(true)
@@ -116,7 +126,7 @@ void createMenu() {
   cp5.addButton("Save")
     .setBroadcast(false)
       .setValue(7)
-        .setPosition(0, 211)
+        .setPosition(0, 186)
           .setSize(BOUNDARYV1, BUTTON_W)
             .setVisible(false)
               .setBroadcast(true)
@@ -346,6 +356,9 @@ void show() {
   cp5.getController("Delete").setVisible(true);
   //cp5.getController("Edit").setVisible(true);
   cp5.getController("XForm").setVisible(true);
+  cp5.getController("Rectangles").setVisible(true);
+  cp5.getController("Circles").setVisible(true);
+  cp5.getController("Lines").setVisible(true);
   cp5.getController("Save As").setVisible(true);
   cp5.getController("Save").setVisible(true);
   cp5.getController("3D View").setVisible(true);
