@@ -26,6 +26,8 @@ boolean setup = true;
 boolean END_ENT = false;
 boolean gotIt = false;
 boolean DEL_SHAPE = false;
+boolean MOV_SHAPE = false;
+boolean COP_SHAPE = false;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0, MV_SHAPE = 0, CP_SHAPE = 0;
 
 //placeholder vars
@@ -457,11 +459,14 @@ void controlEvent(ControlEvent theEvent) {
       CRT_RECT = 0;
       CRT_LINE = 0;
       CRT_CIRC = 0;
-      boolean SELECT_MODE = false;
-      boolean MENU_SCREEN = true;
-      boolean setup = true;
-      boolean END_ENT = false;
-      boolean gotIt = false;
+      SELECT_MODE = false;
+      MENU_SCREEN = true;
+      setup = true;
+      END_ENT = false;
+      gotIt = false;
+      DEL_SHAPE = false;
+      MOV_SHAPE = false;
+      COP_SHAPE = false;
       CRT_FILE = 0;
       MV_SHAPE = 0;
       CP_SHAPE = 0;
@@ -524,70 +529,116 @@ void controlEvent(ControlEvent theEvent) {
       } else {
         text.setText("No shapes to delete.");
       }
+    } else if (ControllerName.equals("Move")) { 
+      if (creationsR.size()>0 || creationsL.size()>0 || creationsC.size()>0) {
+        text.setText("Move shape:\n\nChoose which shape from either the Rectangles, Lines, or Circles menu.");
+        cp5.addButton("Abort", 4)
+          .setPosition(0, 5 + 4*BUTTON_W)
+            .setSize(BOUNDARYV1, BUTTON_W)
+              ;
+        MOV_SHAPE = true;
+      } else {
+        text.setText("No shapes to move.");
+      }
+    } else if (ControllerName.equals("Copy")) { 
+      if (creationsR.size()>0 || creationsL.size()>0 || creationsC.size()>0) {
+        text.setText("Copy shape:\n\nChoose which shape from either the Rectangles, Lines, or Circles menu.");
+        cp5.addButton("Abort", 4)
+          .setPosition(0, 5 + 4*BUTTON_W)
+            .setSize(BOUNDARYV1, BUTTON_W)
+              ;
+        COP_SHAPE = true;
+      } else {
+        text.setText("No shapes to copy.");
+      }
     } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")) {
-      if (DEL_SHAPE) {
-        println("delete a rectangle");
-        println(val);
-        //println(theEvent.getController().getValue());
-        int i = ((int) val % 40);
-        creationsR.remove(i);
-        text.setText("Rectangle deleted.");
-        updateMenu();
-        cp5.getController("Abort").remove();
-        DEL_SHAPE = false;
+      if (creationsR.size()>0) {
+        if (DEL_SHAPE) {
+          println("delete a rectangle");
+          println(val);
+          //println(theEvent.getController().getValue());
+          int i = ((int) val % 40);
+          creationsR.remove(i);
+          text.setText("Rectangle deleted.");
+          updateMenu();
+          cp5.getController("Abort").remove();
+          DEL_SHAPE = false;
+        } else if (MOV_SHAPE) {
+          println("move a rect");
+          temp2 = ((int) val % 40);
+          tempM = 0;
+          MV_SHAPE = 1;
+          updateMenu();
+          cp5.getController("Abort").remove();
+          MOV_SHAPE = false;
+        } else if (COP_SHAPE) {
+          println("copy a rect");
+          temp2 = ((int) val % 40);
+          tempM = 0;
+          CP_SHAPE = 1;
+          updateMenu();
+          cp5.getController("Abort").remove();
+          COP_SHAPE = false;
+        }
       }
     } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
-      if (DEL_SHAPE) {
-        println("delete a circle");
-        int i = ((int) val % 60);
-        println(i);
-        creationsC.remove(i);
-        text.setText("Circle deleted.");
-        updateMenu();
-        cp5.getController("Abort").remove();
-        DEL_SHAPE = false;
+      if (creationsC.size()>0) {
+        if (DEL_SHAPE) {
+          println("delete a circle");
+          int i = ((int) val % 60);
+          println(i);
+          creationsC.remove(i);
+          text.setText("Circle deleted.");
+          updateMenu();
+          cp5.getController("Abort").remove();
+          DEL_SHAPE = false;
+        } else if (MOV_SHAPE) {
+          println("move a circle");
+          temp2 = ((int) val % 60);
+          tempM = 1;
+          MV_SHAPE = 1;
+          updateMenu();
+          cp5.getController("Abort").remove();
+          MOV_SHAPE = false;
+        } else if (COP_SHAPE) {
+          println("copy a circle");
+          temp2 = ((int) val % 60);
+          tempM = 1;
+          CP_SHAPE = 1;
+          updateMenu();
+          cp5.getController("Abort").remove();
+          COP_SHAPE = false;
+        }
       }
     } else if (ControllerName.length() > 4 && ControllerName.substring(0, 4).equals("Line")) {
-      if (DEL_SHAPE) {
-        println("delete a line");
-        int i = ((int) val % 50);
-        creationsL.remove(i);
-        text.setText("Line deleted.");
-        updateMenu();
-        cp5.getController("Abort").remove();
-        DEL_SHAPE = false;
+      if (creationsL.size()>0) {
+        if (DEL_SHAPE) {
+          println("delete a line");
+          int i = ((int) val % 50);
+          creationsL.remove(i);
+          text.setText("Line deleted.");
+          updateMenu();
+          cp5.getController("Abort").remove();
+          DEL_SHAPE = false;
+        } else if (MOV_SHAPE) {
+          println("move a line");
+          temp2 = ((int) val % 50);
+          tempM = 2;
+          MV_SHAPE = 1;
+          updateMenu();
+          cp5.getController("Abort").remove();
+          MOV_SHAPE = false;
+        } else if (COP_SHAPE) {
+          println("copy a line");
+          println(val);
+          temp2 = ((int) val % 50);
+          tempM = 2;
+          CP_SHAPE = 1;
+          updateMenu();
+          cp5.getController("Abort").remove();
+          COP_SHAPE = false;
+        }
       }
-    } else if (ControllerName.length() > 10 && ControllerName.substring(0, 10).equals("MRectangle")) {
-      println("move a rect");
-      temp2 = ((int) val % 3110);
-      tempM = 0;
-      MV_SHAPE = 1;
-    } else if (ControllerName.length() > 7 && ControllerName.substring(0, 7).equals("MCircle")) {
-      println("move a circle");
-      temp2 = ((int) val % 3130);
-      tempM = 1;
-      MV_SHAPE = 1;
-    } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("MLine")) {
-      println("move a line");
-      temp2 = ((int) val % 3120);
-      tempM = 2;
-      MV_SHAPE = 1;
-    } else if (ControllerName.length() > 10 && ControllerName.substring(0, 10).equals("CRectangle")) {
-      println("copy a rect");
-      temp2 = ((int) val % 3210);
-      tempM = 0;
-      CP_SHAPE = 1;
-    } else if (ControllerName.length() > 7 && ControllerName.substring(0, 7).equals("CCircle")) {
-      println("copy a circle");
-      temp2 = ((int) val % 3230);
-      tempM = 1;
-      CP_SHAPE = 1;
-    } else if (ControllerName.length() > 5 && ControllerName.substring(0, 5).equals("CLine")) {
-      println("copy a line");
-      println(val);
-      temp2 = ((int) val % 3220);
-      tempM = 2;
-      CP_SHAPE = 1;
     }
   }
 }
