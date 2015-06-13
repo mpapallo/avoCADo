@@ -25,6 +25,7 @@ boolean MENU_SCREEN = true;
 boolean setup = true;
 boolean END_ENT = false;
 boolean gotIt = false;
+boolean DEL_SHAPE = false;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0, MV_SHAPE = 0, CP_SHAPE = 0;
 
 //placeholder vars
@@ -420,10 +421,7 @@ void controlEvent(ControlEvent theEvent) {
         }
       }
       fileName = feil;
-      /*updateDMenu();
-       updateMMenu();
-       updateCMenu();
-       */      updateMenu();
+      updateMenu();
     } 
     catch (Exception e) {
       fileName = "NewPart";
@@ -527,37 +525,38 @@ void controlEvent(ControlEvent theEvent) {
         text.setText("No shapes to delete.");
       }
     } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")) {
-      println("delete a rectangle");
-      //println(theEvent.getController().getValue());
-      int i = ((int) val % 210);
-      creationsR.remove(i);
-      text.setText("Rectangle deleted.");
-      //theEvent.getController().remove();
-      /*updateDMenu();
-       updateMMenu();
-       updateCMenu();
-       */      updateMenu();
+      if (DEL_SHAPE) {
+        println("delete a rectangle");
+        println(val);
+        //println(theEvent.getController().getValue());
+        int i = ((int) val % 40);
+        creationsR.remove(i);
+        text.setText("Rectangle deleted.");
+        updateMenu();
+        cp5.getController("Abort").remove();
+        DEL_SHAPE = false;
+      }
     } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
-      println("delete a circle");
-      int i = ((int) val % 230);
-      println(i);
-      creationsC.remove(i);
-      text.setText("Circle deleted.");
-      //theEvent.getController().remove();
-      /*updateDMenu();
-       updateMMenu();
-       updateCMenu();
-       */      updateMenu();
+      if (DEL_SHAPE) {
+        println("delete a circle");
+        int i = ((int) val % 60);
+        println(i);
+        creationsC.remove(i);
+        text.setText("Circle deleted.");
+        updateMenu();
+        cp5.getController("Abort").remove();
+        DEL_SHAPE = false;
+      }
     } else if (ControllerName.length() > 4 && ControllerName.substring(0, 4).equals("Line")) {
-      println("delete a line");
-      int i = ((int) val % 220);
-      creationsL.remove(i);
-      text.setText("Line deleted.");
-      //theEvent.getController().remove();
-      /*updateDMenu();
-       updateMMenu();
-       updateCMenu();
-       */      updateMenu();
+      if (DEL_SHAPE) {
+        println("delete a line");
+        int i = ((int) val % 50);
+        creationsL.remove(i);
+        text.setText("Line deleted.");
+        updateMenu();
+        cp5.getController("Abort").remove();
+        DEL_SHAPE = false;
+      }
     } else if (ControllerName.length() > 10 && ControllerName.substring(0, 10).equals("MRectangle")) {
       println("move a rect");
       temp2 = ((int) val % 3110);
