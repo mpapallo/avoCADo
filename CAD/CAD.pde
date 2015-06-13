@@ -84,20 +84,6 @@ void createMenu() {
   copy = xform.add("Copy", 32);
   xform.setVisible(false);
   updateMenu();
-  /*
-  Rect = menu.add("Rectangles", 4);
-   Rect.setPosition(0, 226);
-   Rect.setVisible(false);
-   Line = menu.add("Lines", 5);
-   Line.setPosition(0, 247);
-   Line.setVisible(false);
-   Circ = menu.add("Circles", 6);
-   Circ.setPosition(0, 268);
-   Circ.setVisible(false);
-   */
-  // Edit
-  //b = menu.add("Edit", 4);
-  //b.setVisible(false);
 
   // Display Files
   open = cp5.addListBox("\n            Open Part", 500, 425, 100, 200)
@@ -285,11 +271,11 @@ void draw() {
     } else {
       cp5.getController("input").setBroadcast(false);
     } 
-    if (CRT_RECT == 4 || CRT_RECT == 5) {
+    if (CRT_RECT == 3 || CRT_RECT == 4) {
       createRect(tempX, tempY);
-    } else if (CRT_LINE == 4 || CRT_LINE == 5) {
+    } else if (CRT_LINE == 3 || CRT_LINE == 4) {
       createLine(tempX, tempY);
-    } else if (CRT_CIRC == 4) {
+    } else if (CRT_CIRC == 3) {
       createCirc(tempX, tempY);
     } else if (CRT_FILE == 1 || CRT_FILE == 2) {
       saveAs();
@@ -733,17 +719,17 @@ void endEnt(int mode, int i) {
 
 void createRect(int x1, int y1) {
 
-  if (CRT_RECT == 4) {
+  if (CRT_RECT == 3) {
     text.setText("Create new Rectangle:\n\nNow input a width.\n\n(If you enter a negative value, we'll take the absolute value.)");
     if (width == -1) {
       width = temp1;
     }
     if (width != -1) {
       temp1 = -1;
-      CRT_RECT = 5;
-      println("CRT_RECT = 5");
+      CRT_RECT = 4;
+      println("CRT_RECT = 4");
     }
-  } else if (CRT_RECT == 5) {
+  } else if (CRT_RECT == 4) {
     text.setText("Create new Rectangle:\n\nNow input a length.");
     length = temp1;
     if (length != -1) {
@@ -764,12 +750,12 @@ void createRect(int x1, int y1) {
 
 void createLine(int x1, int y1) {
 
-  if (CRT_LINE == 4) {
+  if (CRT_LINE == 3) {
     tempX2 = x1;
     tempY2 = y1;
     text.setText("Create New Line:\n\nNow choose another point within the same view box to form a line.");
     SELECT_MODE = true;
-  } else if (CRT_LINE == 5) {
+  } else if (CRT_LINE == 4) {
     text.setText("New Line Created");
     int mode = getMode(x1, y1);
     creationsL.add(new Line(tempX2, tempY2, x1, y1, mode));
@@ -994,28 +980,28 @@ void input(String theText) {
         int m = Integer.parseInt(theText);
         if (m == 0) {
           if (tempM == 0) {
-            CRT_RECT = 4;
-            println("CRT_RECT = 4");
+            CRT_RECT = 3;
+            println("CRT_RECT = 3");
           } else if (tempM == 1) {
-            CRT_LINE = 4;
-            println("CRT_LINE = 4");
+            CRT_LINE = 3;
+            println("CRT_LINE = 3");
           } else {
-            CRT_CIRC = 4;
-            println("CRT_CIRC = 4");
+            CRT_CIRC = 3;
+            println("CRT_CIRC = 3");
           }
           END_ENT = false;
         } else if (m == 1) {
           tempX = tempX2;
           tempY = tempY2;
           if (tempM == 0) {
-            CRT_RECT = 4;
-            println("CRT_RECT = 4");
+            CRT_RECT = 3;
+            println("CRT_RECT = 3");
           } else if (tempM == 1) {
-            CRT_LINE = 4;
-            println("CRT_LINE = 4");
+            CRT_LINE = 3;
+            println("CRT_LINE = 3");
           } else {
-            CRT_CIRC = 4;
-            println("CRT_CIRC = 4");
+            CRT_CIRC = 3;
+            println("CRT_CIRC = 3");
           }
           END_ENT = false;
         } else {
@@ -1025,8 +1011,7 @@ void input(String theText) {
       catch(Exception e) {
         tryAgain();
       }
-    } else if (CRT_RECT > 3 || CRT_CIRC > 3) {
-      println("am i here?");
+    } else if (CRT_RECT > 2 || CRT_CIRC > 2) {
       //width, length, or radius
       try {
         temp1 = abs(Integer.parseInt(theText));
@@ -1049,23 +1034,23 @@ void tryAgain() {
 
 void mouseClicked() {
   if (SELECT_MODE) {
-    if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 4 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 4)) {
+    if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 3 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 3)) {
       tempX = mouseX;
       tempY = mouseY;
       println("xcor: " + tempX + ", ycor: " + tempY);
       SELECT_MODE = false;
       if (CRT_RECT == 2) {
-        CRT_RECT = 4;
-        println("CRT_RECT = 4");
+        CRT_RECT = 3;
+        println("CRT_RECT = 3");
       } else if (CRT_CIRC == 2) {
-        CRT_CIRC = 4;
-        println("CRT_CIRC = 4");
+        CRT_CIRC = 3;
+        println("CRT_CIRC = 3");
       } else if (CRT_LINE == 2) {
-        CRT_LINE  = 4;
+        CRT_LINE  = 3;
+        println("CRT_LINE = 3");
+      } else if (CRT_LINE == 3) {
+        CRT_LINE = 4;
         println("CRT_LINE = 4");
-      } else if (CRT_LINE == 4) {
-        CRT_LINE = 5;
-        println("CRT_LINE = 5");
       }
     } else {
       text.setText(text.getText() + "\n\nWrong view...");
