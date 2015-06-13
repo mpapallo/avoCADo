@@ -72,14 +72,15 @@ void createMenu() {
   // Delete
   del = menu.add("Delete", 2);
   del.add("Clear all", 20);
-  updateDMenu();
+  del.add("Select Shape", 21);
+  //updateDMenu();
   del.setVisible(false);
   // XForm
   xform = menu.add("XForm", 3);
   move = xform.add("Move", 31);
   copy = xform.add("Copy", 32);
-  updateMMenu();
-  updateCMenu();
+  //updateMMenu();
+  //updateCMenu();
   xform.setVisible(false);
   Rect = menu.add("Rectangles", 4);
   Rect.setPosition(0, 226);
@@ -90,7 +91,6 @@ void createMenu() {
   Circ = menu.add("Circles", 6);
   Circ.setPosition(0, 268);
   Circ.setVisible(false);
-  
   // Edit
   //b = menu.add("Edit", 4);
   //b.setVisible(false);
@@ -221,6 +221,30 @@ void updateMMenu() {
   MCirc.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
   for (int i=0; i<creationsC.size (); i++) {
     MCirc.add("MCircle_"+i, 3130+i);
+  }
+}
+
+void updateMenu() {
+  if (!setup) {
+    Rect.remove();
+    Line.remove();
+    Circ.remove();
+  }
+  // add creations to the menu
+  Rect = menu.add("Rectangles", 4);
+  Rect.setPosition(0, 226);
+  for (int i=0; i<creationsR.size (); i++) {
+    Rect.add("Rectangle_"+i, 40+i);
+  }
+  Line = menu.add("Lines", 5);
+  Line.setPosition(0, 247);
+  for (int i=0; i<creationsL.size (); i++) {
+    Line.add("Line_"+i, 50+i);
+  }
+  Circ = menu.add("Circles", 6);
+  Circ.setPosition(0, 268);
+  for (int i=0; i<creationsC.size (); i++) {
+    Circ.add("Circle_"+i, 60+i);
   }
 }
 
@@ -396,9 +420,10 @@ void controlEvent(ControlEvent theEvent) {
         }
       }
       fileName = feil;
-      updateDMenu();
-      updateMMenu();
-      updateCMenu();
+      /*updateDMenu();
+       updateMMenu();
+       updateCMenu();
+       */      updateMenu();
     } 
     catch (Exception e) {
       fileName = "NewPart";
@@ -450,7 +475,6 @@ void controlEvent(ControlEvent theEvent) {
   if (theEvent.isAssignableFrom(MultiListButton.class)) {
     String ControllerName = theEvent.getController().getName();
     float val = theEvent.getController().getValue();
-
     if (ControllerName.equals("Rectangle")) {
       CRT_RECT = 1;
       tempM = 0;
@@ -483,10 +507,25 @@ void controlEvent(ControlEvent theEvent) {
           .setSize(BOUNDARYV1, BUTTON_W)
             ;
     } else if (ControllerName.equals("Clear all")) {
-      creationsR.clear();
-      creationsC.clear();
-      creationsL.clear();
-      text.setText("Cleared all.");
+      if (creationsR.size()>0 || creationsL.size()>0 || creationsC.size()>0) {
+        creationsR.clear();
+        creationsC.clear();
+        creationsL.clear();
+        text.setText("Cleared all.");
+      } else {
+        text.setText("No shapes to delete.");
+      }
+    } else if (ControllerName.equals("Select Shape")) {
+      if (creationsR.size()>0 || creationsL.size()>0 || creationsC.size()>0) {
+        text.setText("Delete shape:\n\nChoose which shape from either the Rectangles, Lines, or Circles menu.");
+        cp5.addButton("Abort", 4)
+          .setPosition(0, 5 + 4*BUTTON_W)
+            .setSize(BOUNDARYV1, BUTTON_W)
+              ;
+        DEL_SHAPE = true;
+      } else {
+        text.setText("No shapes to delete.");
+      }
     } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")) {
       println("delete a rectangle");
       //println(theEvent.getController().getValue());
@@ -494,9 +533,10 @@ void controlEvent(ControlEvent theEvent) {
       creationsR.remove(i);
       text.setText("Rectangle deleted.");
       //theEvent.getController().remove();
-      updateDMenu();
-      updateMMenu();
-      updateCMenu();
+      /*updateDMenu();
+       updateMMenu();
+       updateCMenu();
+       */      updateMenu();
     } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
       println("delete a circle");
       int i = ((int) val % 230);
@@ -504,18 +544,20 @@ void controlEvent(ControlEvent theEvent) {
       creationsC.remove(i);
       text.setText("Circle deleted.");
       //theEvent.getController().remove();
-      updateDMenu();
-      updateMMenu();
-      updateCMenu();
+      /*updateDMenu();
+       updateMMenu();
+       updateCMenu();
+       */      updateMenu();
     } else if (ControllerName.length() > 4 && ControllerName.substring(0, 4).equals("Line")) {
       println("delete a line");
       int i = ((int) val % 220);
       creationsL.remove(i);
       text.setText("Line deleted.");
       //theEvent.getController().remove();
-      updateDMenu();
-      updateMMenu();
-      updateCMenu();
+      /*updateDMenu();
+       updateMMenu();
+       updateCMenu();
+       */      updateMenu();
     } else if (ControllerName.length() > 10 && ControllerName.substring(0, 10).equals("MRectangle")) {
       println("move a rect");
       temp2 = ((int) val % 3110);
@@ -732,9 +774,10 @@ void createRect(int x1, int y1) {
       //DRect.add(name, 210 + creationsR.size()-1);
       CRT_RECT = 0;
       cp5.getController("Abort").remove();
-      updateDMenu();
-      updateMMenu();
-      updateCMenu();
+      /*updateDMenu();
+       updateMMenu();
+       updateCMenu();
+       */      updateMenu();
     }
   }
 }
@@ -754,9 +797,10 @@ void createLine(int x1, int y1) {
     //DLine.add(name, 220+creationsL.size()-1);
     CRT_LINE = 0;
     cp5.getController("Abort").remove();
-    updateDMenu();
-    updateMMenu();
-    updateCMenu();
+    /*updateDMenu();
+     updateMMenu();
+     updateCMenu();
+     */    updateMenu();
   }
 }
 
@@ -779,9 +823,10 @@ void createCirc(int x1, int y1) {
     //DCirc.add(name, 230+creationsC.size()-1);
     CRT_CIRC = 0;
     cp5.getController("Abort").remove();
-    updateDMenu();
-    updateMMenu();
-    updateCMenu();
+    /*updateDMenu();
+     updateMMenu();
+     updateCMenu();
+     */    updateMenu();
   }
 }
 
@@ -886,9 +931,10 @@ void moveShape() {
     tempX = -1;
     tempY = -1;
     tempZ = -1;
-    updateDMenu();
-    updateMMenu();
-    updateCMenu();
+    /*updateDMenu();
+     updateMMenu();
+     updateCMenu();
+     */    updateMenu();
   }
 }
 
