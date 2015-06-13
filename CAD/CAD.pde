@@ -1,4 +1,5 @@
 import controlP5.*;
+import javax.swing.*; 
 
 //final vars
 final int BOUNDARYV1 = 100, BOUNDARYV2 = 450, BOUNDARYH = 350;
@@ -14,6 +15,10 @@ xform, move, MRect, MLine, MCirc,
 copy, CRect, CLine, CCirc, Rect, Line, Circ;
 Textarea text;
 
+//3D window stuff
+PFrame f;
+SecondApplet s;
+
 //shape storage
 ArrayList<Rectangle> creationsR = new ArrayList<Rectangle>(); 
 ArrayList<Circle> creationsC = new ArrayList<Circle>();
@@ -28,6 +33,7 @@ boolean gotIt = false;
 boolean DEL_SHAPE = false;
 boolean MOV_SHAPE = false;
 boolean COP_SHAPE = false;
+boolean D3 = false;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0, MV_SHAPE = 0, CP_SHAPE = 0;
 
 //placeholder vars
@@ -111,11 +117,13 @@ void createMenu() {
 
   // 3D
   cp5.addButton("3D View")
-    .setValue(5)
-      .setPosition(0, 125)
-        .setSize(BOUNDARYV1, BUTTON_W)
-          .setVisible(false)
-            ;
+    .setBroadcast(false)
+      .setValue(5)
+        .setPosition(0, 125)
+          .setSize(BOUNDARYV1, BUTTON_W)
+            .setVisible(false)
+              .setBroadcast(true)
+                ;
   // Save
   cp5.addButton("Save As")
     .setBroadcast(false)
@@ -282,6 +290,9 @@ void updateCMenu() {
 /////////////////////////
 
 void draw() {
+  /*if (mousePressed) {
+   f = new PFrame();
+   }*/
   if (MENU_SCREEN) {
     // title screen
     background(0);
@@ -444,9 +455,11 @@ void controlEvent(ControlEvent theEvent) {
   // BUTTON
   if (theEvent.isAssignableFrom(Button.class)) {
     String ControllerName = theEvent.getController().getName();
-
-    if (ControllerName.equals("3D View")) {
+    if (ControllerName.equals("3D View") && !D3) {
       println("the 3D button was pressed");
+      f = new PFrame();
+      s = new SecondApplet();
+      D3 = true;
     } else if (ControllerName.equals("Save As")) {
       println("the Save As button was pressed");
       CRT_FILE = 1;
@@ -1181,6 +1194,30 @@ void mouseClicked() {
     } else {
       text.setText(text.getText() + "\n\nWrong view...");
     }
+  }
+}
+
+public class PFrame extends JFrame {
+  public PFrame() {
+    setBounds(100, 75, 350, 350);
+    s = new SecondApplet();
+    add(s);
+    s.init();
+    show();
+  }
+}
+
+public class SecondApplet extends PApplet {
+  public void setup() {
+    size(350, 350, P3D);
+    background(0);
+    noStroke();
+  }
+
+  public void draw() {
+    background(50);
+    fill(255);
+    ellipse(mouseX, mouseY, 10, 10);
   }
 }
 
