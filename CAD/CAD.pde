@@ -455,11 +455,16 @@ void controlEvent(ControlEvent theEvent) {
   // BUTTON
   if (theEvent.isAssignableFrom(Button.class)) {
     String ControllerName = theEvent.getController().getName();
-    if (ControllerName.equals("3D View") && !D3) {
-      println("the 3D button was pressed");
-      f = new PFrame();
-      s = new SecondApplet();
-      D3 = true;
+    if (ControllerName.equals("3D View")) {
+      if (f!=null && f.isDisplayable()) {
+        f.dispose();
+        D3 = false;
+      } else {
+        println("the 3D button was pressed");
+        f = new PFrame();
+        s = new SecondApplet();
+        D3 = true;
+      }
     } else if (ControllerName.equals("Save As")) {
       println("the Save As button was pressed");
       CRT_FILE = 1;
@@ -1199,7 +1204,8 @@ void mouseClicked() {
 
 public class PFrame extends JFrame {
   public PFrame() {
-    setBounds(100, 75, 350, 350);
+    setBounds(50, 50, 350, 350);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     s = new SecondApplet();
     add(s);
     s.init();
@@ -1215,7 +1221,6 @@ public class SecondApplet extends PApplet {
   }
 
   public void draw() {
-    background(50);
     fill(255);
     ellipse(mouseX, mouseY, 10, 10);
   }
