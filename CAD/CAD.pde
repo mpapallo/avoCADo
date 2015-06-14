@@ -1,4 +1,5 @@
 import controlP5.*;
+import javax.swing.*; 
 
 //final vars
 final int BOUNDARYV1 = 100, BOUNDARYV2 = 450, BOUNDARYH = 350;
@@ -13,6 +14,10 @@ MultiListButton del, DRect, DCirc, DLine,
 xform, move, MRect, MLine, MCirc, 
 copy, CRect, CLine, CCirc, Rect, Line, Circ;
 Textarea text;
+
+//3D window stuff
+PFrame f;
+SecondApplet s;
 
 //shape storage
 ArrayList<Rectangle> creationsR = new ArrayList<Rectangle>(); 
@@ -60,6 +65,8 @@ void setup() {
   avo = loadImage("avocado.png");
 
   setup = false;
+
+  strokeWeight(2);
 }
 
 void createMenu() {
@@ -111,11 +118,13 @@ void createMenu() {
 
   // 3D
   cp5.addButton("3D View")
-    .setValue(5)
-      .setPosition(0, 125)
-        .setSize(BOUNDARYV1, BUTTON_W)
-          .setVisible(false)
-            ;
+    .setBroadcast(false)
+      .setValue(5)
+        .setPosition(0, 125)
+          .setSize(BOUNDARYV1, BUTTON_W)
+            .setVisible(false)
+              .setBroadcast(true)
+                ;
   // Save
   cp5.addButton("Save As")
     .setBroadcast(false)
@@ -282,6 +291,9 @@ void updateCMenu() {
 /////////////////////////
 
 void draw() {
+  /*if (mousePressed) {
+   f = new PFrame();
+   }*/
   if (MENU_SCREEN) {
     // title screen
     background(0);
@@ -444,9 +456,15 @@ void controlEvent(ControlEvent theEvent) {
   // BUTTON
   if (theEvent.isAssignableFrom(Button.class)) {
     String ControllerName = theEvent.getController().getName();
-
     if (ControllerName.equals("3D View")) {
-      println("the 3D button was pressed");
+      if (f!=null && f.isDisplayable()) {
+        f.dispose();
+      } else {
+        println("the 3D button was pressed");
+        f = new PFrame();
+        s = new SecondApplet();
+        f.setTitle("3D View");
+      }
     } else if (ControllerName.equals("Save As")) {
       println("the Save As button was pressed");
       CRT_FILE = 1;
@@ -1181,6 +1199,45 @@ void mouseClicked() {
     } else {
       text.setText(text.getText() + "\n\nWrong view...");
     }
+  }
+}
+
+public class PFrame extends JFrame {
+  public PFrame() {
+    setBounds(50, 50, 500, 500);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    s = new SecondApplet();
+    add(s);
+    s.init();
+    show();
+  }
+}
+
+public class SecondApplet extends PApplet {
+
+  void setup() {
+    size(500, 500, OPENGL);
+    noFill(); 
+    strokeWeight(2);
+    stroke(0, 255, 0);
+  }
+
+  void draw() {
+    background(0);
+    rot(width/2, 0);
+    drawBox(width/2, height/2, 100);
+  }
+  void rot(float x, float y) {
+    translate(x, y);
+    rotateX(radians(54));
+    rotateZ(radians(45));
+    ortho();
+  }
+  void drawBox(float x, float y, int size) {
+    pushMatrix();
+    translate(x, y, size/2.0);
+    box(size);
+    popMatrix();
   }
 }
 
