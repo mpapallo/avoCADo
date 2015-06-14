@@ -33,7 +33,6 @@ boolean gotIt = false;
 boolean DEL_SHAPE = false;
 boolean MOV_SHAPE = false;
 boolean COP_SHAPE = false;
-boolean D3 = false;
 int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0, MV_SHAPE = 0, CP_SHAPE = 0;
 
 //placeholder vars
@@ -66,6 +65,8 @@ void setup() {
   avo = loadImage("avocado.png");
 
   setup = false;
+
+  strokeWeight(2);
 }
 
 void createMenu() {
@@ -458,12 +459,11 @@ void controlEvent(ControlEvent theEvent) {
     if (ControllerName.equals("3D View")) {
       if (f!=null && f.isDisplayable()) {
         f.dispose();
-        D3 = false;
       } else {
         println("the 3D button was pressed");
         f = new PFrame();
         s = new SecondApplet();
-        D3 = true;
+        f.setTitle("3D View");
       }
     } else if (ControllerName.equals("Save As")) {
       println("the Save As button was pressed");
@@ -1204,7 +1204,7 @@ void mouseClicked() {
 
 public class PFrame extends JFrame {
   public PFrame() {
-    setBounds(50, 50, 350, 350);
+    setBounds(50, 50, 500, 500);
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     s = new SecondApplet();
     add(s);
@@ -1214,15 +1214,30 @@ public class PFrame extends JFrame {
 }
 
 public class SecondApplet extends PApplet {
-  public void setup() {
-    size(350, 350, P3D);
-    background(0);
-    noStroke();
+
+  void setup() {
+    size(500, 500, OPENGL);
+    noFill(); 
+    strokeWeight(2);
+    stroke(0, 255, 0);
   }
 
-  public void draw() {
-    fill(255);
-    ellipse(mouseX, mouseY, 10, 10);
+  void draw() {
+    background(0);
+    rot(width/2, 0);
+    drawBox(width/2, height/2, 100);
+  }
+  void rot(float x, float y) {
+    translate(x, y);
+    rotateX(radians(54));
+    rotateZ(radians(45));
+    ortho();
+  }
+  void drawBox(float x, float y, int size) {
+    pushMatrix();
+    translate(x, y, size/2.0);
+    box(size);
+    popMatrix();
   }
 }
 
