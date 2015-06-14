@@ -32,8 +32,9 @@ int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0, MV_SHAPE = 0, CP_SHA
 
 //placeholder vars
 int temp1 = -1, temp2 = -1, tempX = -1, tempY = -1, tempZ = -1;
-int tempX2 = -1, tempY2 = -1, tempM = -1;
+int tempX2 = -1, tempY2 = -1, tempM = -1, tempX3 = -1, tempY3 = -1;
 int width = -1, length = -1, radius = -1;
+Shape tempShape;
 
 //
 PImage avo;
@@ -76,27 +77,13 @@ void createMenu() {
   del = menu.add("Delete", 2);
   del.add("Clear all", 20);
   del.add("Select Shape", 21);
-  //updateDMenu();
   del.setVisible(false);
   // XForm
   xform = menu.add("XForm", 3);
   move = xform.add("Move", 31);
   copy = xform.add("Copy", 32);
-  //updateMMenu();
-  //updateCMenu();
   xform.setVisible(false);
-  Rect = menu.add("Rectangles", 4);
-  Rect.setPosition(0, 226);
-  Rect.setVisible(false);
-  Line = menu.add("Lines", 5);
-  Line.setPosition(0, 247);
-  Line.setVisible(false);
-  Circ = menu.add("Circles", 6);
-  Circ.setPosition(0, 268);
-  Circ.setVisible(false);
-  // Edit
-  //b = menu.add("Edit", 4);
-  //b.setVisible(false);
+  updateMenu();
 
   // Display Files
   open = cp5.addListBox("\n            Open Part", 500, 425, 100, 200)
@@ -179,54 +166,6 @@ void createMenu() {
             ;
 }
 
-void updateDMenu() {
-  if (!setup) {
-    DRect.remove();
-    DLine.remove();
-    DCirc.remove();
-  }
-  // add creations to the menu
-  DRect = del.add("D_Rectangle", 21);
-  DRect.setPosition(BOUNDARYV1, 5 + 2*BUTTON_W);
-  for (int i=0; i<creationsR.size (); i++) {
-    DRect.add("Rectangle_"+i, 210+i);
-  }
-  DLine = del.add("D_Line", 22);
-  DLine.setPosition(BOUNDARYV1, 5 + 3*BUTTON_W);
-  for (int i=0; i<creationsL.size (); i++) {
-    DLine.add("Line_"+i, 220+i);
-  }
-  DCirc = del.add("D_Circle", 23);
-  DCirc.setPosition(BOUNDARYV1, 5 + 4*BUTTON_W);
-  for (int i=0; i<creationsC.size (); i++) {
-    DCirc.add("Circle_"+i, 230+i);
-  }
-}
-
-void updateMMenu() {
-  if (!setup) {
-    MRect.remove();
-    MLine.remove();
-    MCirc.remove();
-  }
-  // add creations to the menu
-  MRect = move.add("M_Rectangle", 311);
-  MRect.setPosition(BOUNDARYV1*2, 5 + 2*BUTTON_W);
-  for (int i=0; i<creationsR.size (); i++) {
-    MRect.add("MRectangle_"+i, 3110+i);
-  }
-  MLine = move.add("M_Line", 312);
-  MLine.setPosition(BOUNDARYV1*2, 5 + 3*BUTTON_W);
-  for (int i=0; i<creationsL.size (); i++) {
-    MLine.add("MLine_"+i, 3120+i);
-  }
-  MCirc = move.add("M_Circle", 313);
-  MCirc.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
-  for (int i=0; i<creationsC.size (); i++) {
-    MCirc.add("MCircle_"+i, 3130+i);
-  }
-}
-
 void updateMenu() {
   if (!setup) {
     Rect.remove();
@@ -235,43 +174,22 @@ void updateMenu() {
   }
   // add creations to the menu
   Rect = menu.add("Rectangles", 4);
-  Rect.setPosition(0, 226);
+  Rect.setPosition(0, 226)
+    .setVisible(false);
   for (int i=0; i<creationsR.size (); i++) {
     Rect.add("Rectangle_"+i, 40+i);
   }
   Line = menu.add("Lines", 5);
-  Line.setPosition(0, 247);
+  Line.setPosition(0, 247)
+    .setVisible(false);
   for (int i=0; i<creationsL.size (); i++) {
     Line.add("Line_"+i, 50+i);
   }
   Circ = menu.add("Circles", 6);
-  Circ.setPosition(0, 268);
+  Circ.setPosition(0, 268)
+    .setVisible(false);
   for (int i=0; i<creationsC.size (); i++) {
     Circ.add("Circle_"+i, 60+i);
-  }
-}
-
-void updateCMenu() {
-  if (!setup) {
-    CRect.remove();
-    CLine.remove();
-    CCirc.remove();
-  }
-  // add creations to the menu
-  CRect = copy.add("C_Rectangle", 321);
-  CRect.setPosition(BOUNDARYV1*2, 5 + 3*BUTTON_W);
-  for (int i=0; i<creationsR.size (); i++) {
-    CRect.add("CRectangle_"+i, 3210+i);
-  }
-  CLine = copy.add("C_Line", 322);
-  CLine.setPosition(BOUNDARYV1*2, 5 + 4*BUTTON_W);
-  for (int i=0; i<creationsL.size (); i++) {
-    CLine.add("CLine_"+i, 3220+i);
-  }
-  CCirc = copy.add("C_Circle", 323);
-  CCirc.setPosition(BOUNDARYV1*2, 5 + 5*BUTTON_W);
-  for (int i=0; i<creationsC.size (); i++) {
-    CCirc.add("CCircle_"+i, 3230+i);
   }
 }
 
@@ -306,9 +224,7 @@ void draw() {
     // (highlight if user is hovering over its menu item)
     for (int i=0; i<creationsR.size (); i++) {
       try {
-        if (cp5.controller("Rectangle_"+i).isActive() || 
-          cp5.controller("MRectangle_"+i).isActive() ||
-          cp5.controller("CRectangle_"+i).isActive() ) {
+        if (cp5.controller("Rectangle_"+i).isActive()) {
           stroke(255);
         } else {
           stroke(0, 255, 0);
@@ -322,9 +238,7 @@ void draw() {
     }
     for (int i=0; i<creationsC.size (); i++) {
       try {
-        if (cp5.controller("Circle_"+i).isActive() ||
-          cp5.controller("MCircle_"+i).isActive() ||
-          cp5.controller("CCircle_"+i).isActive() ) {
+        if (cp5.controller("Circle_"+i).isActive() ) {
           stroke(255);
         } else {
           stroke(0, 255, 0);
@@ -338,9 +252,7 @@ void draw() {
     }
     for (int i=0; i<creationsL.size (); i++) {
       try {
-        if (cp5.controller("Line_"+i).isActive() || 
-          cp5.getController("MLine_"+i).isActive() ||
-          cp5.getController("CLine_"+i).isActive()) {
+        if (cp5.controller("Line_"+i).isActive()) {
           stroke(255);
         } else {
           stroke(0, 255, 0);
@@ -359,10 +271,9 @@ void draw() {
     } else {
       cp5.getController("input").setBroadcast(false);
     } 
-
     if (CRT_RECT == 3 || CRT_RECT == 4) {
       createRect(tempX, tempY);
-    } else if (CRT_LINE == 3 || CRT_LINE == 4) {
+    } else if (CRT_LINE == 3 || CRT_LINE == 6) {
       createLine(tempX, tempY);
     } else if (CRT_CIRC == 3) {
       createCirc(tempX, tempY);
@@ -456,12 +367,12 @@ void controlEvent(ControlEvent theEvent) {
     } else if (ControllerName.equals("             New Part")) {
       MENU_SCREEN = false;
     } else if (ControllerName.equals("Abort")) {
+      println("the Abort button was pressed");
       CRT_RECT = 0;
       CRT_LINE = 0;
       CRT_CIRC = 0;
+      println("CRT_RECT, CRT_LINE, CRT_CIRC = 0");
       SELECT_MODE = false;
-      MENU_SCREEN = true;
-      setup = true;
       END_ENT = false;
       gotIt = false;
       DEL_SHAPE = false;
@@ -480,6 +391,7 @@ void controlEvent(ControlEvent theEvent) {
     float val = theEvent.getController().getValue();
     if (ControllerName.equals("Rectangle")) {
       CRT_RECT = 1;
+      println("CRT_RECT = 1");
       tempM = 0;
       println("the Rect option was selected");
       text.setText("Create new Rectangle:\n\nEnter 0 for End Entity, 1 for cursor selection");
@@ -489,22 +401,20 @@ void controlEvent(ControlEvent theEvent) {
             ;
     } else if (ControllerName.equals("Line")) {
       CRT_LINE = 1;
+      println("CRT_LINE = 1");
       tempM = 1;
       println("the Line option was selected");
       text.setText("Create new Line:\n\nEnter 0 for End Entity, 1 for cursor selection");
-      //text.setText("Create new Line:\n\nClick in either the top, front or right view box to indicate the position of the shape");
-      //SELECT_MODE = true;
       cp5.addButton("Abort", 4)
         .setPosition(0, 5 + 4*BUTTON_W)
           .setSize(BOUNDARYV1, BUTTON_W)
             ;
     } else if (ControllerName.equals("Circle")) {
       CRT_CIRC = 1;
+      println("CRT_CIRC = 1");
       tempM = 2;
       println("the Circle option was selected");
       text.setText("Create new Circle:\n\nEnter 0 for End Entity, 1 for cursor selection");
-      //text.setText("Create new Circle:\n\nClick in either the top, front or right view box to indicate the center of the shape");
-      //SELECT_MODE = true;
       cp5.addButton("Abort", 4)
         .setPosition(0, 5 + 4*BUTTON_W)
           .setSize(BOUNDARYV1, BUTTON_W)
@@ -553,7 +463,10 @@ void controlEvent(ControlEvent theEvent) {
       }
     } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")) {
       if (creationsR.size()>0) {
-        if (DEL_SHAPE) {
+        if (END_ENT) {
+          int i = ((int) val % 40);
+          endEnt(0, i);
+        } else if (DEL_SHAPE) {
           println("delete a rectangle");
           println(val);
           //println(theEvent.getController().getValue());
@@ -583,7 +496,10 @@ void controlEvent(ControlEvent theEvent) {
       }
     } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
       if (creationsC.size()>0) {
-        if (DEL_SHAPE) {
+        if (END_ENT) {
+          int i = ((int) val % 60);
+          endEnt(2, i);
+        } else if (DEL_SHAPE) {
           println("delete a circle");
           int i = ((int) val % 60);
           println(i);
@@ -612,7 +528,10 @@ void controlEvent(ControlEvent theEvent) {
       }
     } else if (ControllerName.length() > 4 && ControllerName.substring(0, 4).equals("Line")) {
       if (creationsL.size()>0) {
-        if (DEL_SHAPE) {
+        if (END_ENT) {
+          int i = ((int) val % 50);
+          endEnt(1, i);
+        } else if (DEL_SHAPE) {
           println("delete a line");
           int i = ((int) val % 50);
           creationsL.remove(i);
@@ -761,15 +680,24 @@ void selection(int mode) {
   if (tempM == 0) {
     shape = "Rectangle";
     CRT_RECT = 2;
+    println("CRT_RECT = 2");
   } else if (tempM == 1) {
     shape = "Line";
-    CRT_LINE = 2;
+    if (CRT_LINE == 1) {
+      CRT_LINE = 2;
+      println("CRT_LINE = 2");
+    } else if (CRT_LINE == 4) {
+      CRT_LINE = 5;
+      println("CRT_LINE = 5");
+    }
   } else {
     shape = "Circle";
     CRT_CIRC = 2;
+    println("CRT_CIRC = 2");
   }
   if (mode == 0) {
-    text.setText("Create new " + shape + ":\n\nInput the name of the shape you wish to select, in the form <shape><index> (see delete menu for reference)");
+    text.setText("Create new " + shape + ":\n\nSelect a shape from either the Rectangles, Lines, or Circles menu");
+    END_ENT = true;
   } else {
     text.setText("Create new " + shape + ":\n\nClick in either the top, front or right view box to indicate the position of the shape.");
     SELECT_MODE = true;
@@ -777,9 +705,6 @@ void selection(int mode) {
 }
 
 void endEnt(int mode, int i) {
-  // each of these has to set tempX and tempY
-
-  END_ENT = true;
   //println("mode " + mode + " index " + i);
   if (mode == 0) {
     //rectangle i
@@ -788,11 +713,11 @@ void endEnt(int mode, int i) {
     //line i
     Line l = creationsL.get(i);
     //these are not correct coords, but it works for what it is
-    tempX = l.getX();
-    tempY = l.getY();
+    tempX = l.getX1();
+    tempY = l.getY1();
     tempX2 = l.getX2();
     tempY2 = l.getY2();
-    text.setText("Create new Line:\n\nWhich coordinates do you want?\nEnter 0 for (" + tempX + " , " + tempY + ") or 1 for (" + tempX2 + " , " + tempY2 + ")");
+    text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + tempX + " , " + tempY + ") \nor 1 for \n(" + tempX2 + " , " + tempY2 + ")");
   } else if (mode == 2) {
     //circle i
     //text.setText(which coords? left or right of center)
@@ -809,6 +734,7 @@ void createRect(int x1, int y1) {
     if (width != -1) {
       temp1 = -1;
       CRT_RECT = 4;
+      println("CRT_RECT = 4");
     }
   } else if (CRT_RECT == 4) {
     text.setText("Create new Rectangle:\n\nNow input a length.");
@@ -821,13 +747,10 @@ void createRect(int x1, int y1) {
       width = -1;
       length = -1;
       String name = "Rectangle_"+(creationsR.size()-1);
-      //DRect.add(name, 210 + creationsR.size()-1);
       CRT_RECT = 0;
+      println("CRT_RECT = 0");
       cp5.getController("Abort").remove();
-      /*updateDMenu();
-       updateMMenu();
-       updateCMenu();
-       */      updateMenu();
+      updateMenu();
     }
   }
 }
@@ -835,22 +758,20 @@ void createRect(int x1, int y1) {
 void createLine(int x1, int y1) {
 
   if (CRT_LINE == 3) {
-    tempX2 = x1;
-    tempY2 = y1;
-    text.setText("Create New Line:\n\nNow choose another point within the same view box to form a line.");
-    SELECT_MODE = true;
-  } else if (CRT_LINE == 4) {
+    tempX3 = x1;
+    tempY3 = y1;
+    text.setText("Create New Line:\n\nNow choose another point within the same view box to form a line.\n\nEnter 0 for End Entity or 1 for cursor selection.");
+    CRT_LINE = 4;
+    println("CRT_LINE = 4");
+  } else if (CRT_LINE == 6) {
     text.setText("New Line Created");
     int mode = getMode(x1, y1);
-    creationsL.add(new Line(tempX2, tempY2, x1, y1, mode));
+    creationsL.add(new Line(tempX3, tempY3, x1, y1, mode));
     String name = "Line_"+(creationsL.size()-1);
-    //DLine.add(name, 220+creationsL.size()-1);
     CRT_LINE = 0;
+    println("CRT_LINE = 0");
     cp5.getController("Abort").remove();
-    /*updateDMenu();
-     updateMMenu();
-     updateCMenu();
-     */    updateMenu();
+    updateMenu();
   }
 }
 
@@ -870,13 +791,10 @@ void createCirc(int x1, int y1) {
     tempX = -1;
     tempY = -1;
     String name = "Circle_"+(creationsC.size()-1);
-    //DCirc.add(name, 230+creationsC.size()-1);
     CRT_CIRC = 0;
+    println("CRT_CIRC = 0");
     cp5.getController("Abort").remove();
-    /*updateDMenu();
-     updateMMenu();
-     updateCMenu();
-     */    updateMenu();
+    updateMenu();
   }
 }
 
@@ -903,11 +821,14 @@ int getMode(int x, int y) {
 void moveShape() {
 
   if (MV_SHAPE == 1) {
+    /*
     if (CP_SHAPE == 1) {
-      text.setText("Copy a Shape:\n\nInput the change in x (+ or -)");
-    } else {
-      text.setText("Move a Shape:\n\nInput the change in x (+ or -)");
-    }
+     text.setText("Copy a Shape:\n\nInput the change in x (+ or -)");
+     } else {
+     text.setText("Move a Shape:\n\nInput the change in x (+ or -)");
+     }
+     */
+    text.setText(text.getText() + "\n\nInput the change in x (+ or -)");
     if (gotIt) {
       println("l");
       tempX = temp1;
@@ -916,22 +837,26 @@ void moveShape() {
       gotIt = false;
     }
   } else if (MV_SHAPE == 2) {
+    /*
     if (CP_SHAPE == 1) {
-      text.setText("Copy a Shape:\n\nInput the change in y (+ or -)");
-    } else {
-      text.setText("Move a Shape:\n\nInput the change in y (+ or -)");
-    }
+     text.setText(text.getText() + "\n\nInput the change in y (+ or -)");
+     } else {
+     text.setText(text.getText() + "Move a Shape:\n\nInput the change in y (+ or -)");
+     }*/
+    text.setText(text.getText() + "\n\nInput the change in y (+ or -)");
     if (gotIt) {
       tempY = temp1;
       MV_SHAPE ++;
       gotIt = false;
     }
   } else if (MV_SHAPE == 3) {
+    /*
     if (CP_SHAPE == 1) {
-      text.setText("Copy a Shape:\n\nInput the change in z (+ or -)");
-    } else {
-      text.setText("Move a Shape:\n\nInput the change in z (+ or -)");
-    }
+     text.setText("Copy a Shape:\n\nInput the change in z (+ or -)");
+     } else {
+     text.setText("Move a Shape:\n\nInput the change in z (+ or -)");
+     }*/
+    text.setText(text.getText() + "\n\nInput the change in z (+ or -)");
     if (gotIt) {
       tempZ = temp1;
       MV_SHAPE ++;
@@ -981,10 +906,7 @@ void moveShape() {
     tempX = -1;
     tempY = -1;
     tempZ = -1;
-    /*updateDMenu();
-     updateMMenu();
-     updateCMenu();
-     */    updateMenu();
+    updateMenu();
   }
 }
 
@@ -1054,19 +976,7 @@ void input(String theText) {
       catch(Exception e) {
         tryAgain();
       }
-    } else if (CRT_RECT > 2 || CRT_CIRC > 2) {
-      //width, length, or radius
-      try {
-        temp1 = abs(Integer.parseInt(theText));
-        if (temp1 == 0) {
-          tryAgain();
-        }
-      }
-      catch(Exception e) {
-        tryAgain();
-      }
-      println(temp1);
-    } else if (CRT_RECT == 1 || CRT_LINE == 1 || CRT_CIRC == 1) {
+    } else if (CRT_RECT == 1 || CRT_LINE == 1 || CRT_LINE == 4 || CRT_CIRC == 1) {
       //end ent or cursor
       try {
         temp1 = Integer.parseInt(theText);
@@ -1080,61 +990,24 @@ void input(String theText) {
       catch(Exception e) {
         tryAgain();
       }
-    } else if (!END_ENT && (CRT_RECT == 2 || CRT_LINE == 2 || CRT_CIRC == 2)) {
-      //choose a shape for end ent
-      int i;
-      if (theText.length() > 9 && theText.substring(0, 9).toLowerCase().equals("rectangle")) {
-        try {
-          i = Integer.parseInt(theText.substring(9));
-          println("rect " + i);
-          if (i >= creationsR.size()) {
-            tryAgain();
-          } else {
-            endEnt(0, i);
-          }
-        } 
-        catch(Exception e) {
-          tryAgain();
-        }
-      } else if (theText.length() > 4 && theText.substring(0, 4).toLowerCase().equals("line")) {
-        try {
-          i = Integer.parseInt(theText.substring(4));
-          println("line " + i);
-          if (i >= creationsL.size()) {
-            tryAgain();
-          } else {
-            endEnt(1, i);
-          }
-        } 
-        catch(Exception e) {
-          tryAgain();
-        }
-      } else if (theText.length() > 6 && theText.substring(0, 6).toLowerCase().equals("circle")) {
-        try {
-          i = Integer.parseInt(theText.substring(6));
-          println("circ " + i);
-          if (i >= creationsC.size()) {
-            tryAgain();
-          } else {
-            endEnt(2, i);
-          }
-        } 
-        catch(Exception e) {
-          tryAgain();
-        }
-      } else {
-        tryAgain();
-      }
-    } else if (END_ENT) {
+    } else if (END_ENT && CRT_RECT == 2 || CRT_LINE == 2 || CRT_LINE == 5 || CRT_CIRC == 2) {
       try {
         int m = Integer.parseInt(theText);
         if (m == 0) {
           if (tempM == 0) {
             CRT_RECT = 3;
+            println("CRT_RECT = 3");
           } else if (tempM == 1) {
-            CRT_LINE = 3;
+            if (CRT_LINE == 2) {
+              CRT_LINE = 3;
+              println("CRT_LINE = 3");
+            } else if (CRT_LINE == 5) {
+              CRT_LINE = 6;
+              println("CRT_LINE = 6");
+            }
           } else {
             CRT_CIRC = 3;
+            println("CRT_CIRC = 3");
           }
           END_ENT = false;
         } else if (m == 1) {
@@ -1142,10 +1015,18 @@ void input(String theText) {
           tempY = tempY2;
           if (tempM == 0) {
             CRT_RECT = 3;
+            println("CRT_RECT = 3");
           } else if (tempM == 1) {
-            CRT_LINE = 3;
+            if (CRT_LINE == 2) {
+              CRT_LINE = 3;
+              println("CRT_LINE = 3");
+            } else if (CRT_LINE == 5) {
+              CRT_LINE = 6;
+              println("CRT_LINE = 6");
+            }
           } else {
             CRT_CIRC = 3;
+            println("CRT_CIRC = 3");
           }
           END_ENT = false;
         } else {
@@ -1155,6 +1036,18 @@ void input(String theText) {
       catch(Exception e) {
         tryAgain();
       }
+    } else if (CRT_RECT > 2 || CRT_CIRC > 2) {
+      //width, length, or radius
+      try {
+        temp1 = abs(Integer.parseInt(theText));
+        if (temp1 == 0) {
+          tryAgain();
+        }
+      }
+      catch(Exception e) {
+        tryAgain();
+      }
+      println(temp1);
     }
   }
 }
@@ -1166,17 +1059,23 @@ void tryAgain() {
 
 void mouseClicked() {
   if (SELECT_MODE) {
-    if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 3 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 3)) {
+    if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 5 && getMode(mouseX, mouseY) == getMode(tempX3, tempY3)) || CRT_LINE != 5)) {
       tempX = mouseX;
       tempY = mouseY;
       println("xcor: " + tempX + ", ycor: " + tempY);
       SELECT_MODE = false;
       if (CRT_RECT == 2) {
         CRT_RECT = 3;
+        println("CRT_RECT = 3");
       } else if (CRT_CIRC == 2) {
         CRT_CIRC = 3;
-      } else if (CRT_LINE == 2 || CRT_LINE == 3) {
-        CRT_LINE++;
+        println("CRT_CIRC = 3");
+      } else if (CRT_LINE == 2) {
+        CRT_LINE  = 3;
+        println("CRT_LINE = 3");
+      } else if (CRT_LINE == 5) {
+        CRT_LINE = 6;
+        println("CRT_LINE = 6");
       }
     } else {
       text.setText(text.getText() + "\n\nWrong view...");
