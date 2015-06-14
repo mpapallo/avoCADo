@@ -32,7 +32,7 @@ int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0, MV_SHAPE = 0, CP_SHA
 
 //placeholder vars
 int temp1 = -1, temp2 = -1, tempX = -1, tempY = -1, tempZ = -1;
-int tempX2 = -1, tempY2 = -1, tempM = -1;
+int tempX2 = -1, tempY2 = -1, tempM = -1, tempX3 = -1, tempY3 = -1;
 int width = -1, length = -1, radius = -1;
 Shape tempShape;
 
@@ -273,7 +273,7 @@ void draw() {
     } 
     if (CRT_RECT == 3 || CRT_RECT == 4) {
       createRect(tempX, tempY);
-    } else if (CRT_LINE == 3 || CRT_LINE == 4) {
+    } else if (CRT_LINE == 3 || CRT_LINE == 6) {
       createLine(tempX, tempY);
     } else if (CRT_CIRC == 3) {
       createCirc(tempX, tempY);
@@ -367,9 +367,11 @@ void controlEvent(ControlEvent theEvent) {
     } else if (ControllerName.equals("             New Part")) {
       MENU_SCREEN = false;
     } else if (ControllerName.equals("Abort")) {
+      println("the Abort button was pressed");
       CRT_RECT = 0;
       CRT_LINE = 0;
       CRT_CIRC = 0;
+      println("CRT_RECT, CRT_LINE, CRT_CIRC = 0");
       SELECT_MODE = false;
       END_ENT = false;
       gotIt = false;
@@ -681,8 +683,13 @@ void selection(int mode) {
     println("CRT_RECT = 2");
   } else if (tempM == 1) {
     shape = "Line";
-    CRT_LINE = 2;
-    println("CRT_LINE = 2");
+    if (CRT_LINE == 1) {
+      CRT_LINE = 2;
+      println("CRT_LINE = 2");
+    } else if (CRT_LINE == 4) {
+      CRT_LINE = 5;
+      println("CRT_LINE = 5");
+    }
   } else {
     shape = "Circle";
     CRT_CIRC = 2;
@@ -710,7 +717,7 @@ void endEnt(int mode, int i) {
     tempY = l.getY1();
     tempX2 = l.getX2();
     tempY2 = l.getY2();
-    text.setText("Which coordinates do you want?\nEnter 0 for (" + tempX + " , " + tempY + ") or 1 for (" + tempX2 + " , " + tempY2 + ")");
+    text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + tempX + " , " + tempY + ") \nor 1 for \n(" + tempX2 + " , " + tempY2 + ")");
   } else if (mode == 2) {
     //circle i
     //text.setText(which coords? left or right of center)
@@ -751,14 +758,15 @@ void createRect(int x1, int y1) {
 void createLine(int x1, int y1) {
 
   if (CRT_LINE == 3) {
-    tempX2 = x1;
-    tempY2 = y1;
-    text.setText("Create New Line:\n\nNow choose another point within the same view box to form a line.");
-    SELECT_MODE = true;
-  } else if (CRT_LINE == 4) {
+    tempX3 = x1;
+    tempY3 = y1;
+    text.setText("Create New Line:\n\nNow choose another point within the same view box to form a line.\n\nEnter 0 for End Entity or 1 for cursor selection.");
+    CRT_LINE = 4;
+    println("CRT_LINE = 4");
+  } else if (CRT_LINE == 6) {
     text.setText("New Line Created");
     int mode = getMode(x1, y1);
-    creationsL.add(new Line(tempX2, tempY2, x1, y1, mode));
+    creationsL.add(new Line(tempX3, tempY3, x1, y1, mode));
     String name = "Line_"+(creationsL.size()-1);
     CRT_LINE = 0;
     println("CRT_LINE = 0");
@@ -813,11 +821,14 @@ int getMode(int x, int y) {
 void moveShape() {
 
   if (MV_SHAPE == 1) {
+    /*
     if (CP_SHAPE == 1) {
-      text.setText("Copy a Shape:\n\nInput the change in x (+ or -)");
-    } else {
-      text.setText("Move a Shape:\n\nInput the change in x (+ or -)");
-    }
+     text.setText("Copy a Shape:\n\nInput the change in x (+ or -)");
+     } else {
+     text.setText("Move a Shape:\n\nInput the change in x (+ or -)");
+     }
+     */
+    text.setText(text.getText() + "\n\nInput the change in x (+ or -)");
     if (gotIt) {
       println("l");
       tempX = temp1;
@@ -826,22 +837,26 @@ void moveShape() {
       gotIt = false;
     }
   } else if (MV_SHAPE == 2) {
+    /*
     if (CP_SHAPE == 1) {
-      text.setText("Copy a Shape:\n\nInput the change in y (+ or -)");
-    } else {
-      text.setText("Move a Shape:\n\nInput the change in y (+ or -)");
-    }
+     text.setText(text.getText() + "\n\nInput the change in y (+ or -)");
+     } else {
+     text.setText(text.getText() + "Move a Shape:\n\nInput the change in y (+ or -)");
+     }*/
+    text.setText(text.getText() + "\n\nInput the change in y (+ or -)");
     if (gotIt) {
       tempY = temp1;
       MV_SHAPE ++;
       gotIt = false;
     }
   } else if (MV_SHAPE == 3) {
+    /*
     if (CP_SHAPE == 1) {
-      text.setText("Copy a Shape:\n\nInput the change in z (+ or -)");
-    } else {
-      text.setText("Move a Shape:\n\nInput the change in z (+ or -)");
-    }
+     text.setText("Copy a Shape:\n\nInput the change in z (+ or -)");
+     } else {
+     text.setText("Move a Shape:\n\nInput the change in z (+ or -)");
+     }*/
+    text.setText(text.getText() + "\n\nInput the change in z (+ or -)");
     if (gotIt) {
       tempZ = temp1;
       MV_SHAPE ++;
@@ -961,7 +976,7 @@ void input(String theText) {
       catch(Exception e) {
         tryAgain();
       }
-    } else if (CRT_RECT == 1 || CRT_LINE == 1 || CRT_CIRC == 1) {
+    } else if (CRT_RECT == 1 || CRT_LINE == 1 || CRT_LINE == 4 || CRT_CIRC == 1) {
       //end ent or cursor
       try {
         temp1 = Integer.parseInt(theText);
@@ -975,7 +990,7 @@ void input(String theText) {
       catch(Exception e) {
         tryAgain();
       }
-    } else if (END_ENT && CRT_RECT == 2 || CRT_LINE == 2 || CRT_CIRC == 2) {
+    } else if (END_ENT && CRT_RECT == 2 || CRT_LINE == 2 || CRT_LINE == 5 || CRT_CIRC == 2) {
       try {
         int m = Integer.parseInt(theText);
         if (m == 0) {
@@ -983,8 +998,13 @@ void input(String theText) {
             CRT_RECT = 3;
             println("CRT_RECT = 3");
           } else if (tempM == 1) {
-            CRT_LINE = 3;
-            println("CRT_LINE = 3");
+            if (CRT_LINE == 2) {
+              CRT_LINE = 3;
+              println("CRT_LINE = 3");
+            } else if (CRT_LINE == 5) {
+              CRT_LINE = 6;
+              println("CRT_LINE = 6");
+            }
           } else {
             CRT_CIRC = 3;
             println("CRT_CIRC = 3");
@@ -997,8 +1017,13 @@ void input(String theText) {
             CRT_RECT = 3;
             println("CRT_RECT = 3");
           } else if (tempM == 1) {
-            CRT_LINE = 3;
-            println("CRT_LINE = 3");
+            if (CRT_LINE == 2) {
+              CRT_LINE = 3;
+              println("CRT_LINE = 3");
+            } else if (CRT_LINE == 5) {
+              CRT_LINE = 6;
+              println("CRT_LINE = 6");
+            }
           } else {
             CRT_CIRC = 3;
             println("CRT_CIRC = 3");
@@ -1034,7 +1059,7 @@ void tryAgain() {
 
 void mouseClicked() {
   if (SELECT_MODE) {
-    if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 3 && getMode(mouseX, mouseY) == getMode(tempX2, tempY2)) || CRT_LINE != 3)) {
+    if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 5 && getMode(mouseX, mouseY) == getMode(tempX3, tempY3)) || CRT_LINE != 5)) {
       tempX = mouseX;
       tempY = mouseY;
       println("xcor: " + tempX + ", ycor: " + tempY);
@@ -1048,9 +1073,9 @@ void mouseClicked() {
       } else if (CRT_LINE == 2) {
         CRT_LINE  = 3;
         println("CRT_LINE = 3");
-      } else if (CRT_LINE == 3) {
-        CRT_LINE = 4;
-        println("CRT_LINE = 4");
+      } else if (CRT_LINE == 5) {
+        CRT_LINE = 6;
+        println("CRT_LINE = 6");
       }
     } else {
       text.setText(text.getText() + "\n\nWrong view...");
