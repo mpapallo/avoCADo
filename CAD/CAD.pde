@@ -223,9 +223,9 @@ void updateDMenu() {
 
 void updateMenu() {
   //if (!setup) {
-    Rect.remove();
-    Line.remove();
-    Circ.remove();
+  Rect.remove();
+  Line.remove();
+  Circ.remove();
   //}
   // add creations to the menu
   Rect = menu.add("Rectangles", 4);
@@ -279,9 +279,7 @@ void draw() {
     // (highlight if user is hovering over its menu item)
     for (int i=0; i<creationsR.size (); i++) {
       try {
-        if (cp5.controller("Rectangle_"+i).isActive() || 
-          cp5.controller("MRectangle_"+i).isActive() ||
-          cp5.controller("CRectangle_"+i).isActive() ) {
+        if (cp5.isMouseOver(cp5.getController("Rectangle_"+i))){
           stroke(255);
         } else {
           stroke(0, 255, 0);
@@ -295,9 +293,7 @@ void draw() {
     }
     for (int i=0; i<creationsC.size (); i++) {
       try {
-        if (cp5.controller("Circle_"+i).isActive() ||
-          cp5.controller("MCircle_"+i).isActive() ||
-          cp5.controller("CCircle_"+i).isActive() ) {
+        if (cp5.isMouseOver(cp5.getController("Circle_"+i))){
           stroke(255);
         } else {
           stroke(0, 255, 0);
@@ -311,9 +307,7 @@ void draw() {
     }
     for (int i=0; i<creationsL.size (); i++) {
       try {
-        if (cp5.controller("Line_"+i).isActive() || 
-          cp5.getController("MLine_"+i).isActive() ||
-          cp5.getController("CLine_"+i).isActive()) {
+        if (cp5.isMouseOver(cp5.getController("Line_"+i))){
           stroke(255);
         } else {
           stroke(0, 255, 0);
@@ -523,6 +517,7 @@ void controlEvent(ControlEvent theEvent) {
           text.setText("Rectangle deleted.");
           updateMenu();
           DEL_SHAPE = false;
+          cp5.getController("Abort").setVisible(false);
         } else if (MOV_SHAPE) {
           println("move a rect");
           temp2 = ((int) val % 40);
@@ -549,6 +544,7 @@ void controlEvent(ControlEvent theEvent) {
           text.setText("Circle deleted.");
           updateMenu();
           DEL_SHAPE = false;
+          cp5.getController("Abort").setVisible(false);
         } else if (MOV_SHAPE) {
           println("move a circle");
           temp2 = ((int) val % 60);
@@ -574,6 +570,7 @@ void controlEvent(ControlEvent theEvent) {
           text.setText("Line deleted.");
           updateMenu();
           DEL_SHAPE = false;
+          cp5.getController("Abort").setVisible(false);
         } else if (MOV_SHAPE) {
           println("move a line");
           temp2 = ((int) val % 50);
@@ -1127,7 +1124,7 @@ void mouseClicked() {
 
 public class PFrame extends JFrame {
   public PFrame() {
-    setBounds(50, 50, 500, 500);
+    setBounds(50, 50, 630, 530);
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     s = new SecondApplet();
     add(s);
@@ -1139,32 +1136,66 @@ public class PFrame extends JFrame {
 public class SecondApplet extends PApplet {
 
   void setup() {
-    size(500, 500, OPENGL);
+    size(630, 530, OPENGL);
     noFill(); 
     strokeWeight(2);
     stroke(0, 255, 0);
   }
 
   void draw() {
+    println(height+" "+width);
     background(0);
     rot(width/2, 0);
     for (int i=0; i<creationsL.size (); i++) {
+      stroke(0, 255, 0);
       Line l = creationsL.get(i);
-      line(l.getX(), l.getY(), l.getZ(), l.getX2(), l.getY2(), l.getZ());
+      if (l.getM()==0) {
+        line(l.getX(), l.getY(), l.getZ()-360, l.getX2(), l.getY2(), l.getZ()-360);
+      } else if (l.getM()==1) {
+        line(l.getX(), l.getZ(), l.getY()-350, l.getX2(), l.getZ(), l.getY2()-350);
+      } else if (l.getM()==2) {
+        line(ENDX-l.getY(), ENDY-l.getZ(), l.getX(), ENDX-l.getY2(), ENDY-l.getZ(), l.getX2());
+      }
     }
-    //drawBox(width/2, height/2, 100);
+    //test();
   }
   void rot(float x, float y) {
     translate(x, y);
     rotateX(radians(54));
     rotateZ(radians(45));
     ortho();
+    scale(0.75);
   }
-  void drawBox(float x, float y, int size) {
+  void drawBox(float x, float y, float z, int size) {
     pushMatrix();
-    translate(x, y, size/2.0);
+    translate(x, y, z);
     box(size);
     popMatrix();
+  }
+  void test() {
+    //line(0,0,0,350,350,0);
+    //line(50,50,50,150,150,50);
+    stroke(0, 0, 255);
+    //drawBox(width/2, height/2, 0.0, 100);
+    stroke(0, 255, 0);
+    //drawBox(width/2, height/2, 50.0, 100);
+    stroke(255, 0, 0);
+    //drawBox(0, 100, 0, 100);
+    stroke(205, 0, 0);
+    //drawBox(100, 0, 0, 100);
+    stroke(255, 250, 0);
+    //drawBox(0, 0, 200, 100);
+    //drawBox(0, 0, -550, 100);
+    drawBox(0, 0, 600, 100);
+    stroke(0, 250, 0);
+    //drawBox(0, 0, 0, 100);
+    //drawBox(-100, -100, -350.0, 100);
+    stroke(155, 0, 0);
+    //drawBox(0, 0, -350.0, 100);
+    stroke(105, 0, 0);
+    //drawBox(100, -100, -350.0, 100);
+    stroke(55, 0, 0);
+    //drawBox(200, -100, -350.0, 100);
   }
 }
 
