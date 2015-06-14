@@ -2,6 +2,7 @@ abstract class Shape {
 
   int x1, y1, z1;
   int mode;
+  boolean isActive;
   final int TOP = 0, FRONT = 1, RIGHT = 2;
   final int BOUNDARYV1 = 100, BOUNDARYV2 = 500, BOUNDARYH = 300;
 
@@ -12,6 +13,7 @@ abstract class Shape {
     y1 = yy1;
     z1 = zz1;
     mode = mod;
+    isActive = false;
   }
 
   int getX() {
@@ -29,6 +31,10 @@ abstract class Shape {
   int getM() {
     return mode;
   }
+  
+  boolean getA() {
+    return isActive;
+  }
 
   void setX(int x) {
     x1=x;
@@ -44,6 +50,10 @@ abstract class Shape {
 
   void setM(int m) {
     mode = m;
+  }
+  
+  void setA(boolean a) {
+    isActive = a;
   }
 
   abstract void draw();

@@ -280,8 +280,10 @@ void draw() {
     for (int i=0; i<creationsR.size (); i++) {
       try {
         if (cp5.isMouseOver(cp5.getController("Rectangle_"+i))){
+          creationsR.get(i).setA(true);
           stroke(255);
         } else {
+          creationsR.get(i).setA(false);
           stroke(0, 255, 0);
         }
       } 
@@ -294,8 +296,10 @@ void draw() {
     for (int i=0; i<creationsC.size (); i++) {
       try {
         if (cp5.isMouseOver(cp5.getController("Circle_"+i))){
+          creationsC.get(i).setA(true);
           stroke(255);
         } else {
+          creationsC.get(i).setA(false);
           stroke(0, 255, 0);
         }
       } 
@@ -308,8 +312,10 @@ void draw() {
     for (int i=0; i<creationsL.size (); i++) {
       try {
         if (cp5.isMouseOver(cp5.getController("Line_"+i))){
+          creationsL.get(i).setA(true);
           stroke(255);
         } else {
+          creationsL.get(i).setA(false);
           stroke(0, 255, 0);
         }
       } 
@@ -1147,14 +1153,18 @@ public class SecondApplet extends PApplet {
     background(0);
     rot(width/2, 0);
     for (int i=0; i<creationsL.size (); i++) {
-      stroke(0, 255, 0);
       Line l = creationsL.get(i);
+      if (l.getA()){
+        stroke(255);
+      } else{
+        stroke(0, 255, 0);
+      }
       if (l.getM()==0) {
-        line(l.getX(), l.getY(), l.getZ()-360, l.getX2(), l.getY2(), l.getZ()-360);
+        line(l.getX(), l.getY(), l.getZ()-400, l.getX2(), l.getY2(), l.getZ()-400);
       } else if (l.getM()==1) {
-        line(l.getX(), l.getZ(), l.getY()-350, l.getX2(), l.getZ(), l.getY2()-350);
+        line(l.getX(), l.getZ(), l.getY()-400, l.getX2(), l.getZ(), l.getY2()-400);
       } else if (l.getM()==2) {
-        line(ENDX-l.getY(), ENDY-l.getZ(), l.getX(), ENDX-l.getY2(), ENDY-l.getZ(), l.getX2());
+        line(l.getY(), l.getZ(), l.getX()-400, l.getY2(), l.getZ(), l.getX2()-400);
       }
     }
     //test();
