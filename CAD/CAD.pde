@@ -1153,6 +1153,7 @@ public class SecondApplet extends PApplet {
     background(0);
     rot(width/2, 0);
     for (int i=0; i<creationsL.size (); i++) {
+      scale(0.75);
       Line l = creationsL.get(i);
       if (l.getA()){
         stroke(255);
@@ -1174,7 +1175,6 @@ public class SecondApplet extends PApplet {
     rotateX(radians(54));
     rotateZ(radians(45));
     ortho();
-    scale(0.75);
   }
   void drawBox(float x, float y, float z, int size) {
     pushMatrix();
