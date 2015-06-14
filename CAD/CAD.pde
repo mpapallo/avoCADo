@@ -1057,6 +1057,12 @@ void input(String theText) {
         temp1 = abs(Integer.parseInt(theText));
         if (temp1 == 0) {
           tryAgain();
+        } else if (CRT_RECT > 2 && outOfBounds(0, tempX, tempY, temp1)) {
+          println("Out of Bounds");
+          tryAgain();
+        } else if (CRT_CIRC > 2 && outOfBounds(1, tempX, tempY, temp1)) {
+          println("Out of Bounds");
+          tryAgain();
         }
       }
       catch(Exception e) {
@@ -1065,6 +1071,47 @@ void input(String theText) {
       println(temp1);
     }
   }
+}
+
+boolean outOfBounds(int m, int x, int y, int t) {
+  if (m == 0) { //rectangle width or height
+    if (CRT_RECT == 3) { //checking width
+      if (getMode(x, y) == 0 || getMode(x, y) == 1) { //top view or front view
+        if (x + t >= BOUNDARYV2) {
+          return true;
+        }
+      } else { //right view
+        if (x + t >= ENDX) {
+          return true;
+        }
+      }
+    } else if (CRT_RECT == 4) { //checking length
+      if (getMode(x, y) == 1 || getMode(x, y) == 2 ) { //front view or right view
+        if (y + t >= ENDY) {
+          return true;
+        }
+      } else { //top view
+        if (y + t >= BOUNDARYH) {
+          return true;
+        }
+      }
+    }
+  } else if (m == 1) { //circle radius
+    if (getMode(x, y) == 0) { //top view
+      if (x + t >= BOUNDARYV2 || x - t <= BOUNDARYV1 || y + t >= BOUNDARYH || y - t <= 0) {
+        return true;
+      }
+    } else if (getMode(x, y) == 1) { //front view
+      if (x + t >= BOUNDARYV2 || x - t <= BOUNDARYV1 || y + t >= ENDY || y - t <= BOUNDARYH) {
+        return true;
+      }
+    } else { //right view
+      if (x + t >= ENDX || x - t <= BOUNDARYV2 || y + t >= ENDY || y - t <= BOUNDARYH) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 void tryAgain() {
