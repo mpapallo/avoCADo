@@ -35,12 +35,36 @@ class Line extends Shape {
     }
   }
 
+  int getX1() {
+    if (mode == RIGHT) {
+      return ENDX - y1;
+    } else {
+      return x1;
+    }
+  }
+
+  int getY1() {
+    if (mode == TOP) {
+      return y1;
+    } else {
+      return ENDY - z1;
+    }
+  }
+
   int getX2() {
-    return x2;
+    if (mode == RIGHT) {
+       return ENDX - y2; 
+    } else {
+       return x2; 
+    }
   }
 
   int getY2() {
-    return y2;
+    if (mode == TOP) {
+       return y2; 
+    } else {
+       return ENDY - z2; 
+    }
   }
 
   int getZ2() {

@@ -689,7 +689,7 @@ void selection(int mode) {
     println("CRT_CIRC = 2");
   }
   if (mode == 0) {
-    text.setText("Create new " + shape + ":\n\nSelect a shape from the menu to connect to");
+    text.setText("Create new " + shape + ":\n\nSelect a shape from either the Rectangles, Lines, or Circles menu");
     END_ENT = true;
   } else {
     text.setText("Create new " + shape + ":\n\nClick in either the top, front or right view box to indicate the position of the shape.");
@@ -706,8 +706,8 @@ void endEnt(int mode, int i) {
     //line i
     Line l = creationsL.get(i);
     //these are not correct coords, but it works for what it is
-    tempX = l.getX();
-    tempY = l.getY();
+    tempX = l.getX1();
+    tempY = l.getY1();
     tempX2 = l.getX2();
     tempY2 = l.getY2();
     text.setText("Which coordinates do you want?\nEnter 0 for (" + tempX + " , " + tempY + ") or 1 for (" + tempX2 + " , " + tempY2 + ")");
