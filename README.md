@@ -68,3 +68,13 @@ Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1
 <b>6/10/15</b>
 - fixed some bugs in move
 - after applying <i>copy</i>-ous amounts of effort, did copy
+
+<b>6/11/15</b>
+- started end ent
+
+<b>6/12/15</b>
+- created master menu of shapes
+
+<b>6/13/15</b>
+- 3D window
+- End ent for lines
