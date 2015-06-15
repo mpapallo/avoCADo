@@ -297,6 +297,11 @@ void draw() {
         stroke(0, 255, 0);
       }
       noFill();
+      Line l = creationsL.get(i);
+      println("k"+l.getX()+" "+l.getY()+" "+l.getZ());
+      println(l.getX1()+" "+l.getY1()+" "+l.getZ());
+      println(l.getX2()+" "+l.getY2()+" "+l.getZ2());
+      println(l.getX2(1)+" "+l.getY2(1));
       creationsL.get(i).draw();
     }
 
@@ -768,7 +773,6 @@ void selection(int mode) {
 
 void endEnt(int mode, int i) {
   // each of these has to set tempX and tempY
-
   END_ENT = true;
   //println("mode " + mode + " index " + i);
   if (mode == 0) {
@@ -777,15 +781,34 @@ void endEnt(int mode, int i) {
   } else if (mode == 1) {
     //line i
     Line l = creationsL.get(i);
-    //these are not correct coords, but it works for what it is
-    tempX = l.getX1();
-    tempY = l.getY1();
-    tempZ = l.getZ();
-    tempX2 = l.getX2();
-    tempY2 = l.getY2();
-    tempZ2 = l.getZ2();
-    text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
-      tempX + ", " + (350-tempY) + ", " + tempZ + ") \nor 1 for \n(" + tempX2 + ", " + (350-tempY2) + ", " + tempZ2 + ")");
+    if (l.getM()==0) {
+      tempX = l.getX1();
+      tempY = l.getY1();
+      tempZ = l.getZ();
+      tempX2 = l.getX2();
+      tempY2 = l.getY2();
+      tempZ2 = l.getZ2();
+      text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
+        tempX + ", " + (350-tempY) + ", " + tempZ + ") \nor 1 for \n(" + tempX2 + ", " + (350-tempY2) + ", " + tempZ2 + ")");
+    } else if (l.getM()==1) {
+      tempX = l.getX1();
+      tempY = l.getY1();
+      tempZ = l.getY2(1);
+      tempX2 = l.getX2(1);
+      tempY2 = l.getY2();
+      tempZ2 = l.getY2(1);
+      text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
+        tempX + ", " + l.getY() + ", " + l.getZ() + ") \nor 1 for \n(" + l.getX2(1) + ", " + l.getY2(1) + ", " + l.getZ2() + ")");
+    } else if (l.getM()==2){
+      tempX = l.getX1();
+      tempY = l.getY1();
+      tempZ = l.getZ();
+      tempX2 = l.getX2();
+      tempY2 = l.getY2();
+      tempZ2 = l.getZ2();
+      text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
+        tempX + ", " + (350-tempY) + ", " + tempZ + ") \nor 1 for \n(" + tempX2 + ", " + (350-tempY2) + ", " + tempZ2 + ")");
+    }
   } else if (mode == 2) {
     //circle i
     //text.setText(which coords? left or right of center)
