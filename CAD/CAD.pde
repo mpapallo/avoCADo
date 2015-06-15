@@ -536,10 +536,10 @@ void controlEvent(ControlEvent theEvent) {
       }
     } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")) {
       if (creationsR.size()>0) {
-        if (END_ENT) {
-          int i = ((int) val % 40);
-          endEnt(0, i);
-        } else if (DEL_SHAPE) {
+        /*if (END_ENT) {
+         int i = ((int) val % 40);
+         endEnt(0, i);
+         } else */        if (DEL_SHAPE) {
           println("delete a rectangle");
           println(val);
           //println(theEvent.getController().getValue());
@@ -567,10 +567,10 @@ void controlEvent(ControlEvent theEvent) {
       }
     } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
       if (creationsC.size()>0) {
-        if (END_ENT) {
-          int i = ((int) val % 60);
-          endEnt(2, i);
-        } else if (DEL_SHAPE) {
+        /*if (END_ENT) {
+         int i = ((int) val % 60);
+         endEnt(2, i);
+         } else*/        if (DEL_SHAPE) {
           println("delete a circle");
           int i = ((int) val % 60);
           println(i);
@@ -799,7 +799,7 @@ void endEnt(int mode, int i) {
       //tempZ2 = l.getY2(1);
       text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
         tempX + ", " + l.getY() + ", " + l.getZ() + ") \nor 1 for \n(" + l.getX2(1) + ", " + l.getY2(1) + ", " + l.getZ2() + ")");
-    } else if (l.getM()==2){
+    } else if (l.getM()==2) {
       tempX = l.getX1();
       tempY = l.getY1();
       //tempZ = l.getZ();
