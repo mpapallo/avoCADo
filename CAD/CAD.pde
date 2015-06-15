@@ -1182,7 +1182,7 @@ void mouseClicked() {
 
 public class PFrame extends JFrame {
   public PFrame() {
-    setBounds(50, 50, 630, 530);
+    setBounds(50, 50, 700, 850);
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     s = new SecondApplet();
     add(s);
@@ -1194,7 +1194,7 @@ public class PFrame extends JFrame {
 public class SecondApplet extends PApplet {
 
   void setup() {
-    size(630, 530, OPENGL);
+    size(700, 850, OPENGL);
     noFill(); 
     strokeWeight(2);
     stroke(0, 255, 0);
@@ -1205,15 +1205,15 @@ public class SecondApplet extends PApplet {
     background(0);
     rot(width/2, 0);
     for (int i=0; i<creationsL.size (); i++) {
-      scale(0.75);
       Line l = creationsL.get(i);
+      //scale(0.75);
       if (l.getA()) {
         stroke(255);
       } else {
         stroke(0, 255, 0);
       }
       if (l.getM()==0) {
-        line(l.getX(), l.getY(), l.getZ()-400, l.getX2(), l.getY2(), l.getZ()-400);
+        line(l.getX(), l.getY(), l.getZ()-360, l.getX2(), l.getY2(), l.getZ()-360);
       } else if (l.getM()==1) {
         line(l.getX(), l.getZ(), l.getY()-400, l.getX2(), l.getZ(), l.getY2()-400);
       } else if (l.getM()==2) {
