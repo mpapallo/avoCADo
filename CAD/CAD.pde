@@ -190,6 +190,30 @@ void createMenu() {
         .setText("RIGHT")
           .setVisible(false)
             ;
+  cp5.addTextarea("Y")
+    .setPosition(106, 185)
+      .setText("Y")
+        .setVisible(false);
+  cp5.addTextarea("X")
+    .setPosition(255, 335)
+      .setText("X")
+        .setVisible(false);
+  cp5.addTextarea("Z")
+    .setPosition(106, 535)
+      .setText("Z")
+        .setVisible(false);
+  cp5.addTextarea("X2")
+    .setPosition(255, 685)
+      .setText("X")
+        .setVisible(false);
+  cp5.addTextarea("Z2")
+    .setPosition(456, 535)
+      .setText("Z")
+        .setVisible(false);
+  cp5.addTextarea("Y2")
+    .setPosition(615, 685)
+      .setText("Y")
+        .setVisible(false);
 }
 
 void updateMenu() {
@@ -249,6 +273,12 @@ void draw() {
     stroke(200);
     line(BOUNDARYV2, 0, BOUNDARYV2, ENDY);
     line(BOUNDARYV1, BOUNDARYH, ENDX, BOUNDARYH);
+    line(110, BOUNDARYH-150, 110, BOUNDARYH-10);
+    line(110, BOUNDARYH-10, 250, BOUNDARYH-10);
+    line(110, ENDY-10, 110, ENDY-150);
+    line(110, ENDY-10, 250, ENDY-10);
+    line(460, ENDY-10, 460, ENDY-150);
+    line(460, ENDY-10, 610, ENDY-10);
 
     // draw all the shapes
     // (highlight if user is hovering over its menu item)
@@ -347,6 +377,12 @@ void show() {
   cp5.getGroup("top").setVisible(true);
   cp5.getGroup("front").setVisible(true);
   cp5.getGroup("right").setVisible(true);
+  cp5.getGroup("X").setVisible(true);
+  cp5.getGroup("Y").setVisible(true);
+  cp5.getGroup("Z").setVisible(true);
+  cp5.getGroup("X2").setVisible(true);
+  cp5.getGroup("Y2").setVisible(true);
+  cp5.getGroup("Z2").setVisible(true);
   cp5.getController("             New Part").setVisible(false);
   open.setVisible(false);
 }
@@ -369,6 +405,12 @@ void antiShow() {
   cp5.getGroup("top").setVisible(!true);
   cp5.getGroup("front").setVisible(!true);
   cp5.getGroup("right").setVisible(!true);
+  cp5.getGroup("X").setVisible(!true);
+  cp5.getGroup("Y").setVisible(!true);
+  cp5.getGroup("Z").setVisible(!true);
+  cp5.getGroup("X2").setVisible(!true);
+  cp5.getGroup("Y2").setVisible(!true);
+  cp5.getGroup("Z2").setVisible(!true);
   cp5.getController("             New Part").setVisible(!false);
   open.setVisible(!false);
 }
@@ -1044,26 +1086,26 @@ void input(String theText) {
         if (tempM == 0) {
           Rectangle r = creationsR.get(i);
           //if (outOfBoundsMR(MV_SHAPE, r, temp1)) {
-            //println("Out of Bounds!");
-            //tryAgain();
+          //println("Out of Bounds!");
+          //tryAgain();
           //} else {
-            gotIt = true;
-         // }
+          gotIt = true;
+          // }
         } else if (tempM == 2) {
           Line l = creationsL.get(i);
           //if (outOfBoundsML(MV_SHAPE, l, temp1)) {
-            //println("Out of Bounds!");
-            //tryAgain();
+          //println("Out of Bounds!");
+          //tryAgain();
           //} else {
-            gotIt = true;
+          gotIt = true;
           //}
         } else {
           Circle c = creationsC.get(i);
           //if (outOfBoundsMC(MV_SHAPE, c, temp1)) {
-           // println("Out of Bounds!");
-            //tryAgain();
+          // println("Out of Bounds!");
+          //tryAgain();
           //} else {
-            gotIt = true;
+          gotIt = true;
           //}
         }
       }
@@ -1164,65 +1206,65 @@ boolean outOfBounds(int m, int x, int y, int t) {
 }
 
 /*boolean outOfBoundsMR(int m, Rectangle r, int t) {
-  int mode = r.getM();
-  int w = r.getW();
-  int l = r.getL();
-  if (m == 1) { //check x
-    return r.getX() + w + t >= BOUNDARYV2 || r.getX() + t <= BOUNDARYV1;
-  } else if (m == 2) { //check y
-    if (mode == 0 || mode == 1) { //top or front view
-      return r.getY() + l + t >= BOUNDARYH || r.getY() - t <= 0;
-    } else { //right view
-      return r.getY() + w + t >= ENDX || r.getY() - t <= BOUNDARYV2;
-    }
-  } else if (m == 3) { //check z
-    if (mode == 1 || mode == 2) { //front or right view
-      return r.getZ() + l - t >= ENDY || r.getZ() - t <= BOUNDARYH;
-    } else { //top view
-      return (ENDY-r.getZ()) + l - t >= ENDY || (ENDY-r.getZ()) - t <= BOUNDARYH;
-    }
-  }
-  return false;
-}
-boolean outOfBoundsML(int m, Line l, int t) {
-  int mode = l.getM();
-  if (m == 1) { //check x
-    if (mode == 0 || mode == 1) { //top or front view
-      return l.getX1() + t >= BOUNDARYV2 || l.getX1() + t <= BOUNDARYV1 || l.getX2() + t >= BOUNDARYV2 || l.getX2() + t <= BOUNDARYV1;
-    } else { //right view
-      return l.getX1() + t >= ENDX || l.getX1() + t <= BOUNDARYV2 || l.getX2() + t >= ENDX || l.getX2() + t <= BOUNDARYV1;
-    }
-  } else if (m == 2) { //check y
-    if (mode == 1 || mode == 2) { //front or right view
-      return l.getY1() + t >= ENDY || l.getY1() + t <= BOUNDARYH || l.getY2() + t >= ENDY || l.getY2() + t <= BOUNDARYH;
-    } else { //top view
-      return l.getY1() + t >= BOUNDARYH || l.getY1() + t <= 0 || l.getY2() + t >= BOUNDARYH || l.getY2() + t <= 0;
-    }
-  } else if (m == 3) { //check z
-    if (mode == 1 || mode == 2) { //front or right view
-      return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH || (ENDY - l.getZ2()) + t >= ENDY || (ENDY - l.getZ2()) + t  <= BOUNDARYH;
-    } else {
-      return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH;
-    }
-  }
-  return false;
-}
-boolean outOfBoundsMC(int m, Circle c, int t) {
-  int mode = c.getM();
-  int r = c.getR();
-  if (m == 1) { //check x
-    return c.getX() + r + t >= BOUNDARYV2 || c.getX() + t <= 0;
-  } else if (m == 2) { //check y
-    if (mode == 0 || mode == 1) { //top or front view
-      return c.getY() - r - t <= 0 || c.getY() + r + t >= BOUNDARYH;
-    } else { //right view
-      return (ENDX-c.getY()) - r - t <=BOUNDARYV2 || (ENDX-c.getY()) + r + t >= ENDX;
-    }
-  } else if (m == 3) { //check z
-    return c.getZ() + r + t >= BOUNDARYH || c.getZ() + t <= 0;
-  }
-  return false;
-}*/
+ int mode = r.getM();
+ int w = r.getW();
+ int l = r.getL();
+ if (m == 1) { //check x
+ return r.getX() + w + t >= BOUNDARYV2 || r.getX() + t <= BOUNDARYV1;
+ } else if (m == 2) { //check y
+ if (mode == 0 || mode == 1) { //top or front view
+ return r.getY() + l + t >= BOUNDARYH || r.getY() - t <= 0;
+ } else { //right view
+ return r.getY() + w + t >= ENDX || r.getY() - t <= BOUNDARYV2;
+ }
+ } else if (m == 3) { //check z
+ if (mode == 1 || mode == 2) { //front or right view
+ return r.getZ() + l - t >= ENDY || r.getZ() - t <= BOUNDARYH;
+ } else { //top view
+ return (ENDY-r.getZ()) + l - t >= ENDY || (ENDY-r.getZ()) - t <= BOUNDARYH;
+ }
+ }
+ return false;
+ }
+ boolean outOfBoundsML(int m, Line l, int t) {
+ int mode = l.getM();
+ if (m == 1) { //check x
+ if (mode == 0 || mode == 1) { //top or front view
+ return l.getX1() + t >= BOUNDARYV2 || l.getX1() + t <= BOUNDARYV1 || l.getX2() + t >= BOUNDARYV2 || l.getX2() + t <= BOUNDARYV1;
+ } else { //right view
+ return l.getX1() + t >= ENDX || l.getX1() + t <= BOUNDARYV2 || l.getX2() + t >= ENDX || l.getX2() + t <= BOUNDARYV1;
+ }
+ } else if (m == 2) { //check y
+ if (mode == 1 || mode == 2) { //front or right view
+ return l.getY1() + t >= ENDY || l.getY1() + t <= BOUNDARYH || l.getY2() + t >= ENDY || l.getY2() + t <= BOUNDARYH;
+ } else { //top view
+ return l.getY1() + t >= BOUNDARYH || l.getY1() + t <= 0 || l.getY2() + t >= BOUNDARYH || l.getY2() + t <= 0;
+ }
+ } else if (m == 3) { //check z
+ if (mode == 1 || mode == 2) { //front or right view
+ return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH || (ENDY - l.getZ2()) + t >= ENDY || (ENDY - l.getZ2()) + t  <= BOUNDARYH;
+ } else {
+ return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH;
+ }
+ }
+ return false;
+ }
+ boolean outOfBoundsMC(int m, Circle c, int t) {
+ int mode = c.getM();
+ int r = c.getR();
+ if (m == 1) { //check x
+ return c.getX() + r + t >= BOUNDARYV2 || c.getX() + t <= 0;
+ } else if (m == 2) { //check y
+ if (mode == 0 || mode == 1) { //top or front view
+ return c.getY() - r - t <= 0 || c.getY() + r + t >= BOUNDARYH;
+ } else { //right view
+ return (ENDX-c.getY()) - r - t <=BOUNDARYV2 || (ENDX-c.getY()) + r + t >= ENDX;
+ }
+ } else if (m == 3) { //check z
+ return c.getZ() + r + t >= BOUNDARYH || c.getZ() + t <= 0;
+ }
+ return false;
+ }*/
 
 void tryAgain() {
   temp1 = -1;
