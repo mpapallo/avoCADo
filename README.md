@@ -78,3 +78,9 @@ Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1
 <b>6/13/15</b>
 - 3D window
 - End ent for lines
+
+<b>6/14/15</b>
+- fixing end ent issues
+- move works completely
+- 3D work
+- much crying
