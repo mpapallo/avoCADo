@@ -73,6 +73,12 @@ class Line extends Shape {
       return ENDY - z2;
     }
   }
+  
+  int getZZ() {
+    if (mode == FRONT) {
+      return y1;
+    } return 0;
+  }
 
   int getY2(int n) {
     return y2;
