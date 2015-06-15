@@ -370,7 +370,15 @@ void antiShow() {
   cp5.getGroup("front").setVisible(!true);
   cp5.getGroup("right").setVisible(!true);
   cp5.getController("             New Part").setVisible(!false);
-  open.setVisible(!false);
+  open.remove();
+  open = cp5.addListBox("\n            Open Part", 500, 425, 100, 200)
+    .setBarHeight(25)
+      .setOpen(false)
+        ;
+  files = loadStrings("config.txt");  
+  for (int i=0; i<files.length; i++) {
+    ListBoxItem lbi = open.addItem(files[i], i);
+  }
 }
 
 /////////////////////////
@@ -406,11 +414,39 @@ void controlEvent(ControlEvent theEvent) {
       for (int i=0; i<data.length; i++) {
         int[] nums = int(split(data[i], ','));
         if (nums[nums.length-1] == 0) {
-          creationsR.add(new Rectangle(nums[0], nums[1], nums[2], nums[3], nums[4]));
+          Rectangle r = new Rectangle(nums[0], nums[1], nums[3], nums[4], nums[5]);
+          if (nums[5]==0) {
+            r.setZ(nums[2]);
+          } else if (nums[5]==1) {
+            r.setY(nums[2]);
+          } else if (nums[5]==2) {
+            r.setX(nums[2]);
+          }
+          creationsR.add(r);
         } else if (nums[nums.length-1] == 1) {
-          creationsL.add(new Line(nums[0], nums[1], nums[2], nums[3], nums[4]));
+          Line l = new Line(nums[0], nums[1], nums[3], nums[4], nums[6]);
+          if (nums[6]==0) {
+            l.setZ(nums[2]);
+            l.setZ2(nums[5]);
+          } else if (nums[6]==1) {
+            l.setY(nums[2]);
+            l.setY2(nums[5]);
+          } else if (nums[6]==2) {
+            l.setX(nums[2]);
+            l.setX2(nums[5]);
+          }
+          creationsL.add(l);
         } else if (nums[nums.length-1] == 2) {
-          creationsC.add(new Circle(nums[0], nums[1], nums[2], nums[3]));
+          println(nums[0]);
+          Circle c = new Circle(nums[0], nums[1], nums[3], nums[4]);
+          if (nums[4]==0) {
+            c.setZ(nums[2]);
+          } else if (nums[4]==1) {
+            c.setY(nums[2]);
+          } else if (nums[4]==2) {
+            c.setX(nums[2]);
+          }
+          creationsC.add(c);
         }
       }
       fileName = feil;
@@ -457,6 +493,11 @@ void controlEvent(ControlEvent theEvent) {
       antiShow();
     } else if (ControllerName.equals("             New Part")) {
       MENU_SCREEN = false;
+      creationsR.clear();
+      creationsC.clear();
+      creationsL.clear();
+      fileName = "NewPart";
+      text.setText("New Part");
     } else if (ControllerName.equals("Abort")) {
       println("the Abort button was pressed");
       CRT_RECT = 0;
@@ -651,60 +692,72 @@ void sauve() {
     int size = creationsR.size() + creationsC.size() + creationsL.size();
     String[] data = new String[size];
     for (int i=0; i<creationsR.size (); i++) {
-      String[] datz = new String[6];
+      String[] datz = new String[7];
       if (creationsR.get(i).getM()==0) {
         datz[0] = creationsR.get(i).getX() + "";
         datz[1] = creationsR.get(i).getY() + "";
+        datz[2] = creationsR.get(i).getZ() + "";
       } else if (creationsR.get(i).getM()==1) {
         datz[0] = creationsR.get(i).getX() + "";
         datz[1] = creationsR.get(i).getZ() + "";
+        datz[2] = creationsR.get(i).getY() + "";
       } else if (creationsR.get(i).getM()==2) {
         datz[0] = creationsR.get(i).getY() + "";
         datz[1] = creationsR.get(i).getZ() + "";
+        datz[2] = creationsR.get(i).getX() + "";
       }
-      datz[2] = creationsR.get(i).getW() + "";
-      datz[3] = creationsR.get(i).getL() + "";
-      datz[4] = creationsR.get(i).getM() + "";
-      datz[5] = "0";
+      datz[3] = creationsR.get(i).getW() + "";
+      datz[4] = creationsR.get(i).getL() + "";
+      datz[5] = creationsR.get(i).getM() + "";
+      datz[6] = "0";
       data[i] = join(datz, ",");
     }
     for (int i=0; i<creationsL.size (); i++) {
-      String[] datz = new String[6];
+      String[] datz = new String[8];
       if (creationsL.get(i).getM()==0) {
         datz[0] = creationsL.get(i).getX() + "";
         datz[1] = creationsL.get(i).getY() + "";
-        datz[2] = creationsL.get(i).getX2() + "";
-        datz[3] = creationsL.get(i).getY2() + "";
+        datz[2] = creationsL.get(i).getZ() + "";
+        datz[3] = creationsL.get(i).getX2() + "";
+        datz[4] = creationsL.get(i).getY2() + "";
+        datz[5] = creationsL.get(i).getZ2() + "";
       } else if (creationsL.get(i).getM()==1) {
         datz[0] = creationsL.get(i).getX() + "";
         datz[1] = ENDY-creationsL.get(i).getZ() + "";
-        datz[2] = creationsL.get(i).getX2(1) + "";
-        datz[3] = ENDY-creationsL.get(i).getZ2() + "";
+        datz[2] = creationsL.get(i).getY() + "";
+        datz[3] = creationsL.get(i).getX2(1) + "";
+        datz[4] = ENDY-creationsL.get(i).getZ2() + "";
+        datz[5] = creationsL.get(i).getY2() + "";
       } else if (creationsL.get(i).getM()==2) {
         datz[0] = ENDX-creationsL.get(i).getY() + "";
         datz[1] = ENDY-creationsL.get(i).getZ() + "";
-        datz[2] = ENDX-creationsL.get(i).getY2(1) + "";
-        datz[3] = ENDY-creationsL.get(i).getZ2() + "";
+        datz[2] = creationsL.get(i).getX() + "";
+        datz[3] = ENDX-creationsL.get(i).getY2(1) + "";
+        datz[4] = ENDY-creationsL.get(i).getZ2() + "";
+        datz[5] = creationsL.get(i).getX2() + "";
       }
-      datz[4] = creationsL.get(i).getM() + "";
-      datz[5] = "1";
+      datz[6] = creationsL.get(i).getM() + "";
+      datz[7] = "1";
       data[i+creationsR.size()] = join(datz, ",");
     }
     for (int i=0; i<creationsC.size (); i++) {
-      String[] datz = new String[5];
+      String[] datz = new String[6];
       if (creationsC.get(i).getM()==0) {
         datz[0] = creationsC.get(i).getX() + "";
         datz[1] = creationsC.get(i).getY() + "";
+        datz[2] = creationsC.get(i).getZ() + "";
       } else if (creationsC.get(i).getM()==1) {
         datz[0] = creationsC.get(i).getX() + "";
         datz[1] = ENDY-creationsC.get(i).getZ() + "";
+        datz[2] = creationsC.get(i).getY() + "";
       } else if (creationsC.get(i).getM()==2) {
         datz[0] = ENDX-creationsC.get(i).getY() + "";
         datz[1] = ENDY-creationsC.get(i).getZ() + "";
+        datz[2] = creationsC.get(i).getX() + "";
       }
-      datz[2] = creationsC.get(i).getR() + "";
-      datz[3] = creationsC.get(i).getM() + "";
-      datz[4] = "2";
+      datz[3] = creationsC.get(i).getR() + "";
+      datz[4] = creationsC.get(i).getM() + "";
+      datz[5] = "2";
       data[i+creationsR.size()+creationsL.size()] = join(datz, ",");
     }
     saveStrings(fileName+".txt", data);
@@ -768,13 +821,13 @@ void endEnt(int i) {
     tempZ = l.getZ();
     tempX2 = l.getX2();
     tempY2 = l.getY2();
-    tempZ2 = l.getZ2();
+    //tempZ2 = l.getZ2();
     text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
-      tempX + ", " + (350-tempY) + ", " + tempZ + ") \nor 1 for \n(" + tempX2 + ", " + (350-tempY2) + ", " + tempZ2 + ")");
+      tempX + ", " + (350-tempY) + ", " + tempZ + ") \nor 1 for \n(" + tempX2 + ", " + (350-tempY2) + ", " + tempZ + ")");
   } else if (l.getM()==1) {
     tempX = l.getX1();
     tempY = l.getY1();
-    //tempZ = l.getY2(1);
+    tempZ = l.getY();
     tempX2 = l.getX2(1);
     tempY2 = l.getY2();
     //tempZ2 = l.getY2(1);
@@ -783,7 +836,7 @@ void endEnt(int i) {
   } else if (l.getM()==2) {
     tempX = l.getX1();
     tempY = l.getY1();
-    //tempZ = l.getZ();
+    tempZ = l.getX()-100;
     tempX2 = l.getX2();
     tempY2 = l.getY2();
     //tempZ2 = l.getZ2();
@@ -836,7 +889,17 @@ void createLine(int x1, int y1) {
   } else if (CRT_LINE == 6) {
     text.setText("New Line Created");
     int mode = getMode(x1, y1);
-    creationsL.add(new Line(tempX3, tempY3, x1, y1, mode));
+    Line l = new Line(tempX3, tempY3, x1, y1, mode);
+    if (END_ENT){
+      if (mode==0){
+         l.setZ(tempZ);
+      } else if (mode==1){
+         l.setY(tempZ);
+      } else if (mode==2){
+         l.setX(tempZ);
+      }
+    }
+    creationsL.add(l);
     String name = "Line_"+(creationsL.size()-1);
     CRT_LINE = 0;
     END_ENT = false;
@@ -1044,26 +1107,26 @@ void input(String theText) {
         if (tempM == 0) {
           Rectangle r = creationsR.get(i);
           //if (outOfBoundsMR(MV_SHAPE, r, temp1)) {
-            //println("Out of Bounds!");
-            //tryAgain();
+          //println("Out of Bounds!");
+          //tryAgain();
           //} else {
-            gotIt = true;
-         // }
+          gotIt = true;
+          // }
         } else if (tempM == 2) {
           Line l = creationsL.get(i);
           //if (outOfBoundsML(MV_SHAPE, l, temp1)) {
-            //println("Out of Bounds!");
-            //tryAgain();
+          //println("Out of Bounds!");
+          //tryAgain();
           //} else {
-            gotIt = true;
+          gotIt = true;
           //}
         } else {
           Circle c = creationsC.get(i);
           //if (outOfBoundsMC(MV_SHAPE, c, temp1)) {
-           // println("Out of Bounds!");
-            //tryAgain();
+          // println("Out of Bounds!");
+          //tryAgain();
           //} else {
-            gotIt = true;
+          gotIt = true;
           //}
         }
       }
@@ -1164,65 +1227,65 @@ boolean outOfBounds(int m, int x, int y, int t) {
 }
 
 /*boolean outOfBoundsMR(int m, Rectangle r, int t) {
-  int mode = r.getM();
-  int w = r.getW();
-  int l = r.getL();
-  if (m == 1) { //check x
-    return r.getX() + w + t >= BOUNDARYV2 || r.getX() + t <= BOUNDARYV1;
-  } else if (m == 2) { //check y
-    if (mode == 0 || mode == 1) { //top or front view
-      return r.getY() + l + t >= BOUNDARYH || r.getY() - t <= 0;
-    } else { //right view
-      return r.getY() + w + t >= ENDX || r.getY() - t <= BOUNDARYV2;
-    }
-  } else if (m == 3) { //check z
-    if (mode == 1 || mode == 2) { //front or right view
-      return r.getZ() + l - t >= ENDY || r.getZ() - t <= BOUNDARYH;
-    } else { //top view
-      return (ENDY-r.getZ()) + l - t >= ENDY || (ENDY-r.getZ()) - t <= BOUNDARYH;
-    }
-  }
-  return false;
-}
-boolean outOfBoundsML(int m, Line l, int t) {
-  int mode = l.getM();
-  if (m == 1) { //check x
-    if (mode == 0 || mode == 1) { //top or front view
-      return l.getX1() + t >= BOUNDARYV2 || l.getX1() + t <= BOUNDARYV1 || l.getX2() + t >= BOUNDARYV2 || l.getX2() + t <= BOUNDARYV1;
-    } else { //right view
-      return l.getX1() + t >= ENDX || l.getX1() + t <= BOUNDARYV2 || l.getX2() + t >= ENDX || l.getX2() + t <= BOUNDARYV1;
-    }
-  } else if (m == 2) { //check y
-    if (mode == 1 || mode == 2) { //front or right view
-      return l.getY1() + t >= ENDY || l.getY1() + t <= BOUNDARYH || l.getY2() + t >= ENDY || l.getY2() + t <= BOUNDARYH;
-    } else { //top view
-      return l.getY1() + t >= BOUNDARYH || l.getY1() + t <= 0 || l.getY2() + t >= BOUNDARYH || l.getY2() + t <= 0;
-    }
-  } else if (m == 3) { //check z
-    if (mode == 1 || mode == 2) { //front or right view
-      return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH || (ENDY - l.getZ2()) + t >= ENDY || (ENDY - l.getZ2()) + t  <= BOUNDARYH;
-    } else {
-      return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH;
-    }
-  }
-  return false;
-}
-boolean outOfBoundsMC(int m, Circle c, int t) {
-  int mode = c.getM();
-  int r = c.getR();
-  if (m == 1) { //check x
-    return c.getX() + r + t >= BOUNDARYV2 || c.getX() + t <= 0;
-  } else if (m == 2) { //check y
-    if (mode == 0 || mode == 1) { //top or front view
-      return c.getY() - r - t <= 0 || c.getY() + r + t >= BOUNDARYH;
-    } else { //right view
-      return (ENDX-c.getY()) - r - t <=BOUNDARYV2 || (ENDX-c.getY()) + r + t >= ENDX;
-    }
-  } else if (m == 3) { //check z
-    return c.getZ() + r + t >= BOUNDARYH || c.getZ() + t <= 0;
-  }
-  return false;
-}*/
+ int mode = r.getM();
+ int w = r.getW();
+ int l = r.getL();
+ if (m == 1) { //check x
+ return r.getX() + w + t >= BOUNDARYV2 || r.getX() + t <= BOUNDARYV1;
+ } else if (m == 2) { //check y
+ if (mode == 0 || mode == 1) { //top or front view
+ return r.getY() + l + t >= BOUNDARYH || r.getY() - t <= 0;
+ } else { //right view
+ return r.getY() + w + t >= ENDX || r.getY() - t <= BOUNDARYV2;
+ }
+ } else if (m == 3) { //check z
+ if (mode == 1 || mode == 2) { //front or right view
+ return r.getZ() + l - t >= ENDY || r.getZ() - t <= BOUNDARYH;
+ } else { //top view
+ return (ENDY-r.getZ()) + l - t >= ENDY || (ENDY-r.getZ()) - t <= BOUNDARYH;
+ }
+ }
+ return false;
+ }
+ boolean outOfBoundsML(int m, Line l, int t) {
+ int mode = l.getM();
+ if (m == 1) { //check x
+ if (mode == 0 || mode == 1) { //top or front view
+ return l.getX1() + t >= BOUNDARYV2 || l.getX1() + t <= BOUNDARYV1 || l.getX2() + t >= BOUNDARYV2 || l.getX2() + t <= BOUNDARYV1;
+ } else { //right view
+ return l.getX1() + t >= ENDX || l.getX1() + t <= BOUNDARYV2 || l.getX2() + t >= ENDX || l.getX2() + t <= BOUNDARYV1;
+ }
+ } else if (m == 2) { //check y
+ if (mode == 1 || mode == 2) { //front or right view
+ return l.getY1() + t >= ENDY || l.getY1() + t <= BOUNDARYH || l.getY2() + t >= ENDY || l.getY2() + t <= BOUNDARYH;
+ } else { //top view
+ return l.getY1() + t >= BOUNDARYH || l.getY1() + t <= 0 || l.getY2() + t >= BOUNDARYH || l.getY2() + t <= 0;
+ }
+ } else if (m == 3) { //check z
+ if (mode == 1 || mode == 2) { //front or right view
+ return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH || (ENDY - l.getZ2()) + t >= ENDY || (ENDY - l.getZ2()) + t  <= BOUNDARYH;
+ } else {
+ return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH;
+ }
+ }
+ return false;
+ }
+ boolean outOfBoundsMC(int m, Circle c, int t) {
+ int mode = c.getM();
+ int r = c.getR();
+ if (m == 1) { //check x
+ return c.getX() + r + t >= BOUNDARYV2 || c.getX() + t <= 0;
+ } else if (m == 2) { //check y
+ if (mode == 0 || mode == 1) { //top or front view
+ return c.getY() - r - t <= 0 || c.getY() + r + t >= BOUNDARYH;
+ } else { //right view
+ return (ENDX-c.getY()) - r - t <=BOUNDARYV2 || (ENDX-c.getY()) + r + t >= ENDX;
+ }
+ } else if (m == 3) { //check z
+ return c.getZ() + r + t >= BOUNDARYH || c.getZ() + t <= 0;
+ }
+ return false;
+ }*/
 
 void tryAgain() {
   temp1 = -1;
