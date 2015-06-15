@@ -61,6 +61,7 @@ class Line extends Shape {
       return x2;
     }
   }
+
   int getX2(int n) {
     return x2;
   }
@@ -72,6 +73,7 @@ class Line extends Shape {
       return ENDY - z2;
     }
   }
+
   int getY2(int n) {
     return y2;
   }

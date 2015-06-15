@@ -955,7 +955,7 @@ void moveShape() {
       Line l = creationsL.get(i);
       l.setX(l.getX() + tempX);
       l.setY(l.getY() - tempY);
-      l.setZ(l.getZ() + tempZ); 
+      l.setZ(l.getZ() + tempZ);
       l.setX2(l.getX2(1) + tempX);
       l.setY2(l.getY2(1) - tempY);
       l.setZ2(l.getZ2() + tempZ);
