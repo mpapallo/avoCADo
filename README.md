@@ -3,14 +3,15 @@
 ##### Team aCADemic dishonesty
 
 ###Description 
-CADKey in Processing
+CADKey in Processing<br>
+The love child of the CS and drafting departments has been birthed! In typical CS fashion it has some nice features; in typical drafting fashion it mainly will make you want to die. This uses the [ControlP5 Library](http://www.sojamo.de/libraries/controlP5/) so be sure to download that before getting started.    
 
 ###How to Use
-Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a53991a2e1114316673a7f7077
+Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a53991a2e1114316673a7f7077 <br>
 - You can create Rectangles or Circles in any of the 3 views; creating lines vaguely works.
 - You can also clear the screen of all shapes.
 
-Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1
+Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1 <br>
 - You can create lines.
 - You can no longer create stuff in weird places.
 - You can delete individual shapes.
@@ -18,11 +19,11 @@ Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1
 - You can cry because you're not sleeping tonight.
 - See V1.
 
+Working V3 (June 15th): <br>
+- See V2.
+
 ###To Do
-- xform
-- (edit?)
-- (3d view?)
-- bug fixes
+- everything
 
 ###DevLog
 <b>5/22/15</b>
