@@ -6,7 +6,7 @@
 CADKey in Processing<br>
 The love child of the CS and drafting departments has been birthed! In typical CS fashion it has some nice features; in typical drafting fashion it mainly will make you want to die. This uses the [ControlP5 Library](http://www.sojamo.de/libraries/controlP5/) so be sure to download that before getting started.<br>
 (**We are not responsible for any bugs that the cp5 guy never fixed, e.g. if a menu item stay highlighted even when it's not active**) <-- actually we took care of that one, but there may be others<br>
-(**Also, as juniors, we had little to no time to work on this in the final week because of SATs and various finals, which is why our commits are mainly concentrated into one night of sadness**)
+(**Also, as juniors and as Michaela and Katherine, we had little to no time to work on this in the final week because of SATs and various finals, as well as quite a few other projects, which is why our commits are mainly concentrated into one night of sadness**)
 
 ###How to Use
 Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a53991a2e1114316673a7f7077 <br>
@@ -21,21 +21,33 @@ Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1 <br>
 - You can cry because you're not sleeping tonight.
 - See V1.
 
-Working V3 (June 15th): <br>
+Working V3 (June 15th): https://github.com/mpapallo/avoCADo <br>
 - Upon running CAD, you can choose to either open an existing file or create a new one.
-- You can create shapes by selecting either Rectangle, Circle, or Line from the Create menu and following the instructions on the side. We have error handling for incorrect inputs, including numbers that are out of bounds.
+- You can create shapes by selecting either Rectangle, Circle, or Line from the Create menu and following the instructions on the side. We have error handling for incorrect inputs, including numbers that are out of bounds (don't get too crazy with that).
     Circles: select a center, input a radius<br>
     Lines: you can either use the cursor to select a point, or you can "end ent" to an existing line (i.e. connect to one of its endpoints)<br>
     Rectangles: select a top left corner, input a width, input a radius
 - You can delete shapes by selecting the Delete Button and then choosing a shape from the Rectangles, Lines, or Circles menu  (when you hover over the shape's name, it turns white).
-- You can move or copy shapes from the XForm menu. Input the change in x, change in y, and change in z.
+- You can move or copy shapes from the XForm menu. Input the change in x, change in y, and change in z; can be negative or 0!!.
 - At any time during creating, deleting, moving, or copying a shape, you can select the Abort button to cancel.
 - At any time, you can select the Menu Screen button to go back to the title screen and select a file to load.
-- You can select the 3D View button to view the isometric shape in a new window.
+- You can select the 3D View button to view the isometric shape in a new window. (Haha only tines drawn in the top view actually work so good luck using this program; see the box file for nice 3d goodness)
 - You can either Save to an existing file or Save As a new file.
+- It is not recommended that you delete files from the directory w/o taking it out of config.txt
+- You can appreciate how close it came to recreating CADKey's overall incomprehensibility.
+- You can be happy because you are not currently regretting your life
 
 ###To Do
-- everything
+- background (yes)
+- create (yes)
+- delete (yes)
+- xform move (yes)
+- xform copy (yes)
+- xform join for cylinders, etc (no)
+- modes for create (just end ent just lines yes)
+- 3D view (just lines just top yes)
+- pretty much everything (no)
+- sleep (no)
 
 ###DevLog
 <b>5/22/15</b>
@@ -97,4 +109,4 @@ Working V3 (June 15th): <br>
 - move
 - 3D work
 - much crying
-- lots of bug fixing and error handling
+- lots of bug fixing and error handling (but not enough)
