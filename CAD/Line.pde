@@ -56,18 +56,24 @@ class Line extends Shape {
 
   int getX2() {
     if (mode == RIGHT) {
-       return ENDX - y2; 
+      return ENDX - y2;
     } else {
-       return x2; 
+      return x2;
     }
+  }
+  int getX2(int n) {
+    return x2;
   }
 
   int getY2() {
     if (mode == TOP) {
-       return y2; 
+      return y2;
     } else {
-       return ENDY - z2; 
+      return ENDY - z2;
     }
+  }
+  int getY2(int n) {
+    return y2;
   }
 
   int getZ2() {

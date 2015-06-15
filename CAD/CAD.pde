@@ -955,9 +955,9 @@ void moveShape() {
       Line l = creationsL.get(i);
       l.setX(l.getX() + tempX);
       l.setY(l.getY() - tempY);
-      l.setZ(l.getZ() + tempZ);
-      l.setX2(l.getX2() + tempX);
-      l.setY2(l.getY2() - tempY);
+      l.setZ(l.getZ() + tempZ); 
+      l.setX2(l.getX2(1) + tempX);
+      l.setY2(l.getY2(1) - tempY);
       l.setZ2(l.getZ2() + tempZ);
       if (CP_SHAPE == 1) {
         text.setText("Line was copied");
