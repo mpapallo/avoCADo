@@ -10,9 +10,7 @@ final int BUTTON_W = 20;
 ControlP5 cp5;
 ListBox open;
 MultiList menu;
-MultiListButton del, DRect, DCirc, DLine, 
-xform, move, MRect, MLine, MCirc, 
-copy, CRect, CLine, CCirc, Rect, Line, Circ;
+MultiListButton del, xform, move, copy, Rect, Line, Circ;
 Textarea text;
 
 //3D window stuff
@@ -37,7 +35,7 @@ int CRT_RECT = 0, CRT_LINE = 0, CRT_CIRC = 0, CRT_FILE = 0, MV_SHAPE = 0, CP_SHA
 
 //placeholder vars
 int temp1 = -1, temp2 = -1, tempX = -1, tempY = -1, tempZ = -1;
-int tempX2 = -1, tempY2 = -1, tempM = -1, tempX3 = -1, tempY3 = -1;
+int tempX2 = -1, tempY2 = -1, tempZ2 = -1, tempM = -1, tempX3 = -1, tempY3 = -1;
 int width = -1, length = -1, radius = -1;
 
 //
@@ -139,6 +137,16 @@ void createMenu() {
               .setBroadcast(true)
                 ;
 
+  // MENU
+  cp5.addButton("Menu Screen")
+    .setBroadcast(false)
+      .setValue(8)
+        .setPosition(0, 308)
+          .setSize(BOUNDARYV1, BUTTON_W)
+            .setVisible(false)
+              .setBroadcast(true)
+                ;
+
   // New
   cp5.addButton("             New Part")
     .setPosition(200, 400)
@@ -225,6 +233,7 @@ void draw() {
     background(0);
     image(avo, 500, 240, 100, 70);
     textSize(65);
+    fill(255);
     text("avoCADo", 200, 300);
     textSize(15);
     text("by CADtherine and MiCADla", 300, 330);
@@ -327,13 +336,36 @@ void show() {
   cp5.getController("Save As").setVisible(true);
   cp5.getController("Save").setVisible(true);
   cp5.getController("3D View").setVisible(true);
+  cp5.getController("Menu Screen").setVisible(true);
   cp5.getController("input").setVisible(true);
   cp5.getGroup("notes").setVisible(true);
   cp5.getGroup("top").setVisible(true);
   cp5.getGroup("front").setVisible(true);
   cp5.getGroup("right").setVisible(true);
-  cp5.remove("             New Part");
-  open.remove();
+  cp5.getController("             New Part").setVisible(false);
+  open.setVisible(false);
+}
+
+void antiShow() {
+  cp5.getController("Create").setVisible(!true);
+  cp5.getController("Delete").setVisible(!true);
+  //cp5.getController("Edit").setVisible(!true);
+  cp5.getController("XForm").setVisible(!true);
+  cp5.getController("Rectangles").setVisible(!true);
+  cp5.getController("Circles").setVisible(!true);
+  cp5.getController("Lines").setVisible(!true);
+  cp5.getController("Save As").setVisible(!true);
+  cp5.getController("Abort").setVisible(!true);
+  cp5.getController("Save").setVisible(!true);
+  cp5.getController("3D View").setVisible(!true);
+  cp5.getController("Menu Screen").setVisible(!true);
+  cp5.getController("input").setVisible(!true);
+  cp5.getGroup("notes").setVisible(!true);
+  cp5.getGroup("top").setVisible(!true);
+  cp5.getGroup("front").setVisible(!true);
+  cp5.getGroup("right").setVisible(!true);
+  cp5.getController("             New Part").setVisible(!false);
+  open.setVisible(!false);
 }
 
 /////////////////////////
@@ -350,6 +382,22 @@ void controlEvent(ControlEvent theEvent) {
       String feil = files[ind];
       String[] data = loadStrings(feil+".txt");
       // load creations data from file
+      creationsR.clear();
+      creationsL.clear();
+      creationsC.clear();
+      CRT_RECT = 0;
+      CRT_LINE = 0;
+      CRT_CIRC = 0;
+      println("CRT_RECT, CRT_LINE, CRT_CIRC = 0");
+      SELECT_MODE = false;
+      END_ENT = false;
+      gotIt = false;
+      DEL_SHAPE = false;
+      MOV_SHAPE = false;
+      COP_SHAPE = false;
+      CRT_FILE = 0;
+      MV_SHAPE = 0;
+      CP_SHAPE = 0;
       for (int i=0; i<data.length; i++) {
         int[] nums = int(split(data[i], ','));
         if (nums[nums.length-1] == 0) {
@@ -361,6 +409,7 @@ void controlEvent(ControlEvent theEvent) {
         }
       }
       fileName = feil;
+      text.setText(feil+" loaded.");
       updateMenu();
     } 
     catch (Exception e) {
@@ -397,6 +446,10 @@ void controlEvent(ControlEvent theEvent) {
     } else if (ControllerName.equals("Save")) {
       println("the Save button was pressed");
       CRT_FILE = 3;
+    } else if (ControllerName.equals("Menu Screen")) {
+      println("back");
+      MENU_SCREEN = true;
+      antiShow();
     } else if (ControllerName.equals("             New Part")) {
       MENU_SCREEN = false;
     } else if (ControllerName.equals("Abort")) {
@@ -727,9 +780,12 @@ void endEnt(int mode, int i) {
     //these are not correct coords, but it works for what it is
     tempX = l.getX1();
     tempY = l.getY1();
+    tempZ = l.getZ();
     tempX2 = l.getX2();
     tempY2 = l.getY2();
-    text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + tempX + " , " + tempY + ") \nor 1 for \n(" + tempX2 + " , " + tempY2 + ")");
+    tempZ2 = l.getZ2();
+    text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
+      tempX + ", " + (350-tempY) + ", " + tempZ + ") \nor 1 for \n(" + tempX2 + ", " + (350-tempY2) + ", " + tempZ2 + ")");
   } else if (mode == 2) {
     //circle i
     //text.setText(which coords? left or right of center)
@@ -760,6 +816,7 @@ void createRect(int x1, int y1) {
       length = -1;
       String name = "Rectangle_"+(creationsR.size()-1);
       CRT_RECT = 0;
+      END_ENT = false;
       println("CRT_RECT = 0");
       cp5.getController("Abort").setVisible(false);
       updateMenu();
@@ -781,6 +838,7 @@ void createLine(int x1, int y1) {
     creationsL.add(new Line(tempX3, tempY3, x1, y1, mode));
     String name = "Line_"+(creationsL.size()-1);
     CRT_LINE = 0;
+    END_ENT = false;
     println("CRT_LINE = 0");
     cp5.getController("Abort").setVisible(false);
     updateMenu();
@@ -804,6 +862,7 @@ void createCirc(int x1, int y1) {
     tempY = -1;
     String name = "Circle_"+(creationsC.size()-1);
     CRT_CIRC = 0;
+    END_ENT = false;
     println("CRT_CIRC = 0");
     cp5.getController("Abort").setVisible(false);
     updateMenu();
@@ -1043,7 +1102,7 @@ void input(String theText) {
             CRT_CIRC = 3;
             println("CRT_CIRC = 3");
           }
-          END_ENT = false;
+          //END_ENT = false;
         } else if (m == 1) {
           tempX = tempX2;
           tempY = tempY2;
@@ -1062,7 +1121,7 @@ void input(String theText) {
             CRT_CIRC = 3;
             println("CRT_CIRC = 3");
           }
-          END_ENT = false;
+          //END_ENT = false;
         } else {
           tryAgain();
         }
@@ -1124,26 +1183,26 @@ boolean outOfBoundsMR() {
 }
 boolean outOfBoundsML(int m, Line l, int t) {
   int mode = l.getM();
-  if (m == 1){ //check x
-     if (mode == 0 || mode == 1){ //top or front view
-        return l.getX1() + t >= BOUNDARYV2 || l.getX1() + t <= BOUNDARYV1 || l.getX2() + t >= BOUNDARYV2 || l.getX2() + t <= BOUNDARYV1; 
-     } else { //right view
-         return l.getX1() + t >= ENDX || l.getX1() + t <= BOUNDARYV2 || l.getX2() + t >= ENDX || l.getX2() + t <= BOUNDARYV1;
-     }
-  } else if (m == 2){ //check y
-     if (mode == 1 || mode == 2) { //front or right view
-       return l.getY1() + t >= ENDY || l.getY1() + t <= BOUNDARYH || l.getY2() + t >= ENDY || l.getY2() + t <= BOUNDARYH;
-     } else { //top view
-       return l.getY1() + t >= BOUNDARYH || l.getY1() + t <= 0 || l.getY2() + t >= BOUNDARYH || l.getY2() + t <= 0;
-     }
-  } else if (m == 3){ //check z
-     if (mode == 1 || mode == 2) { //front or right view
-        return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH || (ENDY - l.getZ2()) + t >= ENDY || (ENDY - l.getZ2()) + t  <= BOUNDARYH;
-     } else {
-        return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH; 
-     }
+  if (m == 1) { //check x
+    if (mode == 0 || mode == 1) { //top or front view
+      return l.getX1() + t >= BOUNDARYV2 || l.getX1() + t <= BOUNDARYV1 || l.getX2() + t >= BOUNDARYV2 || l.getX2() + t <= BOUNDARYV1;
+    } else { //right view
+      return l.getX1() + t >= ENDX || l.getX1() + t <= BOUNDARYV2 || l.getX2() + t >= ENDX || l.getX2() + t <= BOUNDARYV1;
+    }
+  } else if (m == 2) { //check y
+    if (mode == 1 || mode == 2) { //front or right view
+      return l.getY1() + t >= ENDY || l.getY1() + t <= BOUNDARYH || l.getY2() + t >= ENDY || l.getY2() + t <= BOUNDARYH;
+    } else { //top view
+      return l.getY1() + t >= BOUNDARYH || l.getY1() + t <= 0 || l.getY2() + t >= BOUNDARYH || l.getY2() + t <= 0;
+    }
+  } else if (m == 3) { //check z
+    if (mode == 1 || mode == 2) { //front or right view
+      return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH || (ENDY - l.getZ2()) + t >= ENDY || (ENDY - l.getZ2()) + t  <= BOUNDARYH;
+    } else {
+      return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH;
+    }
   }
- return false; 
+  return false;
 }
 boolean outOfBoundsMC() {
   return false;
@@ -1157,6 +1216,24 @@ void tryAgain() {
 void mouseClicked() {
   if (SELECT_MODE) {
     if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 5 && getMode(mouseX, mouseY) == getMode(tempX3, tempY3)) || CRT_LINE != 5)) {
+      tempX = mouseX;
+      tempY = mouseY;
+      println("xcor: " + tempX + ", ycor: " + tempY);
+      SELECT_MODE = false;
+      if (CRT_RECT == 2) {
+        CRT_RECT = 3;
+        println("CRT_RECT = 3");
+      } else if (CRT_CIRC == 2) {
+        CRT_CIRC = 3;
+        println("CRT_CIRC = 3");
+      } else if (CRT_LINE == 2) {
+        CRT_LINE  = 3;
+        println("CRT_LINE = 3");
+      } else if (CRT_LINE == 5) {
+        CRT_LINE = 6;
+        println("CRT_LINE = 6");
+      }
+    } else if (END_ENT && getMode(mouseX, mouseY) != -1) {
       tempX = mouseX;
       tempY = mouseY;
       println("xcor: " + tempX + ", ycor: " + tempY);
@@ -1215,9 +1292,9 @@ public class SecondApplet extends PApplet {
       if (l.getM()==0) {
         line(l.getX(), l.getY(), l.getZ()-360, l.getX2(), l.getY2(), l.getZ()-360);
       } else if (l.getM()==1) {
-        line(l.getX(), l.getZ(), l.getY()-400, l.getX2(), l.getZ(), l.getY2()-400);
+        line(l.getX(), l.getZ(), l.getY()-360, l.getX2(), l.getZ(), l.getY2()-360);
       } else if (l.getM()==2) {
-        line(l.getY(), l.getZ(), l.getX()-400, l.getY2(), l.getZ(), l.getX2()-400);
+        line(l.getY(), l.getZ(), l.getX()-360, l.getY2(), l.getZ(), l.getX2()-360);
       }
     }
     //test();

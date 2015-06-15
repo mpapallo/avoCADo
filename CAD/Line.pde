@@ -20,18 +20,21 @@ class Line extends Shape {
       x2 = xx2;
       y2 = yy2;
       z1 = 100;
+      z2 = 100;
     } else if (mode == FRONT) {
       x1 = xx1;
       z1 = ENDY-yy1;
       x2 = xx2;
       z2 = ENDY-yy2;
       y1 = 100;
+      y2 = 100;
     } else {
       y1 = ENDX-xx1;
       z1 = ENDY-yy1;
       y2 = ENDX-xx2;
       z2 = ENDY-yy2;
       x1 = BOUNDARYV1+100;
+      x2 = BOUNDARYV1+100;
     }
   }
 
