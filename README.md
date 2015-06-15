@@ -20,7 +20,17 @@ Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1 <br>
 - See V1.
 
 Working V3 (June 15th): <br>
-- See V2.
+- Upon running CAD, you can choose to either open an existing file or create a new one.
+- You can create shapes by selecting either Rectangle, Circle, or Line from the Create menu and following the instructions on the side. We have error handling for incorrect inputs, including numbers that are out of bounds.
+    Circles: select a center, input a radius<br>
+    Lines: you can either use the cursor to select a point, or you can "end ent" to an existing line (i.e. connect to one of its endpoints)<br>
+    Rectangles: select a top left corner, input a width, input a radius
+- You can delete shapes by selecting the Delete Button and then choosing a shape from the Rectangles, Lines, or Circles menu  (when you hover over the shape's name, it turns white).
+- You can move or copy shapes from the XForm menu. Input the change in x, change in y, and change in z.
+- At any time during creating, deleting, moving, or copying a shape, you can select the Abort button to cancel.
+- At any time, you can select the Menu Screen button to go back to the title screen and select a file to load.
+- You can select the 3D View button to view the isometric shape in a new window.
+- You can either Save to an existing file or Save As a new file.
 
 ###To Do
 - everything
