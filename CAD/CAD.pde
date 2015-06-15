@@ -1065,28 +1065,28 @@ void input(String theText) {
         int i = temp2;
         if (tempM == 0) {
           Rectangle r = creationsR.get(i);
-          if (outOfBoundsMR(MV_SHAPE, r, temp1)) {
-            println("Out of Bounds!");
-            tryAgain();
-          } else {
+          //if (outOfBoundsMR(MV_SHAPE, r, temp1)) {
+            //println("Out of Bounds!");
+            //tryAgain();
+          //} else {
             gotIt = true;
-          }
+         // }
         } else if (tempM == 2) {
           Line l = creationsL.get(i);
-          if (outOfBoundsML(MV_SHAPE, l, temp1)) {
-            println("Out of Bounds!");
-            tryAgain();
-          } else {
+          //if (outOfBoundsML(MV_SHAPE, l, temp1)) {
+            //println("Out of Bounds!");
+            //tryAgain();
+          //} else {
             gotIt = true;
-          }
+          //}
         } else {
           Circle c = creationsC.get(i);
-          if (outOfBoundsMC(MV_SHAPE, c, temp1)) {
-            println("Out of Bounds!");
-            tryAgain();
-          } else {
+          //if (outOfBoundsMC(MV_SHAPE, c, temp1)) {
+           // println("Out of Bounds!");
+            //tryAgain();
+          //} else {
             gotIt = true;
-          }
+          //}
         }
       }
       catch(Exception e) {
@@ -1201,7 +1201,7 @@ boolean outOfBounds(int m, int x, int y, int t) {
   return false;
 }
 
-boolean outOfBoundsMR(int m, Rectangle r, int t) {
+/*boolean outOfBoundsMR(int m, Rectangle r, int t) {
   int mode = r.getM();
   int w = r.getW();
   int l = r.getL();
@@ -1260,7 +1260,7 @@ boolean outOfBoundsMC(int m, Circle c, int t) {
     return c.getZ() + r + t >= BOUNDARYH || c.getZ() + t <= 0;
   }
   return false;
-}
+}*/
 
 void tryAgain() {
   temp1 = -1;
