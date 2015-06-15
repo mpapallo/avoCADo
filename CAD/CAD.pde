@@ -1192,9 +1192,9 @@ boolean outOfBoundsMR(int m, Rectangle r, int t) {
     }
   } else if (m == 3) { //check z
     if (mode == 1 || mode == 2) { //front or right view
-      return r.getZ() + l + t >= ENDY || r.getZ() - t <= BOUNDARYH;
+      return r.getZ() + l - t >= ENDY || r.getZ() - t <= BOUNDARYH;
     } else { //top view
-      return (ENDY-r.getZ()) + l + t >= ENDY || (ENDY-r.getZ()) - t <= BOUNDARYH;
+      return (ENDY-r.getZ()) + l - t >= ENDY || (ENDY-r.getZ()) - t <= BOUNDARYH;
     }
   }
   return false;
