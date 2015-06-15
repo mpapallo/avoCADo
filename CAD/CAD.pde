@@ -406,7 +406,6 @@ void controlEvent(ControlEvent theEvent) {
       CRT_CIRC = 0;
       println("CRT_RECT, CRT_LINE, CRT_CIRC = 0");
       SELECT_MODE = false;
-      setup = true;
       END_ENT = false;
       gotIt = false;
       DEL_SHAPE = false;
@@ -834,14 +833,12 @@ int getMode(int x, int y) {
 void moveShape() {
 
   if (MV_SHAPE == 1) {
-    /*
+    
     if (CP_SHAPE == 1) {
      text.setText("Copy a Shape:\n\nInput the change in x (+ or -)");
      } else {
      text.setText("Move a Shape:\n\nInput the change in x (+ or -)");
      }
-     */
-    text.setText(text.getText() + "\n\nInput the change in x (+ or -)");
     if (gotIt) {
       println("l");
       tempX = temp1;
@@ -850,27 +847,24 @@ void moveShape() {
       gotIt = false;
     }
   } else if (MV_SHAPE == 2) {
-    /*
+    
     if (CP_SHAPE == 1) {
-     text.setText("Copy a Shape:\n\nInput the change in y (+ or -)");
+     text.setText("Copy a Shape:\n\nNow input the change in y (+ or -)");
      } else {
-     text.setText("Move a Shape:\n\nInput the change in y (+ or -)");
+     text.setText("Move a Shape:\n\nNow input the change in y (+ or -)");
      }
-     */
-    text.setText(text.getText() + "\n\nInput the change in y (+ or -)");
     if (gotIt) {
       tempY = temp1;
       MV_SHAPE ++;
       gotIt = false;
     }
   } else if (MV_SHAPE == 3) {
-    /*
+    
     if (CP_SHAPE == 1) {
-     text.setText("Copy a Shape:\n\nInput the change in z (+ or -)");
+     text.setText("Copy a Shape:\n\nNow input the change in z (+ or -)");
      } else {
-     text.setText("Move a Shape:\n\nInput the change in z (+ or -)");
-     }*/
-    text.setText(text.getText() + "\n\nInput the change in z (+ or -)");
+     text.setText("Move a Shape:\n\nNow input the change in z (+ or -)");
+     }
     if (gotIt) {
       tempZ = temp1;
       MV_SHAPE ++;
@@ -881,8 +875,8 @@ void moveShape() {
     if (tempM == 0) {
       Rectangle r = creationsR.get(i);
       r.setX(r.getX() + tempX);
-      r.setY(r.getY() - tempY);
-      r.setZ(r.getZ() + tempZ);
+      r.setY(r.getY() + tempY);
+      r.setZ(r.getZ() - tempZ);
       if (CP_SHAPE == 1) {
         text.setText("Rectangle was copied");
       } else {
@@ -1058,10 +1052,10 @@ void input(String theText) {
         if (temp1 == 0) {
           tryAgain();
         } else if (CRT_RECT > 2 && outOfBounds(0, tempX, tempY, temp1)) {
-          println("Out of Bounds");
+          println("Out of Bounds!");
           tryAgain();
         } else if (CRT_CIRC > 2 && outOfBounds(1, tempX, tempY, temp1)) {
-          println("Out of Bounds");
+          println("Out of Bounds!");
           tryAgain();
         }
       }
