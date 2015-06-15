@@ -81,6 +81,7 @@ Working V2 (June 8th): https://github.com/mpapallo/avoCADo/tree/demo1
 
 <b>6/14/15</b>
 - fixing end ent issues
-- move works completely
+- move
 - 3D work
 - much crying
+- lots of bug fixing and error handling
