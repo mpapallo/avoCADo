@@ -833,12 +833,12 @@ int getMode(int x, int y) {
 void moveShape() {
 
   if (MV_SHAPE == 1) {
-    
+
     if (CP_SHAPE == 1) {
-     text.setText("Copy a Shape:\n\nInput the change in x (+ or -)");
-     } else {
-     text.setText("Move a Shape:\n\nInput the change in x (+ or -)");
-     }
+      text.setText("Copy a Shape:\n\nInput the change in x (+ or -)");
+    } else {
+      text.setText("Move a Shape:\n\nInput the change in x (+ or -)");
+    }
     if (gotIt) {
       println("l");
       tempX = temp1;
@@ -847,24 +847,24 @@ void moveShape() {
       gotIt = false;
     }
   } else if (MV_SHAPE == 2) {
-    
+
     if (CP_SHAPE == 1) {
-     text.setText("Copy a Shape:\n\nNow input the change in y (+ or -)");
-     } else {
-     text.setText("Move a Shape:\n\nNow input the change in y (+ or -)");
-     }
+      text.setText("Copy a Shape:\n\nNow input the change in y (+ or -)");
+    } else {
+      text.setText("Move a Shape:\n\nNow input the change in y (+ or -)");
+    }
     if (gotIt) {
       tempY = temp1;
       MV_SHAPE ++;
       gotIt = false;
     }
   } else if (MV_SHAPE == 3) {
-    
+
     if (CP_SHAPE == 1) {
-     text.setText("Copy a Shape:\n\nNow input the change in z (+ or -)");
-     } else {
-     text.setText("Move a Shape:\n\nNow input the change in z (+ or -)");
-     }
+      text.setText("Copy a Shape:\n\nNow input the change in z (+ or -)");
+    } else {
+      text.setText("Move a Shape:\n\nNow input the change in z (+ or -)");
+    }
     if (gotIt) {
       tempZ = temp1;
       MV_SHAPE ++;
@@ -980,7 +980,32 @@ void input(String theText) {
     if (MV_SHAPE > 0) {
       try {
         temp1 = Integer.parseInt(theText);
-        gotIt = true;
+        int i = temp2;
+        if (tempM == 0) {
+          Rectangle r = creationsR.get(i);
+          if (outOfBoundsMR()) {
+            println("Out of Bounds!");
+            tryAgain();
+          } else {
+            gotIt = true;
+          }
+        } else if (tempM == 2) {
+          Line l = creationsL.get(i);
+          if (outOfBoundsML(MV_SHAPE, l, temp1)) {
+            println("Out of Bounds!");
+            tryAgain();
+          } else {
+            gotIt = true;
+          }
+        } else {
+          Circle c = creationsC.get(i);
+          if (outOfBoundsMC()) {
+            println("Out of Bounds!");
+            tryAgain();
+          } else {
+            gotIt = true;
+          }
+        }
       }
       catch(Exception e) {
         tryAgain();
@@ -1071,40 +1096,56 @@ boolean outOfBounds(int m, int x, int y, int t) {
   if (m == 0) { //rectangle width or height
     if (CRT_RECT == 3) { //checking width
       if (getMode(x, y) == 0 || getMode(x, y) == 1) { //top view or front view
-        if (x + t >= BOUNDARYV2) {
-          return true;
-        }
+        return x + t >= BOUNDARYV2;
       } else { //right view
-        if (x + t >= ENDX) {
-          return true;
-        }
+        return x + t >= ENDX;
       }
     } else if (CRT_RECT == 4) { //checking length
       if (getMode(x, y) == 1 || getMode(x, y) == 2 ) { //front view or right view
-        if (y + t >= ENDY) {
-          return true;
-        }
+        return y + t >= ENDY;
       } else { //top view
-        if (y + t >= BOUNDARYH) {
-          return true;
-        }
+        return y + t >= BOUNDARYH;
       }
     }
   } else if (m == 1) { //circle radius
     if (getMode(x, y) == 0) { //top view
-      if (x + t >= BOUNDARYV2 || x - t <= BOUNDARYV1 || y + t >= BOUNDARYH || y - t <= 0) {
-        return true;
-      }
+      return x + t >= BOUNDARYV2 || x - t <= BOUNDARYV1 || y + t >= BOUNDARYH || y - t <= 0;
     } else if (getMode(x, y) == 1) { //front view
-      if (x + t >= BOUNDARYV2 || x - t <= BOUNDARYV1 || y + t >= ENDY || y - t <= BOUNDARYH) {
-        return true;
-      }
+      return x + t >= BOUNDARYV2 || x - t <= BOUNDARYV1 || y + t >= ENDY || y - t <= BOUNDARYH;
     } else { //right view
-      if (x + t >= ENDX || x - t <= BOUNDARYV2 || y + t >= ENDY || y - t <= BOUNDARYH) {
-        return true;
-      }
+      return x + t >= ENDX || x - t <= BOUNDARYV2 || y + t >= ENDY || y - t <= BOUNDARYH;
     }
   }
+  return false;
+}
+
+boolean outOfBoundsMR() {
+  return false;
+}
+boolean outOfBoundsML(int m, Line l, int t) {
+  int mode = l.getM();
+  if (m == 1){ //check x
+     if (mode == 0 || mode == 1){ //top or front view
+        return l.getX1() + t >= BOUNDARYV2 || l.getX1() + t <= BOUNDARYV1 || l.getX2() + t >= BOUNDARYV2 || l.getX2() + t <= BOUNDARYV1; 
+     } else { //right view
+         return l.getX1() + t >= ENDX || l.getX1() + t <= BOUNDARYV2 || l.getX2() + t >= ENDX || l.getX2() + t <= BOUNDARYV1;
+     }
+  } else if (m == 2){ //check y
+     if (mode == 1 || mode == 2) { //front or right view
+       return l.getY1() + t >= ENDY || l.getY1() + t <= BOUNDARYH || l.getY2() + t >= ENDY || l.getY2() + t <= BOUNDARYH;
+     } else { //top view
+       return l.getY1() + t >= BOUNDARYH || l.getY1() + t <= 0 || l.getY2() + t >= BOUNDARYH || l.getY2() + t <= 0;
+     }
+  } else if (m == 3){ //check z
+     if (mode == 1 || mode == 2) { //front or right view
+        return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH || (ENDY - l.getZ2()) + t >= ENDY || (ENDY - l.getZ2()) + t  <= BOUNDARYH;
+     } else {
+        return (ENDY-l.getZ()) + t >= ENDY || (ENDY-l.getZ()) + t <= BOUNDARYH; 
+     }
+  }
+ return false; 
+}
+boolean outOfBoundsMC() {
   return false;
 }
 
