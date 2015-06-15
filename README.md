@@ -4,7 +4,9 @@
 
 ###Description 
 CADKey in Processing<br>
-The love child of the CS and drafting departments has been birthed! In typical CS fashion it has some nice features; in typical drafting fashion it mainly will make you want to die. This uses the [ControlP5 Library](http://www.sojamo.de/libraries/controlP5/) so be sure to download that before getting started.    
+The love child of the CS and drafting departments has been birthed! In typical CS fashion it has some nice features; in typical drafting fashion it mainly will make you want to die. This uses the [ControlP5 Library](http://www.sojamo.de/libraries/controlP5/) so be sure to download that before getting started.<br>
+(**We are not responsible for any bugs that the cp5 guy never fixed, e.g. if a menu item stay highlighted even when it's not active**) <-- actually we took care of that one, but there may be others<br>
+(**Also, as juniors, we had little to no time to work on this in the final week because of SATs and various finals, which is why our commits are mainly concentrated into one night of sadness**)
 
 ###How to Use
 Working V1 (June 1st): https://github.com/mpapallo/avoCADo/tree/eee70c9b42fec6a53991a2e1114316673a7f7077 <br>
