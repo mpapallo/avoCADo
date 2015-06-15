@@ -680,12 +680,12 @@ void sauve() {
       } else if (creationsL.get(i).getM()==1) {
         datz[0] = creationsL.get(i).getX() + "";
         datz[1] = ENDY-creationsL.get(i).getZ() + "";
-        datz[2] = creationsL.get(i).getX2() + "";
+        datz[2] = creationsL.get(i).getX2(1) + "";
         datz[3] = ENDY-creationsL.get(i).getZ2() + "";
       } else if (creationsL.get(i).getM()==2) {
         datz[0] = ENDX-creationsL.get(i).getY() + "";
         datz[1] = ENDY-creationsL.get(i).getZ() + "";
-        datz[2] = ENDX-creationsL.get(i).getY2() + "";
+        datz[2] = ENDX-creationsL.get(i).getY2(1) + "";
         datz[3] = ENDY-creationsL.get(i).getZ2() + "";
       }
       datz[4] = creationsL.get(i).getM() + "";
@@ -793,21 +793,21 @@ void endEnt(int mode, int i) {
     } else if (l.getM()==1) {
       tempX = l.getX1();
       tempY = l.getY1();
-      tempZ = l.getY2(1);
+      //tempZ = l.getY2(1);
       tempX2 = l.getX2(1);
       tempY2 = l.getY2();
-      tempZ2 = l.getY2(1);
+      //tempZ2 = l.getY2(1);
       text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
         tempX + ", " + l.getY() + ", " + l.getZ() + ") \nor 1 for \n(" + l.getX2(1) + ", " + l.getY2(1) + ", " + l.getZ2() + ")");
     } else if (l.getM()==2){
       tempX = l.getX1();
       tempY = l.getY1();
-      tempZ = l.getZ();
+      //tempZ = l.getZ();
       tempX2 = l.getX2();
       tempY2 = l.getY2();
-      tempZ2 = l.getZ2();
+      //tempZ2 = l.getZ2();
       text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
-        tempX + ", " + (350-tempY) + ", " + tempZ + ") \nor 1 for \n(" + tempX2 + ", " + (350-tempY2) + ", " + tempZ2 + ")");
+        (l.getX()-100) + ", " + (ENDX-tempX) + ", " + (ENDY-tempY) + ") \nor 1 for \n(" + (l.getX()-100) + ", " + (ENDX-tempX2) + ", " + (ENDY-tempY2) + ")");
     }
   } else if (mode == 2) {
     //circle i
@@ -1239,24 +1239,6 @@ void tryAgain() {
 void mouseClicked() {
   if (SELECT_MODE) {
     if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 5 && getMode(mouseX, mouseY) == getMode(tempX3, tempY3)) || CRT_LINE != 5)) {
-      tempX = mouseX;
-      tempY = mouseY;
-      println("xcor: " + tempX + ", ycor: " + tempY);
-      SELECT_MODE = false;
-      if (CRT_RECT == 2) {
-        CRT_RECT = 3;
-        println("CRT_RECT = 3");
-      } else if (CRT_CIRC == 2) {
-        CRT_CIRC = 3;
-        println("CRT_CIRC = 3");
-      } else if (CRT_LINE == 2) {
-        CRT_LINE  = 3;
-        println("CRT_LINE = 3");
-      } else if (CRT_LINE == 5) {
-        CRT_LINE = 6;
-        println("CRT_LINE = 6");
-      }
-    } else if (END_ENT && getMode(mouseX, mouseY) != -1) {
       tempX = mouseX;
       tempY = mouseY;
       println("xcor: " + tempX + ", ycor: " + tempY);
