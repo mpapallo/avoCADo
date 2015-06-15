@@ -1042,7 +1042,7 @@ void input(String theText) {
         int i = temp2;
         if (tempM == 0) {
           Rectangle r = creationsR.get(i);
-          if (outOfBoundsMR()) {
+          if (outOfBoundsMR(MV_SHAPE, r, temp1)) {
             println("Out of Bounds!");
             tryAgain();
           } else {
@@ -1058,7 +1058,7 @@ void input(String theText) {
           }
         } else {
           Circle c = creationsC.get(i);
-          if (outOfBoundsMC()) {
+          if (outOfBoundsMC(MV_SHAPE, c, temp1)) {
             println("Out of Bounds!");
             tryAgain();
           } else {
@@ -1178,7 +1178,25 @@ boolean outOfBounds(int m, int x, int y, int t) {
   return false;
 }
 
-boolean outOfBoundsMR() {
+boolean outOfBoundsMR(int m, Rectangle r, int t) {
+  int mode = r.getM();
+  int w = r.getW();
+  int l = r.getL();
+  if (m == 1) { //check x
+    return r.getX() + w + t >= BOUNDARYV2 || r.getX() + t <= BOUNDARYV1;
+  } else if (m == 2) { //check y
+    if (mode == 0 || mode == 1) { //top or front view
+      return r.getY() + l + t >= BOUNDARYH || r.getY() - t <= 0;
+    } else { //right view
+      return r.getY() + w + t >= ENDX || r.getY() - t <= BOUNDARYV2;
+    }
+  } else if (m == 3) { //check z
+    if (mode == 1 || mode == 2) { //front or right view
+      return r.getZ() + l + t >= ENDY || r.getZ() - t <= BOUNDARYH;
+    } else { //top view
+      return (ENDY-r.getZ()) + l + t >= ENDY || (ENDY-r.getZ()) - t <= BOUNDARYH;
+    }
+  }
   return false;
 }
 boolean outOfBoundsML(int m, Line l, int t) {
@@ -1204,7 +1222,20 @@ boolean outOfBoundsML(int m, Line l, int t) {
   }
   return false;
 }
-boolean outOfBoundsMC() {
+boolean outOfBoundsMC(int m, Circle c, int t) {
+  int mode = c.getM();
+  int r = c.getR();
+  if (m == 1) { //check x
+    return c.getX() + r + t >= BOUNDARYV2 || c.getX() + t <= 0;
+  } else if (m == 2) { //check y
+    if (mode == 0 || mode == 1) { //top or front view
+      return c.getY() - r - t <= 0 || c.getY() + r + t >= BOUNDARYH;
+    } else { //right view
+      return (ENDX-c.getY()) - r - t <=BOUNDARYV2 || (ENDX-c.getY()) + r + t >= ENDX;
+    }
+  } else if (m == 3) { //check z
+    return c.getZ() + r + t >= BOUNDARYH || c.getZ() + t <= 0;
+  }
   return false;
 }
 
