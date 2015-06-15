@@ -1343,7 +1343,7 @@ public class SecondApplet extends PApplet {
   }
 
   void draw() {
-    println(height+" "+width);
+    //println(height+" "+width);
     background(0);
     rot(width/2, 0);
     for (int i=0; i<creationsL.size (); i++) {
@@ -1357,9 +1357,9 @@ public class SecondApplet extends PApplet {
       if (l.getM()==0) {
         line(l.getX(), l.getY(), l.getZ()-360, l.getX2(), l.getY2(), l.getZ()-360);
       } else if (l.getM()==1) {
-        line(l.getX(), l.getZ(), l.getY()-360, l.getX2(), l.getZ(), l.getY2()-360);
+        //line(l.getX1(), l.getY1(), l.getZ()-360, l.getX2(), l.getY2(), l.getZ2()-360);
       } else if (l.getM()==2) {
-        line(l.getY(), l.getZ(), l.getX()-360, l.getY2(), l.getZ(), l.getX2()-360);
+        //line(l.getY(), l.getZ(), l.getX()-360, l.getY2(), l.getZ2(), l.getX()-360);
       }
     }
     //test();
