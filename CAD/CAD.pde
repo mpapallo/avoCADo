@@ -297,6 +297,11 @@ void draw() {
         stroke(0, 255, 0);
       }
       noFill();
+      Line l = creationsL.get(i);
+      println("k"+l.getX()+" "+l.getY()+" "+l.getZ());
+      println(l.getX1()+" "+l.getY1()+" "+l.getZ());
+      println(l.getX2()+" "+l.getY2()+" "+l.getZ2());
+      println(l.getX2(1)+" "+l.getY2(1));
       creationsL.get(i).draw();
     }
 
@@ -531,10 +536,10 @@ void controlEvent(ControlEvent theEvent) {
       }
     } else if (ControllerName.length() > 9 && ControllerName.substring(0, 9).equals("Rectangle")) {
       if (creationsR.size()>0) {
-        if (END_ENT) {
-          int i = ((int) val % 40);
-          endEnt(0, i);
-        } else if (DEL_SHAPE) {
+        /*if (END_ENT) {
+         int i = ((int) val % 40);
+         endEnt(0, i);
+         } else */        if (DEL_SHAPE) {
           println("delete a rectangle");
           println(val);
           //println(theEvent.getController().getValue());
@@ -562,10 +567,10 @@ void controlEvent(ControlEvent theEvent) {
       }
     } else if (ControllerName.length() > 6 && ControllerName.substring(0, 6).equals("Circle")) {
       if (creationsC.size()>0) {
-        if (END_ENT) {
-          int i = ((int) val % 60);
-          endEnt(2, i);
-        } else if (DEL_SHAPE) {
+        /*if (END_ENT) {
+         int i = ((int) val % 60);
+         endEnt(2, i);
+         } else*/        if (DEL_SHAPE) {
           println("delete a circle");
           int i = ((int) val % 60);
           println(i);
@@ -675,12 +680,12 @@ void sauve() {
       } else if (creationsL.get(i).getM()==1) {
         datz[0] = creationsL.get(i).getX() + "";
         datz[1] = ENDY-creationsL.get(i).getZ() + "";
-        datz[2] = creationsL.get(i).getX2() + "";
+        datz[2] = creationsL.get(i).getX2(1) + "";
         datz[3] = ENDY-creationsL.get(i).getZ2() + "";
       } else if (creationsL.get(i).getM()==2) {
         datz[0] = ENDX-creationsL.get(i).getY() + "";
         datz[1] = ENDY-creationsL.get(i).getZ() + "";
-        datz[2] = ENDX-creationsL.get(i).getY2() + "";
+        datz[2] = ENDX-creationsL.get(i).getY2(1) + "";
         datz[3] = ENDY-creationsL.get(i).getZ2() + "";
       }
       datz[4] = creationsL.get(i).getM() + "";
@@ -768,7 +773,6 @@ void selection(int mode) {
 
 void endEnt(int mode, int i) {
   // each of these has to set tempX and tempY
-
   END_ENT = true;
   //println("mode " + mode + " index " + i);
   if (mode == 0) {
@@ -777,15 +781,34 @@ void endEnt(int mode, int i) {
   } else if (mode == 1) {
     //line i
     Line l = creationsL.get(i);
-    //these are not correct coords, but it works for what it is
-    tempX = l.getX1();
-    tempY = l.getY1();
-    tempZ = l.getZ();
-    tempX2 = l.getX2();
-    tempY2 = l.getY2();
-    tempZ2 = l.getZ2();
-    text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
-      tempX + ", " + (350-tempY) + ", " + tempZ + ") \nor 1 for \n(" + tempX2 + ", " + (350-tempY2) + ", " + tempZ2 + ")");
+    if (l.getM()==0) {
+      tempX = l.getX1();
+      tempY = l.getY1();
+      tempZ = l.getZ();
+      tempX2 = l.getX2();
+      tempY2 = l.getY2();
+      tempZ2 = l.getZ2();
+      text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
+        tempX + ", " + (350-tempY) + ", " + tempZ + ") \nor 1 for \n(" + tempX2 + ", " + (350-tempY2) + ", " + tempZ2 + ")");
+    } else if (l.getM()==1) {
+      tempX = l.getX1();
+      tempY = l.getY1();
+      //tempZ = l.getY2(1);
+      tempX2 = l.getX2(1);
+      tempY2 = l.getY2();
+      //tempZ2 = l.getY2(1);
+      text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
+        tempX + ", " + l.getY() + ", " + l.getZ() + ") \nor 1 for \n(" + l.getX2(1) + ", " + l.getY2(1) + ", " + l.getZ2() + ")");
+    } else if (l.getM()==2) {
+      tempX = l.getX1();
+      tempY = l.getY1();
+      //tempZ = l.getZ();
+      tempX2 = l.getX2();
+      tempY2 = l.getY2();
+      //tempZ2 = l.getZ2();
+      text.setText("Which coordinates do you want?\n\nEnter 0 for \n(" + 
+        (l.getX()-100) + ", " + (ENDX-tempX) + ", " + (ENDY-tempY) + ") \nor 1 for \n(" + (l.getX()-100) + ", " + (ENDX-tempX2) + ", " + (ENDY-tempY2) + ")");
+    }
   } else if (mode == 2) {
     //circle i
     //text.setText(which coords? left or right of center)
@@ -1247,24 +1270,6 @@ void tryAgain() {
 void mouseClicked() {
   if (SELECT_MODE) {
     if (getMode(mouseX, mouseY) != -1 && ((CRT_LINE == 5 && getMode(mouseX, mouseY) == getMode(tempX3, tempY3)) || CRT_LINE != 5)) {
-      tempX = mouseX;
-      tempY = mouseY;
-      println("xcor: " + tempX + ", ycor: " + tempY);
-      SELECT_MODE = false;
-      if (CRT_RECT == 2) {
-        CRT_RECT = 3;
-        println("CRT_RECT = 3");
-      } else if (CRT_CIRC == 2) {
-        CRT_CIRC = 3;
-        println("CRT_CIRC = 3");
-      } else if (CRT_LINE == 2) {
-        CRT_LINE  = 3;
-        println("CRT_LINE = 3");
-      } else if (CRT_LINE == 5) {
-        CRT_LINE = 6;
-        println("CRT_LINE = 6");
-      }
-    } else if (END_ENT && getMode(mouseX, mouseY) != -1) {
       tempX = mouseX;
       tempY = mouseY;
       println("xcor: " + tempX + ", ycor: " + tempY);
